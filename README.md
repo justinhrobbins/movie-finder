@@ -2,7 +2,7 @@
 
 ## January 29th, 2022
 - Move Development Log to GitHub Pages
-- https://justinhrobbins.github.io/movie-finder/
+    - https://justinhrobbins.github.io/movie-finder/
 
 ## January 28th, 2022
 - Remove api_key value from existing PostMan collection 
