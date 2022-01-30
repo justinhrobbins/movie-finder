@@ -6,7 +6,7 @@ Just a running list of notes and commentary regarding development of this app
    - VS Code: Added Environment Variable to launch.json as described in the [Configure](https://code.visualstudio.com/docs/java/java-debugging#_configure) section of [Running and debugging Java](https://code.visualstudio.com/docs/java/java-debugging)
    - How to add the Environment Variable when starting the app from the command line:
        - Option 1: `mvn clean install -Dtmdb.api.key=ReplaceWithApiKeyValue`
-       - Option 2: `mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DTMDB_API_KEY=ReplaceWithApiKeyValue"
+       - Option 2: `mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DTMDB_API_KEY=ReplaceWithApiKeyValue"`
        - Option 3: `export TMDB_API_KEY="ReplaceWithApiKeyValue"` then start normally
 
 ## January 29th, 2022
