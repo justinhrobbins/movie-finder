@@ -9,7 +9,7 @@ Just a running list of notes and commentary regarding development of this app
        - Run: `mvn spring-boot:run -Dspring-boot.run.jvmArguments="-DTMDB_API_KEY=ReplaceWithApiKeyValue"`
        - Other Option: `export TMDB_API_KEY="ReplaceWithApiKeyValue"` then build/start normally
 - VS Code "Problems" tab was WARNING about `'tmdb.apikey' is an unknown property.`
-    - Thsi property had been added to the application.properties and was being injected into a Controller
+    - This property had been added to the application.properties and was being injected into a Controller
     - Resolved by:
         - Createing a `@ConfigurationProperties` as described in Spring's [Configuration Metadata](https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html) docs
         - Enabling `@ConfigurationPropertiesScan` for the Application
