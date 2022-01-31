@@ -1,6 +1,4 @@
-# movie-finder
-
-# Goals for this App:
+# Goals for the movie-finder App:
 - Create an app that provides better movie recommendation
 - Revamp and reacquaint myself with hands-on Java software development
 
