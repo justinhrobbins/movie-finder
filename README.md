@@ -1,6 +1,16 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
+## January 31th, 2022
+- Improve development workflow
+    -  Use [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) to manage git branches
+    -  Use GitHub issues to track changes, including [linking Pull Requests to Issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)
+    -  Use GitHub Actions for simple CI (details below)
+    -  Add [Workflow status badge](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge) to ReadMe.md
+-  GitHub Actions ([Quickstart](https://docs.github.com/en/actions/quickstart))
+    - [.github/workflows/maven.yml](https://github.com/justinhrobbins/movie-finder/blob/master/.github/workflows/maven.yml) workflow based on OOTB "Java with Maven" template
+    - Created GitHub Actions [encrypted secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) to inject required Environment Variable into the build
+
 ## January 30th, 2022
 - Inject TMDB API Key as an environment variable
    - VS Code: Added Environment Variable to launch.json as described in the [Configure](https://code.visualstudio.com/docs/java/java-debugging#_configure) section of [Running and debugging Java](https://code.visualstudio.com/docs/java/java-debugging)
