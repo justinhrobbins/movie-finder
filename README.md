@@ -2,7 +2,7 @@
 Just a running list of notes and commentary regarding development of this app
 
 ## January 31th, 2022
-- Improve development workflow
+- Improve development lifecycle
     -  Use [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) to manage git branches
     -  Use GitHub issues to track changes, including [linking Pull Requests to Issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue)
     -  Use GitHub Actions for simple CI (details below)
