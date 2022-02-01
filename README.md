@@ -1,6 +1,11 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
+## February 1st, 2022
+- Enable Spring Boot [Actuator](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#actuator)
+    - Enable `/info` endpoint as described in [Actuator Security](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#features.security.actuator)
+    - Add build info to `/info` endpoing as described in Baeldung's [Customizing the /info Endpoint](https://www.baeldung.com/spring-boot-actuators#info-endpoint)
+
 ## January 31th, 2022
 - Improve development lifecycle
     -  Use [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) to manage git branches
