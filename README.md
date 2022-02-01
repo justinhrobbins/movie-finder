@@ -9,6 +9,7 @@ Just a running list of notes and commentary regarding development of this app
     -  Add [Workflow status badge](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge) to ReadMe.md
 -  GitHub Actions ([Quickstart](https://docs.github.com/en/actions/quickstart))
     - [.github/workflows/maven.yml](https://github.com/justinhrobbins/movie-finder/blob/master/.github/workflows/maven.yml) workflow based on OOTB "Java with Maven" template
+    - Workflow is configured to run on `push` to `master` branch, PR's to `master` and can be triggered manually via `workflow_dispatch` event.
     - Created GitHub Actions [encrypted secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets) to inject required Environment Variable into the build
 
 ## January 30th, 2022
