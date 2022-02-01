@@ -4,7 +4,8 @@ Just a running list of notes and commentary regarding development of this app
 ## February 1st, 2022
 - Enable Spring Boot [Actuator](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#actuator)
     - Enable `/info` endpoint as described in [Actuator Security](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#features.security.actuator)
-    - Add build info to `/info` endpoing as described in Baeldung's [Customizing the /info Endpoint](https://www.baeldung.com/spring-boot-actuators#info-endpoint)
+    - Add build info to `/info` endpoint as described in Baeldung's [Customizing the /info Endpoint](https://www.baeldung.com/spring-boot-actuators#info-endpoint)
+    - Add git info to `/info` endpoint as described in Spring doc's [Generate Git Information](https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/howto.html). Note: The docs for the new SNAPSHOT version Spring Boot indicate this plugin is upgraded from `<groupId>pl.project13.maven</groupId>` to the new `<groupId>io.github.git-commit-id</groupId>`
 
 ## January 31th, 2022
 - Improve development lifecycle
