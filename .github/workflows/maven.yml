@@ -29,8 +29,8 @@ jobs:
         TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
       run: mvn -B verify --file pom.xml
       
-    - name: Archive code coverage results
-      uses: actions/upload-artifact@v2
-      with:
-          name: Spring Boot artifact
-          path: target/movie-finder-*.jar
+#     - name: Archive code Spring Boot artifact
+#       uses: actions/upload-artifact@v2
+#       with:
+#           name: Spring Boot artifact
+#           path: target/movie-finder-*.jar
