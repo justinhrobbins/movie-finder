@@ -1,6 +1,25 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
+## February 3st, 2022
+- Fork themoviedbapi to [justinhrobbins/themoviedbapi](https://github.com/justinhrobbins/themoviedbapi)
+- The themoviedbapi uses Gradle for build automation and includes a Gradle wrapper (Gradle version 6.7)
+- Had several issues building the project via `./gradlew` command
+    - `zsh: permission denied: ./gradlew` <<< Fixed with `chmod` command as recommended by this blog post: [permission denied: ./gradlew](https://topherpedersen.blog/2021/05/05/zsh-permission-denied-gradlew/)
+    - Build fails with `General error during semantic analysis: Unsupported class file major version 61` <<< Fixed this by using SdkMan to downgrad Java version from 17 to 11. Relevant resources for Gradle / Java compatability:
+    - [Unsupported class file major version 61 error](https://stackoverflow.com/questions/69425829/unsupported-class-file-major-version-61-error)
+    - [Gradle Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html#java)
+    - [Using SDKMAN! to work with multiple versions of Java](https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java)
+- Install themoviedbapi built from sources to local Maven repository at .m2: `./gradlew publishToMavenLocal`
+- Confirmed movie-finder is using locally built themoviedbapi by
+    - Adding a logging statement into themoviedbapi
+    - Building and publishing themoviedbapi to local Maven repository
+    - Building and running movie-finder and confirming the new log statement is present in the logs
+
+## February 2st, 2022
+- Research whether it's currently possible to get Watch Providers from the existing themoviedbapi Java wrapper library
+- Created [GitHub issue on themoviedbapi project](https://github.com/holgerbrandl/themoviedbapi/issues/122) confirming whether Watch Providers functionality already exists. Offer to potentially build it mysefl and contribute it via PR back to themoviedbapi at a later time
+
 ## February 1st, 2022
 - Enable and minimall Spring Boot [Actuator](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#actuator)
     - Enable `/info` endpoint as described in [Actuator Security](https://docs.spring.io/spring-boot/docs/2.5.0/reference/htmlsingle/#features.security.actuator)
