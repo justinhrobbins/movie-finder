@@ -1,7 +1,17 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
-## February 3st, 2022
+## February 4th, 2022
+- Research whether it might be better in the long-term to use the existing [RAML](https://api.stoplight.io/v1/versions/9WaNJfGpnnQ76opqe/export/raml.yaml) or [OAS](https://api.stoplight.io/v1/versions/9WaNJfGpnnQ76opqe/export/oas.json) spec for [The Movie Database API](https://developers.themoviedb.org/3/getting-started/introduction) to generate Java client rather than modify the existing Java wrapper project [themoviedbapi](https://github.com/holgerbrandl/themoviedbapi/).
+    - Received errors importing the RAML spec into Postman. Others reported this too: [The Movie Database Support: Postman Collection](https://www.themoviedb.org/talk/570931c4c3a36810b4000096)
+    - Use [OpenAPI Generator](https://openapi-generator.tech/) to create a Java project using the OAS/Swagger spec
+        - [Generate Spring Boot REST Client with Swagger] (https://www.baeldung.com/spring-boot-rest-client-swagger-codegen)
+        - Errors when generating project from the published TheMovieDb API OAS spec: `-attribute definitions.image-path.type is not of type string`
+        - Tried converting the RAML -> Swagger using [Mulesoft OAS/RAML converter](https://mulesoft.github.io/oas-raml-converter/)
+        - OpenAPI Generator now created a project successfully but upon inspection, the resulting REST client seemed highly flawed (eg. client methods returning void when they should return a Person or Movie)
+        - Forum post [The Movie Database Support: Swagger generator produces bad-named models](https://www.themoviedb.org/talk/58b926d992514160840085fd) confirmed the existing spec needs correction: "we'll be migrating to a new platform but there's nothing that can be done about this in the currently state of the docs"
+
+## February 3rd, 2022
 - Fork themoviedbapi to [justinhrobbins/themoviedbapi](https://github.com/justinhrobbins/themoviedbapi)
 - The themoviedbapi uses Gradle for build automation and includes a Gradle wrapper (Gradle version 6.7)
 - Had several issues building the project via `./gradlew` command
@@ -16,7 +26,7 @@ Just a running list of notes and commentary regarding development of this app
     - Building and publishing themoviedbapi to local Maven repository
     - Building and running movie-finder and confirming the new log statement is present in the logs
 
-## February 2st, 2022
+## February 2nd, 2022
 - Research whether it's currently possible to get Watch Providers from the existing themoviedbapi Java wrapper library
 - Created [GitHub issue on themoviedbapi project](https://github.com/holgerbrandl/themoviedbapi/issues/122) confirming whether Watch Providers functionality already exists. Offer to potentially build it mysefl and contribute it via PR back to themoviedbapi at a later time
 
