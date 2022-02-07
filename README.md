@@ -16,7 +16,7 @@ Just a running list of notes and commentary regarding development of this app
 - The themoviedbapi uses Gradle for build automation and includes a Gradle wrapper (Gradle version 6.7)
 - Had several issues building the project via `./gradlew` command
     - `zsh: permission denied: ./gradlew` <<< Fixed with `chmod` command as recommended by this blog post: [permission denied: ./gradlew](https://topherpedersen.blog/2021/05/05/zsh-permission-denied-gradlew/)
-    - Build fails with `General error during semantic analysis: Unsupported class file major version 61` <<< Fixed this by using SdkMan to downgrad Java version from 17 to 11. Relevant resources for Gradle / Java compatability:
+    - Build fails with `General error during semantic analysis: Unsupported class file major version 61` <<< Fixed this by using SdkMan to downgrad Java version from 17 to 11. Relevant resources for Gradle / Java compatability: `sdk use java 11.0.14-tem`
     - [Unsupported class file major version 61 error](https://stackoverflow.com/questions/69425829/unsupported-class-file-major-version-61-error)
     - [Gradle Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html#java)
     - [Using SDKMAN! to work with multiple versions of Java](https://www.twilio.com/blog/sdkman-work-with-multiple-versions-java)
