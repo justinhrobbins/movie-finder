@@ -1,6 +1,14 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
+## February 7th, 2022
+- Begin adding `watch/providers` functionality to forked themoviedbapi repository:
+    - Add new Movie Controller to `movie-finder` with GET mapping for `movie/{movieId}/watchproviders`
+    - Add new `MovieMethod` "watch_providers" which can be added to the `append_to_response` query parameter on the Movie endpoint
+        - The actual `append_to_response` parameter is named `watch/providers` but slash cannot be used in the Enum `MovieMethod`. For now I added some special handling in the Utils class that is specific to the watch/providers use-case. Will need to consider a better permanent solution.
+    - Add new `WatchProviders` POJO for JSON mapping. Had some issues getting the Jackson annotation configured correctly. Currently only has minimal properties to prove the JSON mapping is working. Will need to enhance this class later to include all the required watch/provider properties.
+    - Confirmed reqeust to new `movie-finder` Controller now returns minimal `watch/provider` info
+
 ## February 4th, 2022
 - Research whether it might be better in the long-term to use the existing [RAML](https://api.stoplight.io/v1/versions/9WaNJfGpnnQ76opqe/export/raml.yaml) or [OAS](https://api.stoplight.io/v1/versions/9WaNJfGpnnQ76opqe/export/oas.json) spec for [The Movie Database API](https://developers.themoviedb.org/3/getting-started/introduction) to generate Java client rather than modify the existing Java wrapper project [themoviedbapi](https://github.com/holgerbrandl/themoviedbapi/).
     - Received errors importing the RAML spec into Postman. Others reported this too: [The Movie Database Support: Postman Collection](https://www.themoviedb.org/talk/570931c4c3a36810b4000096)
