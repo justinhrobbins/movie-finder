@@ -1,6 +1,9 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
+## February 8th, 2022
+- Continue to add properties to Watch/Provider POJO
+
 ## February 7th, 2022
 - Begin adding `watch/providers` functionality to forked themoviedbapi repository:
     - Add new Movie Controller to `movie-finder` with GET mapping for `movie/{movieId}/watchproviders`
