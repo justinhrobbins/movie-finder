@@ -31,9 +31,3 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
         
       run: mvn -B verify --file pom.xml --settings settings.xml
-      
-#     - name: Archive code Spring Boot artifact
-#       uses: actions/upload-artifact@v2
-#       with:
-#           name: Spring Boot artifact
-#           path: target/movie-finder-*.jar
