@@ -2,12 +2,14 @@
 Just a running list of notes and commentary regarding development of this app
 
 ## February 11th, 2022
+- Create a GitHub [personal access token](personal access token) that can be used for reading GitHub Packages published to forked `themoviedbapi`
 - Changes to GitHub Actions on forked `themoviedbapi`:
     - PR to `master` triggers build
     - Push to `master` triggers publication of SNAPSHOT artifact to GitHub Package
  - Changes to GitHub Actions on `movie-finder`
      - Added Maven `settings.xml` to repo with `<server>` configuration packages published to `themoviedbapi`
      - Mofied GitHub Action to make the Maven build use the `settings.xml` and also injecting GitHub environment variables such that Maven can authenticate Maven repository published as GitHub Packages on `themoviedbapi`
+     - Used this GitHub Community post as a reference for the GitHub Action configuration: [using a GitHub Packages hosted repo in a Java/maven action](https://github.community/t/using-a-github-packages-hosted-repo-in-a-java-maven-action/18003/5)
 
 ## February 9th, 2022
 - Push latest movie-finder to GitHub but [build is failing](https://github.com/justinhrobbins/movie-finder/runs/5131324411?check_suite_focus=true) due to `Could not find artifact com.github.holgerbrandl:themoviedbapi:jar:1.12-SNAPSHOT`
