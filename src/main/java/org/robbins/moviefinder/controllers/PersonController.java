@@ -2,6 +2,7 @@ package org.robbins.moviefinder.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import info.movito.themoviedbapi.model.people.Person;
 import info.movito.themoviedbapi.model.people.PersonCredits;
 
 @RestController
+@CrossOrigin
 @RequestMapping("person")
 public class PersonController {
     final TmdbApi tmdbApi;
