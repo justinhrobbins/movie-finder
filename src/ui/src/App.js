@@ -6,7 +6,7 @@ import { ActorDetailPage } from './pages/ActorDetailPage';
 function App() {
   return (
     <div className="App">
-      <h1>Movie Finder</h1>
+      <h1>Actor Alerts</h1>
       <Router>
         <Routes>
           <Route path='/actors/search/:actorName' element={<ActorSearchPage/>} />

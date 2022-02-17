@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ActorMovieCard } from '../components/ActorMovieCard';
 
 export const ActorDetailPage = () => {
+    const [person, setPerson] = useState({});
     const [personCredits, setPersonCredits] = useState({});
     const { actorId } = useParams();
 
@@ -10,13 +11,23 @@ export const ActorDetailPage = () => {
         () => {
             const fetchPersonCredits = async () => {
                 const response = await fetch(`http://localhost:8080/person/${actorId}/movies`);
-                const data = await response.json();
-                setPersonCredits(data);
+                const movieData = await response.json();
+                setPersonCredits(movieData);
             };
-
             fetchPersonCredits();
+
+            const fetchPerson = async () => {
+                const response = await fetch(`http://localhost:8080/person/${actorId}`);
+                const personData = await response.json();
+                setPerson(personData);
+            };
+            fetchPerson();
         }, []
     );
+
+    if (!person) {
+        return <h1>Actor not found</h1>
+    }
 
     if (!personCredits || !personCredits.cast) {
         return <h1>Movies not found for Actor</h1>
@@ -24,9 +35,10 @@ export const ActorDetailPage = () => {
 
     return (
         <div className="ActorDetailPage">
-            <h2>Movies</h2>
+            <h2>Movies for {person.name}</h2>
+            <p>Most recent movie role: <ActorMovieCard key={personCredits.cast[0].id} movie={personCredits.cast[0]} /></p>
             {personCredits.cast
-                .filter(credit => credit.media_type == "movie")
+                .slice(1)
                 .map(movie => <ActorMovieCard key={movie.id} movie={movie} />)
             }
         </div>
