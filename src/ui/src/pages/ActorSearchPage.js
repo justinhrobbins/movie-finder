@@ -1,10 +1,11 @@
 import { React, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { ActorSearchCard } from '../components/ActorSearchCard';
 
 export const ActorSearchPage = () => {
+  const [searchParams] = useSearchParams()
+  const actorName = searchParams.get('actorName');
   const [actors, setActors] = useState([]);
-  const { actorName } = useParams();
 
   useEffect(
     () => {

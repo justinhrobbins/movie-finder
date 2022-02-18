@@ -36,7 +36,8 @@ export const ActorDetailPage = () => {
     return (
         <div className="ActorDetailPage">
             <h2>Movies for {person.name}</h2>
-            <p>Most recent movie role: <ActorMovieCard key={personCredits.cast[0].id} movie={personCredits.cast[0]} /></p>
+            <hr />
+            Most recent movie role: <ActorMovieCard key={personCredits.cast[0].id} movie={personCredits.cast[0]} />
             {personCredits.cast
                 .slice(1)
                 .map(movie => <ActorMovieCard key={movie.id} movie={movie} />)
