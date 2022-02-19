@@ -1,6 +1,18 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
+## February 18th, 2022
+- Enable OAuth2 authentication using Spring Security
+- Create OAuth credentials on Google Cloud Platform
+
+## February 12th - February 17, 2022
+- Learning [React JS](https://reactjs.org/) Javascript UI library
+- Begin building simple UI (no styling yet) for:
+    - Actor search
+    - Actor details
+        - Movies for Actor
+        - Flatrate subscriptions for each Movie 
+
 ## February 11th, 2022
 - Create a GitHub [personal access token](personal access token) that can be used for reading GitHub Packages published to forked `themoviedbapi`
 - Changes to GitHub Actions on forked `themoviedbapi`:
