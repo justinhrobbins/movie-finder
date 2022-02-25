@@ -3,23 +3,32 @@ import { GoogleLogin } from 'react-google-login';
 
 export const LoginCard = () => {
     const [loginData, setLoginData] = useState(
-        localStorage.getItem('loggedInUser')
-            ? JSON.parse(localStorage.getItem('loggedInUser'))
+        localStorage.getItem('loginData')
+            ? JSON.parse(localStorage.getItem('loginData'))
             : null
     );
 
-    const handleFailure = (response) => {
-        console.log(response.profileObj.name);
-    }
+    const handleFailure = (failure) => {
+        console.log(failure);
+    };
 
-    const handleLogin = (response) => {
-        const name = (response.profileObj.name);
-        setLoginData(name);
-        localStorage.setItem("loggedInUser", JSON.stringify(name));
-    }
+    const handleLogin = async (googleData) => {
+        const name = (googleData.profileObj.name);
+
+        const response = await fetch('http://localhost:8080/user', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${googleData.tokenId}`,
+            }
+        });
+
+        const userData = await response.json();
+        setLoginData(userData);
+        localStorage.setItem("loginData", JSON.stringify(userData));
+    };
 
     const handleLogout = () => {
-        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('loginData');
         setLoginData(null);
     };
 
@@ -27,7 +36,7 @@ export const LoginCard = () => {
         <div className="LoginCard">
             {loginData ? (
                 <div>
-                    <h3>You logged in as {loginData}</h3>
+                    <h3>You logged in as {loginData.email}</h3>
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
