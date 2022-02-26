@@ -1,5 +1,6 @@
 package org.robbins.moviefinder.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -22,11 +23,11 @@ public class User {
     private String email;
     private String name;
 
-    // @Column(name = "created_date", nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
     private long createdDate;
 
-    // @Column(name = "modified_date")
+    @Column(name = "modified_date")
     @LastModifiedDate
     private long modifiedDate;
 
