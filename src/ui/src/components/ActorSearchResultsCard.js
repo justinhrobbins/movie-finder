@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { Link } from 'react-router-dom';
 
-export const ActorSearchCard = ({ actor }) => {
+export const ActorSearchResultsCard = ({ actor }) => {
     if (!actor) return null;
 
     const baseUrl = "https://image.tmdb.org/t/p/w45/";
@@ -10,7 +10,7 @@ export const ActorSearchCard = ({ actor }) => {
     const actorDetailRoute = `/actors/${actor.id}`;
 
     return (
-        <div className="ActorSearchCard">
+        <div className="ActorSearchResultsCard">
             <p><Link to={actorDetailRoute}>{actor.name}</Link></p>
             <img src={actorUrl} width="45" alt="" />
         </div>
