@@ -3,6 +3,8 @@ Just a running list of notes and commentary regarding development of this app
 
 ## April 7th, 2022
 - Add Search Box for searching for Actors
+- Begin basic UI Styling
+    - Install Saas as a development dependency as described here: [The Simplest Sass Compile Setup|https://pineco.de/the-simplest-sass-compile-setup/]
 
 ## February 25th, 2022
 - Enable OAuth2 authentication in the UI
