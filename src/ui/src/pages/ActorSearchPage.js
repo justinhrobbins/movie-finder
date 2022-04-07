@@ -24,14 +24,10 @@ export const ActorSearchPage = () => {
 
   const handleSearchBarChange = (searchBarQuery) => {
     if (searchBarQuery && searchBarQuery.length > 2) {
-      navigate('?actorName=' + searchBarQuery);
+      // navigate('?actorName=' + searchBarQuery);
       fetchActors(searchBarQuery)
     }
   };
-
-  // if ((actorName && actorName.length > 0) && (!actors || actors.length === 0)) {
-  //   return <h1>Actor not found</h1>
-  // }
 
   return (
     <div className="ActorSearchPage">
