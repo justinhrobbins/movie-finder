@@ -1,6 +1,13 @@
 # Development Log
 Just a running list of notes and commentary regarding development of this app
 
+## April 7th, 2022
+- Add Search Box for searching for Actors
+
+## February 25th, 2022
+- Enable OAuth2 authentication in the UI
+- Using [react-google-login|https://www.npmjs.com/package/react-google-login]
+
 ## February 18th, 2022
 - Enable OAuth2 authentication using Spring Security
 - Create OAuth credentials on Google Cloud Platform
