@@ -1,0 +1,51 @@
+.ActorMovieCard {
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-rows: min-content auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+
+    margin-bottom: 35px;
+
+    .actor-movie-card-image {
+        grid-row: span 2;
+        margin-right: 20px;
+
+        & > img {
+            border-radius: 8px;
+        }
+    }
+
+    .actor-movie-card-info {
+        display: grid;
+        grid-template-rows: min-content auto;
+        grid-row-gap: 10px;
+    }
+
+    .actor-movie-card-info-title {
+        float: left;
+        font-size: 2rem;
+    }
+
+    .actor-movie-card-info-content {
+        padding-left: 5px;
+        color: #8a8d98;
+    }
+
+    .actor-movie-card-providers-section {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: min-content auto;
+        align-self: end;
+        margin-bottom: 20px;
+    }
+
+    .actor-movie-card-providers-section-label {
+        padding-left: 5px;
+        align-self: end;
+    }
+
+    .actor-movie-card-providers-section-content {
+        display: flex;
+    }
+}

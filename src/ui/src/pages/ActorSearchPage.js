@@ -2,6 +2,8 @@ import { React, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ActorSearchResultsCard } from '../components/ActorSearchResultsCard';
 
+import './ActorSearchPage.scss';
+
 export const ActorSearchPage = () => {
   const [searchParams] = useSearchParams()
   const actorName = searchParams.get('actorName');
@@ -31,23 +33,26 @@ export const ActorSearchPage = () => {
 
   return (
     <div className="ActorSearchPage">
-      <label>Search</label>
-      <input
-        type="text"
-        placeholder="Search..."
-        onChange={(e) => { handleSearchBarChange(e.target.value) }} />
+      <div className="actor-search-box">
+        <label className="actor-search-lable">Search:</label>
+        <input
+          type="text"
+          onChange={(e) => { handleSearchBarChange(e.target.value) }} />
+      </div>
 
-      {
-        ((actorName && actorName.length > 0) && (!actors || actors.length === 0)) &&
-        <h1>Actor not found</h1>
-      }
+      <div className="actor-search-results" >
+        {
+          ((actorName && actorName.length > 0) && (!actors || actors.length === 0)) &&
+          <h1>Actor not found</h1>
+        }
 
-      {
-        (!actors || actors.length > 0) &&
-        <h2>Actors</h2>
-      }
+        {
+          (!actors || actors.length > 0) &&
+          <h2 className="actor-search-page-results-label">Actor Search Results</h2>
+        }
 
-      {actors.map(actor => <ActorSearchResultsCard key={actor.id} actor={actor} />)}
+        {actors.map(actor => <ActorSearchResultsCard key={actor.id} actor={actor} />)}
+      </div>
     </div>
   );
 }

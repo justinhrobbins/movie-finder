@@ -1,6 +1,8 @@
 import { React } from 'react';
 import { Link } from 'react-router-dom';
 
+import './ActorSearchResultsCard.scss';
+
 export const ActorSearchResultsCard = ({ actor }) => {
     if (!actor) return null;
 
@@ -11,8 +13,10 @@ export const ActorSearchResultsCard = ({ actor }) => {
 
     return (
         <div className="ActorSearchResultsCard">
-            <p><Link to={actorDetailRoute}>{actor.name}</Link></p>
-            <img src={actorUrl} width="45" alt="" />
+            <Link to={actorDetailRoute}>
+                <img className="actor-search-results-card-image" src={actorUrl} width="45" alt="" />
+            </Link>
+            <span className="actor-search-results-card-name"><Link to={actorDetailRoute}>{actor.name}</Link></span>
         </div>
     );
 }

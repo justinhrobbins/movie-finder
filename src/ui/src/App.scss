@@ -1,0 +1,28 @@
+.App {
+  padding: 20px;
+  text-align: left;
+
+  .app-header-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .app-header-name {
+    justify-self: start;
+    align-self: end;
+    font-size: 2rem;
+  }
+
+  .app-header-name-link {
+    text-decoration: none;
+  }
+
+  .app-header-login {
+    text-align: right;
+    font-size: -1rem;
+  }
+}

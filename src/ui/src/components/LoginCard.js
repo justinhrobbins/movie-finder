@@ -1,6 +1,8 @@
 import { React, useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
 
+import './LoginCard.scss';
+
 export const LoginCard = () => {
     const [loginData, setLoginData] = useState(
         localStorage.getItem('loginData')
@@ -35,18 +37,22 @@ export const LoginCard = () => {
     return (
         <div className="LoginCard">
             {loginData ? (
-                <div>
-                    <h3>You logged in as {loginData.email}</h3>
+                <div className="login-card-logged-in">
+                    <div>You logged in as {loginData.email}</div>
                     <button onClick={handleLogout}>Logout</button>
+                    <div>My Actor Alerts</div>
                 </div>
             ) : (
-                <GoogleLogin
-                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                    buttonText="Log in with Google"
-                    onSuccess={handleLogin}
-                    onFailure={handleFailure}
-                    cookiePolicy={'single_host_origin'}
-                />
+                <div className="login-card-logged-in">
+                    <GoogleLogin
+                        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                        buttonText="Log in with Google"
+                        onSuccess={handleLogin}
+                        onFailure={handleFailure}
+                        cookiePolicy={'single_host_origin'}
+                    />
+                    <div>Login to access your Actor Alerts</div>
+                </div>
             )}
         </div>
     );
