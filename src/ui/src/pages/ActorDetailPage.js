@@ -1,6 +1,9 @@
 import { React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { ActorDetailCard } from '../components/ActorDetailCard';
 import { ActorMovieCard } from '../components/ActorMovieCard';
+
+import './ActorDetailPage.scss';
 
 export const ActorDetailPage = () => {
     const [person, setPerson] = useState({});
@@ -30,16 +33,14 @@ export const ActorDetailPage = () => {
     }
 
     if (!personCredits || !personCredits.cast) {
-        return <h1>Movies not found for Actor</h1>
+        return <h1>Searching for movies for {person.name}</h1>
     }
 
     return (
         <div className="ActorDetailPage">
-            <h2>Movies for {person.name}</h2>
-            <hr />
-            Most recent movie role: <ActorMovieCard key={personCredits.cast[0].id} movie={personCredits.cast[0]} />
+            <ActorDetailCard key={person.id} actor={person}/>
+            <h2 className="actor-detail-card-label">Movies for {person.name}:</h2>
             {personCredits.cast
-                .slice(1)
                 .map(movie => <ActorMovieCard key={movie.id} movie={movie} />)
             }
         </div>

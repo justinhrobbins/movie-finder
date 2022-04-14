@@ -1,0 +1,36 @@
+.ActorDetailCard {
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-rows: 1fr;
+    margin-bottom: 45px;
+
+    .actor-detail-card-image-container {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 25px;
+        background-color: rgb(91, 93, 103);
+    }
+
+    .actor-detail-card-image-container-image {
+        border-radius: 8px;
+    }
+
+    .actor-detail-card-image-container-details {
+        font-size: .85rem;
+        text-align: center;
+        padding: 10px 20px;
+    }
+
+    .actor-detail-card-content-section {
+        margin-left: 20px;
+    }
+
+    .actor-detail-card-content-section-actor-name {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .actor-detail-card-content-section-label{
+        font-weight: bold;
+    }
+}

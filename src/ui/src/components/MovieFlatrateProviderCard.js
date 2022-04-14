@@ -1,5 +1,7 @@
 import { React } from 'react';
 
+import './MovieFlatrateProviderCard.scss';
+
 export const MovieFlatrateProviderCard = ({ flatrateProvider }) => {
     if (!flatrateProvider) return null;
 
@@ -9,8 +11,7 @@ export const MovieFlatrateProviderCard = ({ flatrateProvider }) => {
 
     return (
         <div className="MovieFlatrateProviderCard">
-            <p>{flatrateProvider.provider_name}</p>
-            <img src={providerUrl} />
+            <div className="movie-flatrate-provider-card-image"><img alt={flatrateProvider.provider_name} title={flatrateProvider.provider_name} src={providerUrl} /></div>
         </div>
     );
 }
