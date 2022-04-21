@@ -1,28 +1,39 @@
 .App {
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   text-align: left;
 
   .app-header-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: min-content auto;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
   }
 
   .app-header-name {
+    // grid-row: span 2;
     justify-self: start;
     align-self: end;
     font-size: 2rem;
   }
 
-  .app-header-name-link {
-    text-decoration: none;
-  }
-
   .app-header-login {
     text-align: right;
     font-size: -1rem;
+  }
+
+  .app-header-menu {
+    display: flex;
+    gap: 10px;
+    justify-self: start;
+  }
+
+  .app-header-menu-link-active {
+    text-decoration: none;
+  }
+
+  .app-header-menu-link-inactive {
+    text-decoration: underline;
   }
 }

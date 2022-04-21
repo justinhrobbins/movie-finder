@@ -3,25 +3,34 @@ package org.robbins.moviefinder.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "users")
+@Table(name = "useractoralerts", uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueUserAndActor", columnNames = { "fk_user", "actorId" }) })
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class ActorAlert {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String email;
-    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_user")
+    private User user;
+    
+    private Long actorId;
 
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
@@ -31,24 +40,24 @@ public class User {
     @LastModifiedDate
     private long modifiedDate;
 
-    protected User() {
-    };
+    public ActorAlert() {
+    }
 
-    public User(final String email, final String name) {
-        this.email = email;
-        this.name = name;
+    public ActorAlert(User user, Long actorId) {
+        this.user = user;
+        this.actorId = actorId;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+    public User getUser() {
+        return user;
     }
 
-    public String getName() {
-        return name;
+    public Long getActorId() {
+        return actorId;
     }
 
     public long getCreatedDate() {
@@ -58,4 +67,5 @@ public class User {
     public long getModifiedDate() {
         return modifiedDate;
     }
+
 }
