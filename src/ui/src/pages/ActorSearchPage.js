@@ -34,8 +34,8 @@ export const ActorSearchPage = () => {
   return (
     <div className="ActorSearchPage">
       <div className="actor-search-box">
-        <label className="actor-search-lable">Search:</label>
-        <input
+        <label className="actor-search-label">Search:</label>
+        <input className="actor-search-box-input"
           type="text"
           onChange={(e) => { handleSearchBarChange(e.target.value) }} />
       </div>

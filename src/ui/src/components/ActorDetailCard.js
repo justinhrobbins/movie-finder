@@ -1,27 +1,69 @@
-import { React, useEffect, useState } from 'react';
+import { React, useContext, useState } from 'react';
+import { UserContext } from "../UserContext";
 
 import './ActorDetailCard.scss';
 
-export const ActorDetailCard = ({ actor }) => {
-    if (!actor) return null;
+export const ActorDetailCard = ({ actor, isAlertActiveForActor, removeActor }) => {
+    const { user, setUserContext } = useContext(UserContext);
+    const [isActorAlertActive, setIsAlertActiveforActort] = useState(isAlertActiveForActor);
 
+    const createActorAlertText = "Add to my Actor Alerts";
+    const removeActorAlertText = "Remove from Actor Alerts";
+
+    if (!actor) return null;
+    
     const baseUrl = "https://image.tmdb.org/t/p/w185/";
-    const defaultActorUrl = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
-    const actorUrl = actor.profile_path === "" ? defaultActorUrl : baseUrl + actor.profile_path;
+    const defaultActorPhotoUrl = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
+    const actorPhotoUrl = (!actor || !actor.profile_path || actor.profile_path === "" || actor.profile_path === null)
+        ? defaultActorPhotoUrl : baseUrl + actor.profile_path;
+
+    const manageActorAlert = (actorId) => {
+        const actorAlert ={};
+        actorAlert.actorId = actorId;
+
+        if (!isActorAlertActive) {
+            fetch('http://localhost:8080/actoralerts', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${user.tokenId}`
+                },
+                body: JSON.stringify(actorAlert)
+            }).then(response => {
+                if (response.status == 200) {
+                    setIsAlertActiveforActort(true)
+                }
+            })
+        } else {
+            fetch(`http://localhost:8080/actoralerts/${actorId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${user.tokenId}`
+                }
+            }).then(response => {
+                if (response.status == 204) {
+                    setIsAlertActiveforActort(false)
+                    removeActor(null);
+                }
+            })
+        };
+    };
 
     return (
         <div className="ActorDetailCard">
             <div className="actor-detail-card-image-container">
-                <img className="actor-detail-card-image-container-image" src={actorUrl} alt={actor.name} title={actor.name} />
-                <div className="actor-detail-card-image-container-details">Add to my Actor Alerts</div>
+                <img className="actor-detail-card-image-container-image" src={actorPhotoUrl} alt={actor.name} title={actor.name} />
+                <div className="actor-detail-card-image-container-details">
+                    <button className="actor-detail-card-image-container-button" value={actor.id} onClick={(e) => { manageActorAlert(e.target.value) }}>{isActorAlertActive ? removeActorAlertText: createActorAlertText}</button>
+                </div>
             </div>
             <div className="actor-detail-card-content-section">
                 <div className="actor-detail-card-content-section-actor-name">{actor.name}</div>
                 <div><span className="actor-detail-card-content-section-label">Birthday:</span> {actor.birthday}</div>
                 {
                     (actor && actor.deathday && actor.deathday.length > 0)
-                    ? <div><span className="actor-detail-card-content-section-label">Day of Death:</span> {actor.deathday}</div>
-                    : <div><span className="actor-detail-card-content-section-label"></span></div>
+                        ? <div><span className="actor-detail-card-content-section-label">Day of Death:</span> {actor.deathday}</div>
+                        : <div><span className="actor-detail-card-content-section-label"></span></div>
                 }
                 <div><span className="actor-detail-card-content-section-label">Place of birth:</span> {actor.place_of_birth}</div>
             </div>

@@ -24,9 +24,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests(a -> a
-                        .antMatchers("/person/**", "/movie/**", "/error").permitAll()
+                        .antMatchers("/person/**", "/movie/**", "/error", "/h2-console/**", "/favicon.ico").permitAll()
                         .anyRequest().authenticated())
+                .headers().frameOptions().sameOrigin()
+                .and()
                 // .exceptionHandling(e -> e
                 // .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 
