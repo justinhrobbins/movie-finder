@@ -1,0 +1,10 @@
+.ActorDetailAlertDataCard {
+
+    .actor-detail-alert-data-card-link {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

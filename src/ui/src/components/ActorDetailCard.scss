@@ -3,10 +3,10 @@
     grid-template-columns: min-content auto;
     grid-template-rows: 1fr;
     margin-bottom: 45px;
+    background-color: rgb(32, 32, 32);
 
     .actor-detail-card-image-container {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        margin-bottom: 25px;
         background-color: rgb(91, 93, 103);
     }
 
@@ -25,16 +25,31 @@
     }
 
     .actor-detail-card-content-section {
+        display: flex;
+        flex-direction: column;
         margin-left: 20px;
     }
 
     .actor-detail-card-content-section-actor-name {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 10px;
     }
 
+    .actor-detail-card-content-section-actor-name-link {
+        text-decoration: none;
+        
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     .actor-detail-card-content-section-label{
         font-weight: bold;
+    }
+
+    .actor-detail-card-content-section-alert-data {
+        // flex-grow: 1;
+        margin-top: auto;
     }
 }
