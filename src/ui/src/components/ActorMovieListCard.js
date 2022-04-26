@@ -6,8 +6,8 @@ import Select from 'react-select';
 import './ActorMovieListCard.scss';
 
 export const ActorMovieListCard = ({ actor }) => {
-    const [personCredits, setPersonCredits] = useState({});
     const [loading, setLoading] = useState(true);
+    const [personCredits, setPersonCredits] = useState({});
     const [unfilteredPersonCredits, setUnfilteredPersonCreditsPersonCredits] = useState({});
     useEffect(
         () => {

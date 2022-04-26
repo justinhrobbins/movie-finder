@@ -1,4 +1,26 @@
 .ActorAlertsPage{
+}
+
+.actor-alert-movie-list-section{ 
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.actor-alert-movie-list-label{
+    flex: 50%;
+}
+
+.actor-alert-movie-list-sort{
+    flex: 25%;
+    margin-right: 20px;
+}
+
+.actor-alert-movie-list-filter{
+    flex: 25%;
+}
+
+.actor-alerts-page-actors-list{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
