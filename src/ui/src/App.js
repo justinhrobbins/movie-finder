@@ -9,11 +9,11 @@ import { UserContext } from "./UserContext";
 import './App.scss';
 
 function App() {
-  const [user, setUserContext] = useState(null);
+  const [loggedInUser, setLoggedInUserContext] = useState(JSON.parse(localStorage.getItem('loginData')));
 
   return (
     <div className="App">
-      <UserContext.Provider value={{ user, setUserContext }}>
+      <UserContext.Provider value={ {loggedInUser, setLoggedInUserContext} }>
         <Router>
           <div className="app-header-section">
             <div className="app-header-name">

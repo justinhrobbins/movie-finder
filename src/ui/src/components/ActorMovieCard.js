@@ -8,13 +8,16 @@ export const ActorMovieCard = ({ movie }) => {
 
     useEffect(
         () => {
+            let isMounted = true;
             const fetchWatchProviders = async () => {
                 const response = await fetch(`http://localhost:8080/movie/${movie.id}/watchproviders`);
                 const data = await response.json();
-                setMovieWithWatchProviders(data);
+                if (isMounted) setMovieWithWatchProviders(data);
             };
 
             fetchWatchProviders();
+
+            return () => { isMounted = false };
         }, []
     );
 
@@ -27,8 +30,8 @@ export const ActorMovieCard = ({ movie }) => {
 
     const baseUrl = "https://image.tmdb.org/t/p/" + "w185" + "/";
     const defaultMovieUrl = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
-    const movieUrl = !movie.poster_path || movie.poster_path === "" || movie.poster_path === null 
-        ? defaultMovieUrl 
+    const movieUrl = !movie.poster_path || movie.poster_path === "" || movie.poster_path === null
+        ? defaultMovieUrl
         : baseUrl + movie.poster_path;
 
     let flatrateProviderLabel;
@@ -50,14 +53,15 @@ export const ActorMovieCard = ({ movie }) => {
                 <div className="actor-movie-card-info-content">RELEASE DATE: {movie.release_date} ({movie.original_language})</div>
                 <div className="actor-movie-card-info-content">LANGUAGE: {movie.original_language}</div>
                 <div className="actor-movie-card-info-content">ROLE: {movie.character}</div>
+                <div className="actor-movie-card-info-content">Popularity: {movie.popularity}</div>
                 <div className="actor-movie-card-info-content">OVERVIEW: {movie.overview}</div>
             </div>
             <div className="actor-movie-card-providers-section">
                 <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div>
                 <div className="actor-movie-card-providers-section-content">
-                {
-                    flatrateProviders.map(flatrateProvider => <MovieFlatrateProviderCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
-                }
+                    {
+                        flatrateProviders.map(flatrateProvider => <MovieFlatrateProviderCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
+                    }
                 </div>
             </div>
         </div>

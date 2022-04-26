@@ -5,7 +5,7 @@ import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
 import './ActorAlertsPage.scss';
 
 export const ActorAlertsPage = () => {
-  const { user, setUserContext } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
   const [userActorAlerts, setUserActorAlerts] = useState({});
 
   useEffect(
@@ -14,37 +14,38 @@ export const ActorAlertsPage = () => {
         const response = await fetch('http://localhost:8080/actoralerts', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${user.tokenId}`
+            'Authorization': `Bearer ${loggedInUser.tokenId}`
           }
         });
         const userActorAlerts = await response.json();
         setUserActorAlerts(userActorAlerts);
       };
-      
-      if (user) {
+
+      if (loggedInUser) {
         fetchActorAlerts();
       }
     }, []
   );
 
-  if (!user) {
+  if (!loggedInUser) {
     return <h3>Login to configure your Actor Alerts</h3>
   }
 
   if (!userActorAlerts || !userActorAlerts.actorAlerts || userActorAlerts.actorAlerts.length === 0) {
 
-    return <h3>No Actor Alerts configured</h3>
+    return <h3>Loading your Actor Alerts...</h3>
   }
 
   return (
     <div className="ActorAlertsPage">
       {
-        !user ? "Please login to create Actor Alerts" : ""
+        !loggedInUser ? "Please login to create Actor Alerts" : ""
       }
-
-      {userActorAlerts.actorAlerts
-        .map(actorAlert => <ActorAlertDetailCard key={actorAlert.actorId} actorId={actorAlert.actorId} />)
-      }
+      <div className="ActorAlertsPage">
+        {userActorAlerts.actorAlerts
+          .map(actorAlert => <ActorAlertDetailCard key={actorAlert.actorId} providedActor={actorAlert.person} actorDetails={actorAlert.details} />)
+        }
+      </div>
     </div>
   );
 }
