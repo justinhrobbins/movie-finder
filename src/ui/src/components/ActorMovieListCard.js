@@ -40,7 +40,8 @@ export const ActorMovieListCard = ({ actor }) => {
     const filterOptions = [
         { value: 'all', label: 'All Movies' },
         { value: 'upcoming', label: 'Upcoming Releases' },
-        { value: 'recent', label: 'Recent Release' }
+        { value: 'recent', label: 'Recent Release' },
+        { value: 'subscriptions', label: 'My Subscriptions' }
     ]
     useEffect(
         () => {
