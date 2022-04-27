@@ -1,10 +1,9 @@
-import { React, useEffect, useState } from 'react';
+import { React } from 'react';
 import { Link } from 'react-router-dom';
 
 import './ActorDetailAlertDataCard.scss';
 
 export const ActorDetailAlertDataCard = ({ actor, actorDetails}) => {
-    const actorDetailRoute = `/actors/${actor.id}/`;
 
     return (
         <div className="ActorDetailAlertDataCard">
