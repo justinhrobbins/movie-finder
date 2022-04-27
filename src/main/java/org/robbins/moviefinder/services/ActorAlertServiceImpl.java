@@ -89,7 +89,32 @@ public class ActorAlertServiceImpl implements ActorAlertService {
             actorAlertsDto.getActorAlerts().add(actorWithMovieCounts);
         });
 
+        actorAlertsDto.setActorAlertCount(calculateActorAlertsCount(actorAlertsDto));
+        actorAlertsDto.setUpcomingMovieCount(calculateUpcomingMovieCount(actorAlertsDto));
+        actorAlertsDto.setRecentMovieCount(calculateRecentMovieCount(actorAlertsDto));
         return actorAlertsDto;
+    }
+
+    private int calculateActorAlertsCount(final ActorAlertsDto actorAlertsDto) {
+        return actorAlertsDto.getActorAlerts().size();
+    }
+
+    private int calculateUpcomingMovieCount(final ActorAlertsDto actorAlertsDto) {
+        long upcomingMovieCount = actorAlertsDto.getActorAlerts()
+                .stream()
+                .filter(actorAlert -> actorAlert.getDetails().getUpcomingMovies() > 0)
+                .count();
+
+        return Math.toIntExact(upcomingMovieCount);
+    }
+
+    private int calculateRecentMovieCount(final ActorAlertsDto actorAlertsDto) {
+        long recentMovieCount = actorAlertsDto.getActorAlerts()
+                .stream()
+                .filter(actorAlert -> actorAlert.getDetails().getRecentMovies() > 0)
+                .count();
+
+        return Math.toIntExact(recentMovieCount);
     }
 
     private ActorAlertDto addPersonToActorAlert(final ActorAlertDto actorAlertDto) {
@@ -99,7 +124,8 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     private ActorAlertDto addMovieCounts(final ActorAlertDto actorAlertDto) {
-        final ActorDetailsDto actorDetailsDto = personService.findActorDetails(Math.toIntExact(actorAlertDto.getActorId()));
+        final ActorDetailsDto actorDetailsDto = personService
+                .findActorDetails(Math.toIntExact(actorAlertDto.getActorId()));
         actorAlertDto.setDetails(actorDetailsDto);
         return actorAlertDto;
     }

@@ -2,6 +2,7 @@ import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
 import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
+import { ActortAlertSummaryCard } from '../components/ActortAlertSummaryCard';
 import Select from 'react-select';
 
 import './ActorAlertsPage.scss';
@@ -75,17 +76,14 @@ export const ActorAlertsPage = () => {
       const filterActors = (allActorAlerts) => {
         let filteredActors;
         if (selectedFilterOption.value == "recent") {
-          console.log("filterActors: recent");
           filteredActors = allActorAlerts.actorAlerts.filter(function (el) {
             return el.details.recentMovies > 0;
           });
         } else if (selectedFilterOption.value == "upcoming") {
-          console.log("filterActors: upcoming");
           filteredActors = allActorAlerts.actorAlerts.filter(function (el) {
             return el.details.upcomingMovies > 0;
           });
         } else {
-          console.log("filterActors: all");
           filteredActors = allActorAlerts.actorAlerts;
         }
         return filteredActors;
@@ -94,19 +92,14 @@ export const ActorAlertsPage = () => {
       const sortActors = (actorAlerts) => {
         let sortedActorAlerts;
         if (selectedSortOption.value == "name") {
-          console.log("sortActors: name");
           sortedActorAlerts = actorAlerts.sort((a, b) => a.person.name.localeCompare(b.person.name));
         } else if (selectedSortOption.value == "upcoming") {
-          console.log("sortActors: upcoming");
           sortedActorAlerts = actorAlerts.sort((a, b) => b.details.upcomingMovies - a.details.upcomingMovies);
         } else if (selectedSortOption.value == "recent") {
-          console.log("sortActors: recent");
           sortedActorAlerts = actorAlerts.sort((a, b) => b.details.recentMovies - a.details.recentMovies);
         } else {
-          console.log("sortActors: total");
           sortedActorAlerts = actorAlerts.sort((a, b) => b.details.totalMovies - a.details.totalMovies);
         }
-        console.log(JSON.stringify(sortedActorAlerts));
         return sortedActorAlerts;
       }
 
@@ -157,9 +150,11 @@ export const ActorAlertsPage = () => {
   return (
     <div className="ActorAlertsPage">
       <div className="actor-alert-movie-list-section">
-        <h2 className="actor-alert-movie-list-label">
-          {!loggedInUser ? "Please login to create Actor Alerts" : "Your Actor Alerts"}
-        </h2>
+        <div className="actor-alert-movie-list-section-summary">
+          <div className="actor-alert-movie-list-section-summary-data">
+                    <ActortAlertSummaryCard userActorAlerts={userActorAlerts} />
+                </div>
+        </div>
         <div className="actor-alert-movie-list-sort">
           Sort by:
           <Select
