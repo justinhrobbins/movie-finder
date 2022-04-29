@@ -10,26 +10,31 @@ export const AccountConfigurationCard = () => {
 
     const checkboxesData = [
         {
-            value: 'Amazon_Prime',
+            key: 'Amazon_Prime_Video',
+            value: 'Amazon Prime Video',
             label: 'Amazon Prime Video',
             img: 'https://image.tmdb.org/t/p/w45//emthp39XA2YScoYL1p0sdbAH2WA.jpg',
         },
         {
-            value: 'Apple_Plus',
+            key: 'Apple_TV-Plus',
+            value: 'Apple TV Plus',
             label: 'Apple TV Plus',
             img: 'https://image.tmdb.org/t/p/w45//6uhKBfmtzFqOcLousHwZuzcrScK.jpg',
         },
         {
-            value: 'Diney_Plus',
+            key: 'Disney_Plus',
+            value: 'Disney Plus',
             label: 'Disney Plus',
             img: 'https://image.tmdb.org/t/p/w45//7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg',
         },
         {
-            value: 'HBO_Max',
+            key: 'HBO_Max',
+            value: 'HBO Max',
             label: 'HBO Max',
             img: 'https://image.tmdb.org/t/p/w45//rrta9psrx3e7F9wLUfpANdJzudx.jpg',
         },
         {
+            key: 'Netflix',
             value: 'Netflix',
             label: 'Netflix',
             img: 'https://image.tmdb.org/t/p/w45//t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg',
@@ -40,7 +45,7 @@ export const AccountConfigurationCard = () => {
         () => {
             setSelectedCheckboxes(new Set(loggedInUser.streamingServices));
         }, []
-      );
+    );
 
     const handleCheckboxChange = (event) => {
         const itemKey = event.target.value;
@@ -61,12 +66,10 @@ export const AccountConfigurationCard = () => {
     const saveAndCloseModal = () => {
         setModal(!modal);
 
-        console.log("selectedCheckboxes: " + JSON.stringify([...selectedCheckboxes]));
-
         loggedInUser.streamingServices = [...selectedCheckboxes];
 
         localStorage.setItem("loginData", JSON.stringify(loggedInUser));
-        setLoggedInUserContext(loggedInUser);
+        setLoggedInUserContext({ ...loggedInUser });
     };
 
     if (modal) {
@@ -77,17 +80,27 @@ export const AccountConfigurationCard = () => {
 
     return (
         <div className="AccountConfigurationCard">
-            <button onClick={toggleModal} className="btn-modal">
-                Configure
-            </button>
+            <div className="account-configuration-card-flatrate-provider-section">
+                {
+                    checkboxesData.map(
+                        data =>
+                            selectedCheckboxes && selectedCheckboxes.has(data.value) ?
 
+                                <div key={data.key} className="account-configuration-card-flatrate-provider-image"> <img alt={data.label} title={data.label} src={data.img} /></div>
+
+                                : ""
+                    )
+                }
+                <button onClick={toggleModal} className="btn-modal">
+                    Configure subscriptions
+                </button>
+            </div>
             {modal && (
                 <div className="modal">
                     <div onClick={toggleModal} className="overlay"></div>
                     <div className="modal-content">
                         <div>
                             <h2>Select your streaming services</h2>
-
                             {
                                 checkboxesData.map(
                                     checkbox =>

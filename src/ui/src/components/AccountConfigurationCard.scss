@@ -1,19 +1,22 @@
-.AccountConfigurationCard{
+.AccountConfigurationCard {
     // border: 1px white solid;
     text-align: right;
+    margin-top: 5px;
 
     body.active-modal {
         overflow-y: hidden;
     }
-    
+
     .btn-modal {
-        // padding: 5px 5px;
-        // display: block;
-        // margin: 100px auto 0;
-        // font-size: 18px;
+        margin-left: 5px;
+        margin-top: 5px;
+        padding-left: 3px;
+        padding-right: 3px;
+        height: 25px;
     }
-    
-    .modal, .overlay {
+
+    .modal,
+    .overlay {
         width: 100vw;
         height: 100vh;
         top: 0;
@@ -24,10 +27,11 @@
         text-align: left;
         z-index: 1;
     }
-    
+
     .overlay {
-        background: rgba(49,49,49,0.8);
+        background: rgba(49, 49, 49, 0.8);
     }
+
     .modal-content {
         position: absolute;
         top: 40%;
@@ -41,17 +45,32 @@
         min-width: 300px;
         z-index: 1;
     }
-    
+
     .close-modal {
         padding: 5px 5px;
     }
- 
-    .account-configuration-card-checkbox{
+
+    .account-configuration-card-checkbox {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
         margin-top: 10px;
         column-gap: 0.5rem;
         // border: 1px solid grey;
+    }
+
+    .account-configuration-card-flatrate-provider-section {
+        display: flex;
+        justify-content: flex-end;
+        column-gap: .10rem;
+        // border: 1px white solid;
+    }
+
+    .account-configuration-card-flatrate-provider-image {
+        &>img {
+            border-radius: 5px;
+            max-width: 80%;
+            height: auto;
+        }
     }
 }

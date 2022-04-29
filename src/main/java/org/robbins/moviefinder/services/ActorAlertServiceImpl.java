@@ -82,7 +82,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     private ActorAlertsDto convertActorAlerts(final List<ActorAlert> actorAlerts) {
         final ActorAlertsDto actorAlertsDto = new ActorAlertsDto();
 
-        actorAlerts.forEach(actorAlert -> {
+        actorAlerts.parallelStream().forEach(actorAlert -> {
             final ActorAlertDto actorAlertDto = new ActorAlertDto(actorAlert.getActorId());
             final ActorAlertDto actorWithPersonDetails = addPersonToActorAlert(actorAlertDto);
             final ActorAlertDto actorWithMovieCounts = addMovieCounts(actorWithPersonDetails);
@@ -101,7 +101,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
     private int calculateUpcomingMovieCount(final ActorAlertsDto actorAlertsDto) {
         long upcomingMovieCount = actorAlertsDto.getActorAlerts()
-                .stream()
+                .parallelStream()
                 .filter(actorAlert -> actorAlert.getDetails().getUpcomingMovies() > 0)
                 .count();
 
@@ -110,7 +110,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
     private int calculateRecentMovieCount(final ActorAlertsDto actorAlertsDto) {
         long recentMovieCount = actorAlertsDto.getActorAlerts()
-                .stream()
+                .parallelStream()
                 .filter(actorAlert -> actorAlert.getDetails().getRecentMovies() > 0)
                 .count();
 

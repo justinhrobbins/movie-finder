@@ -1,16 +1,26 @@
 package org.robbins.moviefinder.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.robbins.moviefinder.dtos.ActorDetailsDto;
+import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCounts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.model.MovieDb;
+import info.movito.themoviedbapi.model.WatchProviders;
+import info.movito.themoviedbapi.model.WatchProviders.Provider;
+import info.movito.themoviedbapi.model.WatchProviders.Results.US;
 import info.movito.themoviedbapi.model.people.Person;
 import info.movito.themoviedbapi.model.people.PersonCredit;
 import info.movito.themoviedbapi.model.people.PersonCredits;
@@ -18,10 +28,14 @@ import info.movito.themoviedbapi.model.people.PersonPeople;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-    final TmdbApi tmdbApi;
+    Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
 
-    public PersonServiceImpl(final TmdbApi tmdbApi) {
+    final TmdbApi tmdbApi;
+    final MovieService movieService;
+
+    public PersonServiceImpl(final TmdbApi tmdbApi, final MovieService movieService) {
         this.tmdbApi = tmdbApi;
+        this.movieService = movieService;
     }
 
     @Override
@@ -55,20 +69,22 @@ public class PersonServiceImpl implements PersonService {
         final long totalMovies = personCredits.getCast().size();
 
         final long upcomingMovies = personCredits.getCast()
-                .stream()
+                .parallelStream()
                 .filter(credit -> !(credit.getReleaseDate() == null))
                 .filter(credit -> credit.getReleaseDate().length() > 0)
                 .filter(credit -> LocalDate.parse(credit.getReleaseDate()).isAfter(today))
                 .count();
 
         final long recentMovies = personCredits.getCast()
-                .stream()
+                .parallelStream()
                 .filter(credit -> !(credit.getReleaseDate() == null))
                 .filter(credit -> credit.getReleaseDate().length() > 0)
                 .filter(credit -> isWithinRange(LocalDate.parse(credit.getReleaseDate())))
                 .count();
 
-        return new ActorDetailsDto(totalMovies, upcomingMovies, recentMovies);
+        final List<ActorMovieSubscriptionCounts> subscriptionCounts = findSubscriptions(personCredits);
+
+        return new ActorDetailsDto(totalMovies, upcomingMovies, recentMovies, subscriptionCounts);
     }
 
     private boolean isWithinRange(LocalDate date) {
@@ -84,7 +100,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private PersonCredits filterForMovies(final PersonCredits credits) {
-        final List<PersonCredit> filteredCredits = credits.getCast().stream()
+        final List<PersonCredit> filteredCredits = credits.getCast()
+                .parallelStream()
                 .filter(castCredit -> castCredit.getMediaType().equals("movie"))
                 .collect(Collectors.toList());
 
@@ -96,5 +113,51 @@ public class PersonServiceImpl implements PersonService {
         credits.getCast().sort(Comparator.comparing(credit -> credit.getPopularity(),
                 Comparator.nullsLast(Comparator.reverseOrder())));
         return credits;
+    }
+
+    private List<ActorMovieSubscriptionCounts> findSubscriptions(final PersonCredits personCredits) {
+        List<ActorMovieSubscriptionCounts> subscriptionCounts = new ArrayList<>();
+
+        personCredits.getCast()
+                .parallelStream()
+                .forEach(credit -> {
+                    populateFlatrateProviders(credit.getId(), subscriptionCounts);
+                });
+
+        return subscriptionCounts;
+    }
+
+    private void populateFlatrateProviders(int movieId, final List<ActorMovieSubscriptionCounts> subscriptionCounts) {
+        final MovieDb movie = movieService.findMovieWatchProviders(movieId, "en");
+        final WatchProviders watchProviders = movie.getWatchProviders();
+        final WatchProviders.Results results = watchProviders.getResults();
+        final US us = results.getUS();
+        if (us != null) {
+            final List<Provider> flatRateProviders = us.getFlatrateProviders();
+            if (flatRateProviders != null) {
+                flatRateProviders
+                        .parallelStream()
+                        .forEach(provider -> populateFlatrateProvider(provider, subscriptionCounts));
+            }
+        }
+    }
+
+    private synchronized void populateFlatrateProvider(final Provider provider,
+            final List<ActorMovieSubscriptionCounts> subscriptionCounts) {
+
+        final Optional<ActorMovieSubscriptionCounts> counts = subscriptionCounts
+                .parallelStream()
+                .filter(subscriptionCount -> StringUtils.equalsIgnoreCase(subscriptionCount.getSubcriptionService(),
+                        provider.getProviderName()))
+                .findAny();
+
+        if (counts.isPresent()) {
+            final ActorMovieSubscriptionCounts actorMovieSubscriptionCount = counts.get();
+            actorMovieSubscriptionCount.setMovieCount(actorMovieSubscriptionCount.getMovieCount() + 1);
+        } else {
+            final ActorMovieSubscriptionCounts actorMovieSubscriptionCount = new ActorMovieSubscriptionCounts(
+                    provider.getProviderName(), 1);
+            subscriptionCounts.add(actorMovieSubscriptionCount);
+        }
     }
 }
