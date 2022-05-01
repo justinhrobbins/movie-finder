@@ -9,7 +9,6 @@ import org.robbins.moviefinder.services.ActorAlertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @CrossOrigin
 @RequestMapping("actoralerts")
-public class ActorAlertController {
+public class ActorAlertController extends AbstractSecuredController {
     Logger logger = LoggerFactory.getLogger(ActorAlertController.class);
 
     private final ActorAlertService actorAlertService;
@@ -73,10 +72,5 @@ public class ActorAlertController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor Alert Not found for user");
         }
         return;
-    }
-
-    private String extractUserEmailFromPrincipal(final Principal principal) {
-        final JwtAuthenticationToken token = (JwtAuthenticationToken) principal;
-        return (String) token.getTokenAttributes().get("email");
     }
 }

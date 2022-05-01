@@ -1,45 +1,74 @@
-import { React, useEffect, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
+import { UserContext } from "../UserContext";
 import { MovieFlatrateProviderCard } from './MovieFlatrateProviderCard';
 
 import './ActorMovieCard.scss';
 
-export const ActorMovieCard = ({ movie }) => {
-    const [movieWithWatchProviders, setMovieWithWatchProviders] = useState({});
+export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
+    const { loggedInUser } = useContext(UserContext);
+    const [movie, setMovie] = useState(providedMovie);
+    const [flatrateProviders, setFlatrateProviders] = useState(null);
+    const [movieUrl, setMovieUrl] = useState(null);
+    const [flatrateProviderLabel, setFlatrateProviderLabel] = useState(null);
 
     useEffect(
         () => {
             let isMounted = true;
             const fetchWatchProviders = async () => {
-                const response = await fetch(`http://localhost:8080/movie/${movie.id}/watchproviders`);
-                const data = await response.json();
-                if (isMounted) setMovieWithWatchProviders(data);
+                const response = await fetch(`http://localhost:8080/movie/${providedMovie.id}/watchproviders`);
+                const movieWithWatchProviders = await response.json();
+
+                let flatrateProviders;
+                if (!movieWithWatchProviders
+                    || !movieWithWatchProviders["watch/providers"]
+                    || !movieWithWatchProviders["watch/providers"].results
+                    || !movieWithWatchProviders["watch/providers"].results.US
+                    || !movieWithWatchProviders["watch/providers"].results.US.flatrate) {
+                    flatrateProviders = [];
+                } else {
+                    flatrateProviders = movieWithWatchProviders["watch/providers"].results.US.flatrate;
+                }
+
+                if (isMounted) setFlatrateProviders(flatrateProviders);
             };
 
             fetchWatchProviders();
 
-            return () => { isMounted = false };
+            return () => {
+                isMounted = false
+            };
         }, []
     );
 
-    let flatrateProviders;
-    if (!movieWithWatchProviders["watch/providers"] || !movieWithWatchProviders["watch/providers"].results || !movieWithWatchProviders["watch/providers"].results.US || !movieWithWatchProviders["watch/providers"].results.US.flatrate) {
-        flatrateProviders = [];
-    } else {
-        flatrateProviders = movieWithWatchProviders["watch/providers"].results.US.flatrate;
-    }
+    useEffect(
+        () => {
+            const baseUrl = "https://image.tmdb.org/t/p/" + "w185" + "/";
+            const defaultMovieUrl = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
+            !movie || !movie.poster_path || movie.poster_path === "" || movie.poster_path === null
+                ? setMovieUrl(defaultMovieUrl)
+                : setMovieUrl(baseUrl + movie.poster_path);
+        }, [movie]
+    );
 
-    const baseUrl = "https://image.tmdb.org/t/p/" + "w185" + "/";
-    const defaultMovieUrl = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
-    const movieUrl = !movie.poster_path || movie.poster_path === "" || movie.poster_path === null
-        ? defaultMovieUrl
-        : baseUrl + movie.poster_path;
+    useEffect(
+        () => {
+            if (!flatrateProviders || flatrateProviders.length == 0) {
+                setFlatrateProviderLabel(<span>Not currently on any streaming services</span>);
+            } else {
+                setFlatrateProviderLabel(<span>Available on these streaming services:</span>);
+            }
+            if (filterBySubscriptions == true && flatrateProviders) {
+                if (!loggedInUser
+                    || !loggedInUser.streamingServices 
+                    || !flatrateProviders.some(e => loggedInUser.streamingServices.includes(e.provider_name))) {
+                    setMovie(null);
+                }
+            }
+        }, [flatrateProviders]
+    );
 
-    let flatrateProviderLabel;
-    if (flatrateProviders.length == 0) {
-        flatrateProviderLabel = <span>Not currently on any streaming services</span>;
-    } else {
-        flatrateProviderLabel = <span>Available on these streaming services:</span>
-    }
+    if (!movie) return null;
+    if (!flatrateProviders) return null;
 
     return (
         <div className="ActorMovieCard">

@@ -57,8 +57,12 @@ export const ActorDetailPage = () => {
         }, []
     );
 
-    if (!person || !actorDetails) {
-        return <h1>Actor not found</h1>
+    if (!person) {
+        return <h1>Searching for actor</h1>
+    }
+
+    if (!actorDetails) {
+        return <h1>Loading page for actor {person.name}</h1>
     }
 
     return (

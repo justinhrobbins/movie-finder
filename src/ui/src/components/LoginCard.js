@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { UserContext } from "../UserContext";
+import { AccountConfigurationCard } from './AccountConfigurationCard';
 
 import './LoginCard.scss';
 
@@ -36,8 +37,11 @@ export const LoginCard = () => {
         <div className="LoginCard">
             {loggedInUser ? (
                 <div className="login-card-logged-in">
-                    <div>You logged in as {loggedInUser.email}</div>
-                    <button onClick={handleLogout}>Logout</button>
+                    <div>
+                        <span className="login-card-logged-in-label">Logged in as {loggedInUser.name}</span>
+                        <button onClick={handleLogout}>Logout</button>
+                    </div>
+                    <div><AccountConfigurationCard /></div>
                 </div>
             ) : (
                 <div className="login-card-logged-in">
