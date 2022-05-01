@@ -1,54 +1,49 @@
 package org.robbins.moviefinder.controllers;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
-import org.robbins.moviefinder.entities.User;
-import org.robbins.moviefinder.repositories.UserRepository;
+import org.robbins.moviefinder.dtos.UserDto;
+import org.robbins.moviefinder.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
 @RequestMapping("user")
-public class UserController {
+public class UserController extends AbstractSecuredController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
     
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(final UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(final UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public Map<String, String> getUser(Principal principal) {
+    public UserDto getUser(final Principal principal) {
         final JwtAuthenticationToken token = (JwtAuthenticationToken) principal;
 
-        final Map<String, String> userDetails = new HashMap<>();
-        userDetails.put("name", (String) token.getTokenAttributes().get("name"));
-        userDetails.put("email", (String) token.getTokenAttributes().get("email"));
+        final UserDto userDto = new UserDto();
+        userDto.setEmail((String) token.getTokenAttributes().get("email"));
+        userDto.setName((String) token.getTokenAttributes().get("name"));
         
-        handleLoggedInUser(userDetails);
-
-        return userDetails;
+        final UserDto loggedInUser = userService.handleLoggedInUser(userDto);
+        return loggedInUser;
     }
 
-    private User handleLoggedInUser(final Map<String, String> userDetails) {
-        Optional<User> existingUser = userRepository.findByEmail(userDetails.get("email"));
+    @PostMapping
+    public UserDto saveSubscriptionServices(final Principal principal, @RequestBody UserDto userDto) {
+        logger.info(userDto.toString());
 
-        if (existingUser.isEmpty()) {
-            logger.debug("User Not found");
-            final User newUser = new User(userDetails.get("email"), userDetails.get("email"));
-            return userRepository.save(newUser);
-        }
-        logger.debug("User Found");
-        return existingUser.get();
+        final String userEmail = extractUserEmailFromPrincipal(principal);
+        final UserDto updatedUser = userService.updateUserSubscriptions(userEmail, userDto.getStreamingServices());
+        return updatedUser;
     }
 }

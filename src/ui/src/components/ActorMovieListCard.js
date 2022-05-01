@@ -7,7 +7,7 @@ import Select from 'react-select';
 import './ActorMovieListCard.scss';
 
 export const ActorMovieListCard = ({ actor }) => {
-    const loggedInUser = useContext(UserContext);
+    const { loggedInUser } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
     const [sortedAndFiltered, setSortedAndFiltered] = useState(false);
     const [personCredits, setPersonCredits] = useState({});
@@ -66,16 +66,13 @@ export const ActorMovieListCard = ({ actor }) => {
             if (filterOption) {
                 sortAndFilterOptions.filterOption = filterOption;
             }
-            if (sortOption || filterOption) {
-                setSortAndFilterOptions(sortAndFilterOptions);
-            }
-        }, [location]
+
+            setSortAndFilterOptions({...sortAndFilterOptions});
+        }, [location, loggedInUser]
     );
 
     useEffect(
         () => {
-            setSortedAndFiltered(false);
-
             const filterMovies = (allMovies) => {
                 const today = new Date();
                 const minNewReleaseDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
@@ -119,7 +116,7 @@ export const ActorMovieListCard = ({ actor }) => {
                 setSortedAndFiltered(true);
             }
 
-        }, [sortAndFilterOptions, loading, location]
+        }, [sortAndFilterOptions, loading]
     );
 
     const handleSortChange = (selectedOption) => {

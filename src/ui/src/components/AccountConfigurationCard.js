@@ -65,11 +65,26 @@ export const AccountConfigurationCard = () => {
 
     const saveAndCloseModal = () => {
         setModal(!modal);
+        let user = {};
+        user.streamingServices = Array.from(selectedCheckboxes);
 
-        loggedInUser.streamingServices = [...selectedCheckboxes];
+        const persistUserSubscriptions = async () => {
+            const response = await fetch('http://localhost:8080/user', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${loggedInUser.tokenId}`
+                },
+                body: JSON.stringify(user)
+            });
+            const updatedUser = await response.json();
 
-        localStorage.setItem("loginData", JSON.stringify(loggedInUser));
-        setLoggedInUserContext({ ...loggedInUser });
+            loggedInUser.streamingServices = updatedUser.streamingServices;
+            localStorage.setItem("loginData", JSON.stringify(loggedInUser));
+            setLoggedInUserContext({ ...loggedInUser });
+        }
+
+        persistUserSubscriptions();
     };
 
     if (modal) {
@@ -82,14 +97,14 @@ export const AccountConfigurationCard = () => {
         <div className="AccountConfigurationCard">
             <div className="account-configuration-card-flatrate-provider-section">
                 {
-                    checkboxesData.map(
-                        data =>
-                            selectedCheckboxes && selectedCheckboxes.has(data.value) ?
-
-                                <div key={data.key} className="account-configuration-card-flatrate-provider-image"> <img alt={data.label} title={data.label} src={data.img} /></div>
-
-                                : ""
-                    )
+                    (loggedInUser && loggedInUser.streamingServices && loggedInUser.streamingServices.length > 0)
+                        ? checkboxesData.map(
+                            data =>
+                                loggedInUser.streamingServices.includes(data.value) ?
+                                    <div key={data.key} className="account-configuration-card-flatrate-provider-image"> <img alt={data.label} title={data.label} src={data.img} /></div>
+                                    : ""
+                        )
+                        : ""
                 }
                 <button onClick={toggleModal} className="btn-modal">
                     Configure subscriptions

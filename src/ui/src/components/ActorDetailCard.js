@@ -5,7 +5,7 @@ import { ActorDetailAlertDataCard } from './ActorDetailAlertDataCard';
 import './ActorDetailCard.scss';
 
 export const ActorDetailCard = ({ actor, actorDetails, isAlertActiveForActor, removeActor }) => {
-    const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
+    const { loggedInUser } = useContext(UserContext);
     const [isActorAlertActive, setIsAlertActiveforActort] = useState(isAlertActiveForActor);
 
     const createActorAlertText = "Add to my Actor Alerts";

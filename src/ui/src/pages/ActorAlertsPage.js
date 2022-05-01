@@ -8,7 +8,7 @@ import Select from 'react-select';
 import './ActorAlertsPage.scss';
 
 export const ActorAlertsPage = () => {
-  const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
+  const { loggedInUser } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [userActorAlerts, setUserActorAlerts] = useState({});
   const [unfilteredUserActorAlerts, setUnfilteredUserActorAlerts] = useState({});

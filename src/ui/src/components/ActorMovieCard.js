@@ -5,7 +5,7 @@ import { MovieFlatrateProviderCard } from './MovieFlatrateProviderCard';
 import './ActorMovieCard.scss';
 
 export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
-    const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
+    const { loggedInUser } = useContext(UserContext);
     const [movie, setMovie] = useState(providedMovie);
     const [flatrateProviders, setFlatrateProviders] = useState(null);
     const [movieUrl, setMovieUrl] = useState(null);
@@ -58,7 +58,9 @@ export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
                 setFlatrateProviderLabel(<span>Available on these streaming services:</span>);
             }
             if (filterBySubscriptions == true && flatrateProviders) {
-                if (!loggedInUser.streamingServices || !flatrateProviders.some(e => loggedInUser.streamingServices.includes(e.provider_name))) {
+                if (!loggedInUser
+                    || !loggedInUser.streamingServices 
+                    || !flatrateProviders.some(e => loggedInUser.streamingServices.includes(e.provider_name))) {
                     setMovie(null);
                 }
             }

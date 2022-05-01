@@ -22,6 +22,7 @@ public class User {
     private Long id;
     private String email;
     private String name;
+    private String streamingServices;
 
     @Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
@@ -57,5 +58,13 @@ public class User {
 
     public long getModifiedDate() {
         return modifiedDate;
+    }
+
+    public String getStreamingServices() {
+        return streamingServices;
+    }
+
+    public void setStreamingServices(String streamingServices) {
+        this.streamingServices = streamingServices;
     }
 }

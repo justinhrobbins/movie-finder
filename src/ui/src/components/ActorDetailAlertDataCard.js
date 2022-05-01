@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import './ActorDetailAlertDataCard.scss';
 
 export const ActorDetailAlertDataCard = ({ actor, actorDetails }) => {
-    const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
+    const { loggedInUser } = useContext(UserContext);
     const [subscriptionsLink, setSubscriptionsLink] = useState(null);
 
     useEffect(
@@ -26,7 +26,7 @@ export const ActorDetailAlertDataCard = ({ actor, actorDetails }) => {
                     });
                 setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>Movies on your Subscriptions: {subscriptionCount}</Link>)
             }
-        }, []
+        }, [loggedInUser]
     );
 
     return (
