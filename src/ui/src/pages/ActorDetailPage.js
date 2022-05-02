@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { ActorDetailCard } from '../components/ActorDetailCard';
 import { ActorMovieListCard } from '../components/ActorMovieListCard';
 
@@ -8,8 +8,8 @@ import './ActorDetailPage.scss';
 export const ActorDetailPage = () => {
     const [person, setPerson] = useState(null);
     const [actorDetails, setActortDetails] = useState(null);
-    const [isActorAlertActive, setIsActorAlertActive] = useState(false);
     const { actorId } = useParams();
+    const location = useLocation();
 
     useEffect(
         () => {
@@ -32,7 +32,7 @@ export const ActorDetailPage = () => {
             };
 
             fetchActorAlertDetails();
-        }, []
+        }, [location]
     );
 
     if (!person) {
@@ -40,7 +40,7 @@ export const ActorDetailPage = () => {
     }
 
     if (!actorDetails) {
-        return <h1>Loading page for actor {person.name}</h1>
+        return <h2>Loading page for actor {person.name}...</h2>
     }
 
     return (

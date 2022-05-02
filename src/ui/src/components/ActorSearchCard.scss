@@ -1,4 +1,5 @@
-.ActorSearchPage {
+.ActorSearchCard {
+
     .actor-search-box {
         margin-bottom: 30px;
     }
@@ -11,8 +12,12 @@
         background-color: rgb(180, 180, 180);
     }
 
-    .actor-search-results {
+    .actor-search-results-container {
+        // border: 1px white solid;
+    }
 
+    .actor-search-results-content {
+        background-color: rgb(32, 32, 32);
     }
 
     .actor-search-page-results-label {

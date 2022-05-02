@@ -12,7 +12,6 @@
   }
 
   .app-header-name {
-    // grid-row: span 2;
     justify-self: start;
     align-self: end;
     font-size: 2rem;
@@ -24,6 +23,7 @@
   }
 
   .app-header-menu {
+    grid-column: span 2;
     display: flex;
     gap: 10px;
     justify-self: start;
@@ -35,5 +35,9 @@
 
   .app-header-menu-link-inactive {
     text-decoration: underline;
+  }
+
+  .app-header-search-bar {
+    grid-column: span 2;
   }
 }

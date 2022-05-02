@@ -1,0 +1,32 @@
+[
+    {
+        "key": "Amazon_Prime_Video",
+        "value": "Amazon Prime Video",
+        "label": "Amazon Prime Video",
+        "img": "https://image.tmdb.org/t/p/w45//emthp39XA2YScoYL1p0sdbAH2WA.jpg"
+    },
+    {
+        "key": "Apple_TV-Plus",
+        "value": "Apple TV Plus",
+        "label": "Apple TV Plus",
+        "img": "https://image.tmdb.org/t/p/w45//6uhKBfmtzFqOcLousHwZuzcrScK.jpg"
+    },
+    {
+        "key": "Disney_Plus",
+        "value": "Disney Plus",
+        "label": "Disney Plus",
+        "img": "https://image.tmdb.org/t/p/w45//7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg"
+    },
+    {
+        "key": "HBO_Max",
+        "value": "HBO Max",
+        "label": "HBO Max",
+        "img": "https://image.tmdb.org/t/p/w45//rrta9psrx3e7F9wLUfpANdJzudx.jpg"
+    },
+    {
+        "key": "Netflix",
+        "value": "Netflix",
+        "label": "Netflix",
+        "img": "https://image.tmdb.org/t/p/w45//t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg"
+    }
+]
