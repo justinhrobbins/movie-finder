@@ -8,7 +8,6 @@ import './ActorDetailPage.scss';
 export const ActorDetailPage = () => {
     const [person, setPerson] = useState(null);
     const [actorDetails, setActortDetails] = useState(null);
-    const [isActorAlertActive, setIsActorAlertActive] = useState(false);
     const { actorId } = useParams();
 
     useEffect(
@@ -40,7 +39,7 @@ export const ActorDetailPage = () => {
     }
 
     if (!actorDetails) {
-        return <h1>Loading page for actor {person.name}</h1>
+        return <h2>Loading page for actor {person.name}...</h2>
     }
 
     return (

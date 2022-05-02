@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, NavLink } from 'react-router-dom';
-import { ActorSearchPage } from './pages/ActorSearchPage';
+import { HomePage } from './pages/HomePage';
 import { ActorDetailPage } from './pages/ActorDetailPage';
 import { ActorAlertsPage } from './pages/ActorAlertsPage';
+import { ActorSearchCard } from './components/ActorSearchCard';
 import { LoginCard } from './components/LoginCard';
 import { UserContext } from "./UserContext";
 
@@ -13,7 +14,7 @@ function App() {
 
   return (
     <div className="App">
-      <UserContext.Provider value={ {loggedInUser, setLoggedInUserContext} }>
+      <UserContext.Provider value={{ loggedInUser, setLoggedInUserContext }}>
         <Router>
           <div className="app-header-section">
             <div className="app-header-name">
@@ -23,17 +24,20 @@ function App() {
               <LoginCard />
             </div>
             <div className="app-header-menu">
-              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to="/actors/search/">Home</NavLink>
+              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to="/">Home</NavLink>
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/actoralerts/'>My Actor Alerts</NavLink>
+            </div>
+            <div className="app-header-search-bar">
+              <ActorSearchCard />
             </div>
           </div>
 
           <Routes>
-            <Route path='/actors/search/' element={<ActorSearchPage />} />
+            <Route path='/' element={<HomePage />} />
             <Route path='/actors/:actorId' element={<ActorDetailPage />} />
             <Route path='/actoralerts/' element={<ActorAlertsPage />} />
 
-            <Route path="*" element={<Navigate to="/actors/search/" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </UserContext.Provider>

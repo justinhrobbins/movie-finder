@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './ActorSearchResultsCard.scss';
 
-export const ActorSearchResultsCard = ({ actor }) => {
+export const ActorSearchResultsCard = ({ actor, loadActor }) => {
     if (!actor) return null;
 
     const baseUrl = "https://image.tmdb.org/t/p/w45/";
@@ -12,7 +12,7 @@ export const ActorSearchResultsCard = ({ actor }) => {
     const actorDetailRoute = `/actors/${actor.id}`;
 
     return (
-        <div className="ActorSearchResultsCard">
+        <div className="ActorSearchResultsCard" onClick={loadActor}>
             <Link to={actorDetailRoute}>
                 <img className="actor-search-results-card-image" src={actorUrl} width="45" alt="" />
             </Link>
