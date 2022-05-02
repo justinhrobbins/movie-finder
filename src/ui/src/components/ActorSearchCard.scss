@@ -1,4 +1,5 @@
 .ActorSearchCard {
+
     .actor-search-box {
         margin-bottom: 30px;
     }
@@ -11,43 +12,12 @@
         background-color: rgb(180, 180, 180);
     }
 
-    body.active-modal {
-        overflow-y: hidden;
+    .actor-search-results-container {
+        // border: 1px white solid;
     }
 
-    .actor-search-results-modal,
-    .overlay {
-        width: 100vw;
-        height: 100vh;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        position: fixed;
-        text-align: left;
-        z-index: 1;
-    }
-
-    .overlay {
-        background: rgba(49, 49, 49, 0.8);
-    }
-
-    .modal-content {
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        line-height: 1.4;
-        background: #1e1e1e;
-        padding: 14px 28px;
-        border-radius: 3px;
-        max-width: 600px;
-        min-width: 300px;
-        z-index: 1;
-    }
-
-    .close-modal {
-        padding: 5px 5px;
+    .actor-search-results-content {
+        background-color: rgb(32, 32, 32);
     }
 
     .actor-search-page-results-label {

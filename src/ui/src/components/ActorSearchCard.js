@@ -4,7 +4,7 @@ import { ActorSearchResultsCard } from './ActorSearchResultsCard';
 import './ActorSearchCard.scss';
 
 export const ActorSearchCard = () => {
-  const [modal, setModal] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const [actorName, setActorName] = useState("");
   const [actors, setActors] = useState([]);
 
@@ -27,28 +27,14 @@ export const ActorSearchCard = () => {
     
     if (searchBarQuery && searchBarQuery.length > 2) {
       fetchActors(searchBarQuery)
-
-
-      if (searchBarQuery.length == 3) {
-        toggleModal();
-      }
+      setShowSearchResults(true);
     }
   };
 
-  const toggleModal = () => {
-    setModal(!modal);
-  };
-
-  const loadActor = () => {
-    setModal(!modal);
+  const clearSearchResults = () => {
+    setShowSearchResults(false);
     setActorName("");
   };
-
-  if (modal) {
-    document.body.classList.add('active-modal')
-  } else {
-    document.body.classList.remove('active-modal')
-  }
 
   return (
     <div className="ActorSearchCard">
@@ -61,10 +47,10 @@ export const ActorSearchCard = () => {
           onChange={(e) => { handleSearchBarChange(e.target.value) }} />
       </div>
 
-      {modal && (
-        <div className="actor-search-results-modal">
-          <div onClick={toggleModal} className="overlay"></div>
-          <div className="modal-content">
+      {showSearchResults && (
+        <div className="actor-search-results-container">
+          {/* <div onClick={clearSearchResults} className="overlay"></div> */}
+          <div className="actor-search-results-content" onClick={clearSearchResults}>
             {
               ((actorName && actorName.length > 0) && (!actors || actors.length === 0)) &&
               <h1>Actor not found</h1>
@@ -77,7 +63,7 @@ export const ActorSearchCard = () => {
 
             {actors
               .slice(0, 5)
-              .map(actor => <ActorSearchResultsCard key={actor.id} actor={actor} loadActor={loadActor} />)}
+              .map(actor => <ActorSearchResultsCard key={actor.id} actor={actor} clearSearchResults={clearSearchResults} />)}
           </div>
         </div>
       )}
