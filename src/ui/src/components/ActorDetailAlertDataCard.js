@@ -4,9 +4,27 @@ import { Link } from 'react-router-dom';
 
 import './ActorDetailAlertDataCard.scss';
 
-export const ActorDetailAlertDataCard = ({ actor, actorDetails }) => {
+export const ActorDetailAlertDataCard = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);
+    const [actorDetails, setActortDetails] = useState(null);
     const [subscriptionsLink, setSubscriptionsLink] = useState(null);
+
+    useEffect(
+        () => {
+            const fetchActorAlertDetails = async () => {
+                const response = await fetch(`http://localhost:8080/person/${actor.id}/details`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                const alertDetails = await response.json();
+                setActortDetails(alertDetails);
+            };
+
+            fetchActorAlertDetails();
+        }, []
+    );
 
     useEffect(
         () => {
@@ -15,19 +33,25 @@ export const ActorDetailAlertDataCard = ({ actor, actorDetails }) => {
             } else if (!loggedInUser.streamingServices || !loggedInUser.streamingServices.length > 0) {
                 setSubscriptionsLink("Configure your Subscriptions to filter by Subscriptions");
             } else {
-                let subscriptionCount = 0;
-                actorDetails.subscriptions
-                    .map(subscription => {
-                        if (loggedInUser.streamingServices.includes(subscription.subcriptionService)) {
-                            subscriptionCount = subscriptionCount + subscription.movieCount;
-                        } else {
-                            subscriptionCount = subscriptionCount + 0;
-                        }
-                    });
-                setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>Movies on your Subscriptions: {subscriptionCount}</Link>)
+                if (actorDetails) {
+                    let subscriptionCount = 0;
+                    actorDetails.subscriptions
+                        .map(subscription => {
+                            if (loggedInUser.streamingServices.includes(subscription.subcriptionService)) {
+                                subscriptionCount = subscriptionCount + subscription.movieCount;
+                            } else {
+                                subscriptionCount = subscriptionCount + 0;
+                            }
+                        });
+                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>Movies on your Subscriptions: {subscriptionCount}</Link>)
+                }
             }
-        }, [loggedInUser]
+        }, [loggedInUser, actorDetails]
     );
+
+    if (!actorDetails) {
+        return <h2>Loading details for actor {actor.name}...</h2>
+    }
 
     return (
         <div className="ActorDetailAlertDataCard">

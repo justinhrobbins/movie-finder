@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext";
 import { ActorDetailAlertDataCard } from './ActorDetailAlertDataCard';
 import './ActorDetailCard.scss';
 
-export const ActorDetailCard = ({ actor, actorDetails, removeActor }) => {
+export const ActorDetailCard = ({ actor, removeActor }) => {
     const { loggedInUser } = useContext(UserContext);
     const [isActorAlertActive, setIsActorAlertActive] = useState(false);
 
@@ -104,7 +104,7 @@ export const ActorDetailCard = ({ actor, actorDetails, removeActor }) => {
                 }
                 <div><span className="actor-detail-card-content-section-label">Place of birth:</span> {actor.place_of_birth}</div>
                 <div className="actor-detail-card-content-section-alert-data">
-                    <ActorDetailAlertDataCard key={actor.id} actor={actor} actorDetails={actorDetails} />
+                    <ActorDetailAlertDataCard key={actor.id} actor={actor} />
                 </div>
             </div>
         </div>
