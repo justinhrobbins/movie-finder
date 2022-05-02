@@ -1,16 +1,14 @@
-import { React, useContext, useEffect, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ActorDetailCard } from '../components/ActorDetailCard';
 import { ActorMovieListCard } from '../components/ActorMovieListCard';
-import { UserContext } from "../UserContext";
 
 import './ActorDetailPage.scss';
 
 export const ActorDetailPage = () => {
-    const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
     const [person, setPerson] = useState(null);
     const [actorDetails, setActortDetails] = useState(null);
-    const [isActorAlertActive, setIsAlertActiveforActort] = useState(false);
+    const [isActorAlertActive, setIsActorAlertActive] = useState(false);
     const { actorId } = useParams();
 
     useEffect(
@@ -34,26 +32,6 @@ export const ActorDetailPage = () => {
             };
 
             fetchActorAlertDetails();
-
-            if (loggedInUser) {
-                const fetchActorAlert = async () => {
-                    const response = await fetch(`http://localhost:8080/actoralerts/${actorId}`, {
-                        method: 'GET',
-                        headers: {
-                            "Content-Type": "application/json",
-                            'Authorization': `Bearer ${loggedInUser.tokenId}`
-                        }
-                    })
-                        .then(response => {
-                            if (response.status == 200) {
-                                setIsAlertActiveforActort(true);
-                            } else {
-                                setIsAlertActiveforActort(false);
-                            }
-                        });
-                };
-                fetchActorAlert();
-            }
         }, []
     );
 
@@ -67,7 +45,7 @@ export const ActorDetailPage = () => {
 
     return (
         <div className="ActorDetailPage">
-            <ActorDetailCard key={person.id} actor={person} actorDetails={actorDetails} isAlertActiveForActor={isActorAlertActive} />
+            <ActorDetailCard key={person.id} actor={person} actorDetails={actorDetails} />
             <ActorMovieListCard id={actorId} actor={person} />
         </div>
     );

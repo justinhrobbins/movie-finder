@@ -1,15 +1,40 @@
-import { React, useContext, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from "../UserContext";
 import { ActorDetailAlertDataCard } from './ActorDetailAlertDataCard';
 import './ActorDetailCard.scss';
 
-export const ActorDetailCard = ({ actor, actorDetails, isAlertActiveForActor, removeActor }) => {
+export const ActorDetailCard = ({ actor, actorDetails, removeActor }) => {
     const { loggedInUser } = useContext(UserContext);
-    const [isActorAlertActive, setIsAlertActiveforActort] = useState(isAlertActiveForActor);
+    const [isActorAlertActive, setIsActorAlertActive] = useState(false);
 
     const createActorAlertText = "Add to my Actor Alerts";
     const removeActorAlertText = "Remove from Actor Alerts";
+
+    useEffect(
+        () => {
+            if (loggedInUser) {
+                const fetchActorAlert = async () => {
+                    const response = await fetch(`http://localhost:8080/actoralerts/${actor.id}`, {
+                        method: 'GET',
+                        headers: {
+                            "Content-Type": "application/json",
+                            'Authorization': `Bearer ${loggedInUser.tokenId}`
+                        }
+                    })
+                        .then(response => response.text())
+                        .then(isAlertActiveForActor => {
+                            if (isAlertActiveForActor == 'true') {
+                                setIsActorAlertActive(true);
+                            } else {
+                                setIsActorAlertActive(false);
+                            }
+                        });
+                };
+                fetchActorAlert();
+            }
+        }, []
+    );
 
     if (!actor) return null;
 
@@ -21,14 +46,14 @@ export const ActorDetailCard = ({ actor, actorDetails, isAlertActiveForActor, re
     const actorDetailRoute = `/actors/${actor.id}`;
 
     const manageActorAlert = (actorId) => {
-        const actorAlert = {actorId: actorId};
+        const actorAlert = { actorId: actorId };
 
         if (!loggedInUser) {
             alert('Login to save Actor Alerts');
             return;
         }
 
-        if (!isActorAlertActive) {
+        if (isActorAlertActive === false) {
             fetch('http://localhost:8080/actoralerts', {
                 method: 'POST',
                 headers: {
@@ -38,7 +63,7 @@ export const ActorDetailCard = ({ actor, actorDetails, isAlertActiveForActor, re
                 body: JSON.stringify(actorAlert)
             }).then(response => {
                 if (response.status == 200) {
-                    setIsAlertActiveforActort(true)
+                    setIsActorAlertActive(true)
                 }
             })
         } else {
@@ -49,7 +74,7 @@ export const ActorDetailCard = ({ actor, actorDetails, isAlertActiveForActor, re
                 }
             }).then(response => {
                 if (response.status == 204) {
-                    setIsAlertActiveforActort(false)
+                    setIsActorAlertActive(false)
 
                     if (removeActor) {
                         removeActor(null);
@@ -64,7 +89,9 @@ export const ActorDetailCard = ({ actor, actorDetails, isAlertActiveForActor, re
             <div className="actor-detail-card-image-container">
                 <img className="actor-detail-card-image-container-image" src={actorPhotoUrl} alt={actor.name} title={actor.name} />
                 <div className="actor-detail-card-image-container-details">
-                    <button className="actor-detail-card-image-container-button" value={actor.id} onClick={(e) => { manageActorAlert(e.target.value) }}>{isActorAlertActive ? removeActorAlertText : createActorAlertText}</button>
+                    <button className="actor-detail-card-image-container-button" value={actor.id} onClick={(e) => { manageActorAlert(e.target.value) }}>
+                        {isActorAlertActive === true ? removeActorAlertText : createActorAlertText}
+                    </button>
                 </div>
             </div>
             <div className="actor-detail-card-content-section">

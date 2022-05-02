@@ -42,15 +42,15 @@ public class ActorAlertController extends AbstractSecuredController {
     }
 
     @GetMapping("/{actorId}")
-    public ActorAlertDto findActorAlert(@PathVariable("actorId") final Long actorId, final Principal principal) {
+    public Boolean findActorAlert(@PathVariable("actorId") final Long actorId, final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
 
         Optional<ActorAlertDto> actorAlertDto = actorAlertService.findByUserAndActorId(userEmail, actorId);
 
-        if (!actorAlertDto.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor Alert Not found for user");
+        if (actorAlertDto.isPresent()) {
+            return Boolean.TRUE;
         } else {
-            return actorAlertDto.get();
+            return Boolean.FALSE;
         }
     }
 
