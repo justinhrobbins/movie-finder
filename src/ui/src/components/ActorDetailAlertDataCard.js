@@ -50,7 +50,7 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
     );
 
     if (!actorDetails) {
-        return <h2>Loading details for actor {actor.name}...</h2>
+        return <h3>Loading details for actor {actor.name}...</h3>
     }
 
     return (

@@ -2,6 +2,7 @@ package org.robbins.moviefinder.controllers;
 
 import java.util.List;
 
+import org.robbins.moviefinder.dtos.ActorAlertsDto;
 import org.robbins.moviefinder.dtos.ActorDetailsDto;
 import org.robbins.moviefinder.services.PersonService;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,5 +44,10 @@ public class PersonController {
     @GetMapping("/{actorId}/details")
     public ActorDetailsDto getDetailsForActor(@PathVariable("actorId") final int actorId) {
         return personService.findActorDetails(actorId);
+    }
+
+    @GetMapping("/popular")
+    public ActorAlertsDto getPopluar() {
+        return personService.findPopularActors();
     }
 }

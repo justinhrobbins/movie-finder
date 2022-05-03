@@ -2,6 +2,7 @@ package org.robbins.moviefinder.services;
 
 import java.util.List;
 
+import org.robbins.moviefinder.dtos.ActorAlertsDto;
 import org.robbins.moviefinder.dtos.ActorDetailsDto;
 
 import info.movito.themoviedbapi.model.people.Person;
@@ -13,4 +14,5 @@ public interface PersonService {
     public PersonPeople findPersonDetails(final int personId);
     public PersonCredits findPersonMovieCredits(final int personId);
     public ActorDetailsDto findActorDetails(final int actorId);
+    public ActorAlertsDto findPopularActors();
 }

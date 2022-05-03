@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.robbins.moviefinder.dtos.ActorAlertDto;
+import org.robbins.moviefinder.dtos.ActorAlertsDto;
 import org.robbins.moviefinder.dtos.ActorDetailsDto;
 import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCountsDto;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbPeople.PersonResultsPage;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.WatchProviders;
 import info.movito.themoviedbapi.model.WatchProviders.Provider;
@@ -32,6 +35,7 @@ public class PersonServiceImpl implements PersonService {
 
     final TmdbApi tmdbApi;
     final MovieService movieService;
+    final Integer popularPageNumber = 1;
 
     public PersonServiceImpl(final TmdbApi tmdbApi, final MovieService movieService) {
         this.tmdbApi = tmdbApi;
@@ -127,7 +131,8 @@ public class PersonServiceImpl implements PersonService {
         return subscriptionCounts;
     }
 
-    private void populateFlatrateProviders(int movieId, final List<ActorMovieSubscriptionCountsDto> subscriptionCounts) {
+    private void populateFlatrateProviders(int movieId,
+            final List<ActorMovieSubscriptionCountsDto> subscriptionCounts) {
         final MovieDb movie = movieService.findMovieWatchProviders(movieId, "en");
         final WatchProviders watchProviders = movie.getWatchProviders();
         final WatchProviders.Results results = watchProviders.getResults();
@@ -160,4 +165,24 @@ public class PersonServiceImpl implements PersonService {
             subscriptionCounts.add(actorMovieSubscriptionCount);
         }
     }
+
+    @Override
+    @Cacheable("popular")
+    public ActorAlertsDto findPopularActors() {
+        final ActorAlertsDto actorAlertsDto = new ActorAlertsDto();
+        final PersonResultsPage page = tmdbApi.getPeople().getPersonPopular(popularPageNumber);
+        page.getResults()
+                .parallelStream()
+                .forEach(person -> populateActorDetails(actorAlertsDto, person));
+
+        return actorAlertsDto;
+    }
+
+    private void populateActorDetails(final ActorAlertsDto actorAlertsDto, Person person) {
+        final ActorAlertDto actorAlertDto = new ActorAlertDto(Long.valueOf(person.getId()), person);
+        final ActorDetailsDto actorDetailsDto = findActorDetails(person.getId());
+        actorAlertDto.setDetails(actorDetailsDto);
+        actorAlertsDto.getActorAlerts().add(actorAlertDto);
+    }
+
 }

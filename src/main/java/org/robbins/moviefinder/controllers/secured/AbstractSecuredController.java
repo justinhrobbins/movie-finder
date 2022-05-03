@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.controllers;
+package org.robbins.moviefinder.controllers.secured;
 
 import java.security.Principal;
 

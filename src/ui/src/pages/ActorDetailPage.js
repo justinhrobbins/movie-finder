@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ActorDetailCard } from '../components/ActorDetailCard';
 import { ActorMovieListCard } from '../components/ActorMovieListCard';
 
@@ -9,7 +9,6 @@ export const ActorDetailPage = () => {
     const [person, setPerson] = useState(null);
 
     const { actorId } = useParams();
-    const location = useLocation();
 
     useEffect(
         () => {
