@@ -6,12 +6,12 @@ public class ActorDetailsDto {
     long upcomingMovies;
     long recentMovies;
     long totalMovies;
-    List<ActorMovieSubscriptionCounts> subscriptions;
+    List<ActorMovieSubscriptionCountsDto> subscriptions;
  
     public ActorDetailsDto() {
     }
 
-    public ActorDetailsDto(long totalMovies, long upcomingMovies, long recentMovies, List<ActorMovieSubscriptionCounts> subscriptions) {
+    public ActorDetailsDto(long totalMovies, long upcomingMovies, long recentMovies, List<ActorMovieSubscriptionCountsDto> subscriptions) {
         this.totalMovies = totalMovies;
         this.upcomingMovies = upcomingMovies;
         this.recentMovies = recentMovies;
@@ -30,7 +30,7 @@ public class ActorDetailsDto {
         return totalMovies;
     }
 
-    public List<ActorMovieSubscriptionCounts> getSubscriptions() {
+    public List<ActorMovieSubscriptionCountsDto> getSubscriptions() {
         return subscriptions;
     }
 }

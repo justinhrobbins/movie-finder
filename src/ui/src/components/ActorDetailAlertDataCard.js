@@ -43,7 +43,7 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
                                 subscriptionCount = subscriptionCount + 0;
                             }
                         });
-                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>Movies on your Subscriptions: {subscriptionCount}</Link>)
+                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>On your Subscriptions: {subscriptionCount}</Link>)
                 }
             }
         }, [loggedInUser, actorDetails]
@@ -55,8 +55,8 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
 
     return (
         <div className="ActorDetailAlertDataCard">
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=upcoming`}>Upcoming Movie Releases: {actorDetails.upcomingMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=recent`}>Recent Movie Releases: {actorDetails.recentMovies}</Link></div>
+            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=upcoming`}>Upcoming Movies: {actorDetails.upcomingMovies}</Link></div>
+            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=recent`}>Recent Movies: {actorDetails.recentMovies}</Link></div>
             <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=all`}>Total Movies: {actorDetails.totalMovies}</Link></div>
             <div className="actor-detail-alert-data-card-label">{subscriptionsLink}</div>
         </div>

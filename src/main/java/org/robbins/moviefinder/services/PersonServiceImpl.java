@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.robbins.moviefinder.dtos.ActorDetailsDto;
-import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCounts;
+import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCountsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -82,7 +82,7 @@ public class PersonServiceImpl implements PersonService {
                 .filter(credit -> isWithinRange(LocalDate.parse(credit.getReleaseDate())))
                 .count();
 
-        final List<ActorMovieSubscriptionCounts> subscriptionCounts = findSubscriptions(personCredits);
+        final List<ActorMovieSubscriptionCountsDto> subscriptionCounts = findSubscriptions(personCredits);
 
         return new ActorDetailsDto(totalMovies, upcomingMovies, recentMovies, subscriptionCounts);
     }
@@ -115,8 +115,8 @@ public class PersonServiceImpl implements PersonService {
         return credits;
     }
 
-    private List<ActorMovieSubscriptionCounts> findSubscriptions(final PersonCredits personCredits) {
-        List<ActorMovieSubscriptionCounts> subscriptionCounts = new ArrayList<>();
+    private List<ActorMovieSubscriptionCountsDto> findSubscriptions(final PersonCredits personCredits) {
+        List<ActorMovieSubscriptionCountsDto> subscriptionCounts = new ArrayList<>();
 
         personCredits.getCast()
                 .parallelStream()
@@ -127,7 +127,7 @@ public class PersonServiceImpl implements PersonService {
         return subscriptionCounts;
     }
 
-    private void populateFlatrateProviders(int movieId, final List<ActorMovieSubscriptionCounts> subscriptionCounts) {
+    private void populateFlatrateProviders(int movieId, final List<ActorMovieSubscriptionCountsDto> subscriptionCounts) {
         final MovieDb movie = movieService.findMovieWatchProviders(movieId, "en");
         final WatchProviders watchProviders = movie.getWatchProviders();
         final WatchProviders.Results results = watchProviders.getResults();
@@ -143,19 +143,19 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private synchronized void populateFlatrateProvider(final Provider provider,
-            final List<ActorMovieSubscriptionCounts> subscriptionCounts) {
+            final List<ActorMovieSubscriptionCountsDto> subscriptionCounts) {
 
-        final Optional<ActorMovieSubscriptionCounts> counts = subscriptionCounts
+        final Optional<ActorMovieSubscriptionCountsDto> counts = subscriptionCounts
                 .parallelStream()
                 .filter(subscriptionCount -> StringUtils.equalsIgnoreCase(subscriptionCount.getSubcriptionService(),
                         provider.getProviderName()))
                 .findAny();
 
         if (counts.isPresent()) {
-            final ActorMovieSubscriptionCounts actorMovieSubscriptionCount = counts.get();
+            final ActorMovieSubscriptionCountsDto actorMovieSubscriptionCount = counts.get();
             actorMovieSubscriptionCount.setMovieCount(actorMovieSubscriptionCount.getMovieCount() + 1);
         } else {
-            final ActorMovieSubscriptionCounts actorMovieSubscriptionCount = new ActorMovieSubscriptionCounts(
+            final ActorMovieSubscriptionCountsDto actorMovieSubscriptionCount = new ActorMovieSubscriptionCountsDto(
                     provider.getProviderName(), 1);
             subscriptionCounts.add(actorMovieSubscriptionCount);
         }
