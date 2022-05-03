@@ -82,9 +82,15 @@ public class ActorAlertServiceImpl implements ActorAlertService {
             actorAlertsDto.getActorAlerts().add(actorWithMovieCounts);
         });
 
+        final ActorAlertsDto actorAlertsDtoWithTotals = calculateTotals(actorAlertsDto);
+        return actorAlertsDtoWithTotals;
+    }
+
+    private ActorAlertsDto calculateTotals(final ActorAlertsDto actorAlertsDto) {
         actorAlertsDto.setActorAlertCount(calculateActorAlertsCount(actorAlertsDto));
         actorAlertsDto.setUpcomingMovieCount(calculateUpcomingMovieCount(actorAlertsDto));
         actorAlertsDto.setRecentMovieCount(calculateRecentMovieCount(actorAlertsDto));
+
         return actorAlertsDto;
     }
 

@@ -37,7 +37,7 @@ export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
             return () => {
                 isMounted = false
             };
-        }, []
+        }, [providedMovie]
     );
 
     useEffect(

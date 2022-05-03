@@ -1,6 +1,11 @@
 .ActorDetailAlertDataCard {
     margin-bottom: 5px;
 
+    .actor-detail-alert-data-card-label {
+        padding-bottom: 3px;
+        font-size: .85rem;
+    }
+
     .actor-detail-alert-data-card-link {
         text-decoration: none;
 

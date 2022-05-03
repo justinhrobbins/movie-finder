@@ -27,7 +27,7 @@ export const ActorMovieListCard = ({ actor }) => {
                 }
             };
             fetchPersonCredits();
-        }, []
+        }, [actor]
     );
 
     const [searchParams, setSearchParams] = useSearchParams();

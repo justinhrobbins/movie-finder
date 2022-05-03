@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.controllers;
+package org.robbins.moviefinder.controllers.secured;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -42,7 +42,7 @@ public class ActorAlertController extends AbstractSecuredController {
     }
 
     @GetMapping("/{actorId}")
-    public Boolean findActorAlert(@PathVariable("actorId") final Long actorId, final Principal principal) {
+    public Boolean doesActorAlertExist(@PathVariable("actorId") final Long actorId, final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
 
         Optional<ActorAlertDto> actorAlertDto = actorAlertService.findByUserAndActorId(userEmail, actorId);

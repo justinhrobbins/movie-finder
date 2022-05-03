@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, NavLink } from 'react-router-dom';
-import { HomePage } from './pages/HomePage';
+import { PopularActorsPage } from './pages/PopularActorsPage';
 import { ActorDetailPage } from './pages/ActorDetailPage';
 import { ActorAlertsPage } from './pages/ActorAlertsPage';
 import { ActorSearchCard } from './components/ActorSearchCard';
@@ -24,7 +24,7 @@ function App() {
               <LoginCard />
             </div>
             <div className="app-header-menu">
-              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to="/">Home</NavLink>
+              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to="/popular/">Popular Actors</NavLink>
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/actoralerts/'>My Actor Alerts</NavLink>
             </div>
             <div className="app-header-search-bar">
@@ -33,11 +33,11 @@ function App() {
           </div>
 
           <Routes>
-            <Route path='/' element={<HomePage />} />
+            <Route path='/popular' element={<PopularActorsPage />} />
             <Route path='/actors/:actorId' element={<ActorDetailPage />} />
             <Route path='/actoralerts/' element={<ActorAlertsPage />} />
 
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/popular" replace />} />
           </Routes>
         </Router>
       </UserContext.Provider>

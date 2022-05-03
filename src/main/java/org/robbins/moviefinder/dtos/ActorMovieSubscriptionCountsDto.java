@@ -1,10 +1,10 @@
 package org.robbins.moviefinder.dtos;
 
-public class ActorMovieSubscriptionCounts {
+public class ActorMovieSubscriptionCountsDto {
     String subcriptionService;
     int movieCount = 0;
 
-    public ActorMovieSubscriptionCounts(String subcriptionService, int movieCount) {
+    public ActorMovieSubscriptionCountsDto(String subcriptionService, int movieCount) {
         this.subcriptionService = subcriptionService;
         this.movieCount = movieCount;
     }

@@ -1,8 +1,8 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
 import { ActortAlertSummaryCard } from '../components/ActortAlertSummaryCard';
+import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
 import Select from 'react-select';
 
 import './ActorAlertsPage.scss';

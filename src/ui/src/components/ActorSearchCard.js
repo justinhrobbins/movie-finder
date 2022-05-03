@@ -39,7 +39,7 @@ export const ActorSearchCard = () => {
   return (
     <div className="ActorSearchCard">
       <div className="actor-search-box">
-        <label className="actor-search-label">Search:</label>
+        <label className="actor-search-label">Actor Search:</label>
         <input className="actor-search-box-input"
           id="actorSearchBoxInput"
           type="text"

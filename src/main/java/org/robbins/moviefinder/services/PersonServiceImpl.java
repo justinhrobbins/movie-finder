@@ -9,14 +9,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.robbins.moviefinder.dtos.ActorAlertDto;
+import org.robbins.moviefinder.dtos.ActorAlertsDto;
 import org.robbins.moviefinder.dtos.ActorDetailsDto;
-import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCounts;
+import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCountsDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbPeople.PersonResultsPage;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.WatchProviders;
 import info.movito.themoviedbapi.model.WatchProviders.Provider;
@@ -32,6 +35,7 @@ public class PersonServiceImpl implements PersonService {
 
     final TmdbApi tmdbApi;
     final MovieService movieService;
+    final Integer popularPageNumber = 1;
 
     public PersonServiceImpl(final TmdbApi tmdbApi, final MovieService movieService) {
         this.tmdbApi = tmdbApi;
@@ -82,7 +86,7 @@ public class PersonServiceImpl implements PersonService {
                 .filter(credit -> isWithinRange(LocalDate.parse(credit.getReleaseDate())))
                 .count();
 
-        final List<ActorMovieSubscriptionCounts> subscriptionCounts = findSubscriptions(personCredits);
+        final List<ActorMovieSubscriptionCountsDto> subscriptionCounts = findSubscriptions(personCredits);
 
         return new ActorDetailsDto(totalMovies, upcomingMovies, recentMovies, subscriptionCounts);
     }
@@ -115,8 +119,8 @@ public class PersonServiceImpl implements PersonService {
         return credits;
     }
 
-    private List<ActorMovieSubscriptionCounts> findSubscriptions(final PersonCredits personCredits) {
-        List<ActorMovieSubscriptionCounts> subscriptionCounts = new ArrayList<>();
+    private List<ActorMovieSubscriptionCountsDto> findSubscriptions(final PersonCredits personCredits) {
+        List<ActorMovieSubscriptionCountsDto> subscriptionCounts = new ArrayList<>();
 
         personCredits.getCast()
                 .parallelStream()
@@ -127,7 +131,8 @@ public class PersonServiceImpl implements PersonService {
         return subscriptionCounts;
     }
 
-    private void populateFlatrateProviders(int movieId, final List<ActorMovieSubscriptionCounts> subscriptionCounts) {
+    private void populateFlatrateProviders(int movieId,
+            final List<ActorMovieSubscriptionCountsDto> subscriptionCounts) {
         final MovieDb movie = movieService.findMovieWatchProviders(movieId, "en");
         final WatchProviders watchProviders = movie.getWatchProviders();
         final WatchProviders.Results results = watchProviders.getResults();
@@ -143,21 +148,41 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private synchronized void populateFlatrateProvider(final Provider provider,
-            final List<ActorMovieSubscriptionCounts> subscriptionCounts) {
+            final List<ActorMovieSubscriptionCountsDto> subscriptionCounts) {
 
-        final Optional<ActorMovieSubscriptionCounts> counts = subscriptionCounts
+        final Optional<ActorMovieSubscriptionCountsDto> counts = subscriptionCounts
                 .parallelStream()
                 .filter(subscriptionCount -> StringUtils.equalsIgnoreCase(subscriptionCount.getSubcriptionService(),
                         provider.getProviderName()))
                 .findAny();
 
         if (counts.isPresent()) {
-            final ActorMovieSubscriptionCounts actorMovieSubscriptionCount = counts.get();
+            final ActorMovieSubscriptionCountsDto actorMovieSubscriptionCount = counts.get();
             actorMovieSubscriptionCount.setMovieCount(actorMovieSubscriptionCount.getMovieCount() + 1);
         } else {
-            final ActorMovieSubscriptionCounts actorMovieSubscriptionCount = new ActorMovieSubscriptionCounts(
+            final ActorMovieSubscriptionCountsDto actorMovieSubscriptionCount = new ActorMovieSubscriptionCountsDto(
                     provider.getProviderName(), 1);
             subscriptionCounts.add(actorMovieSubscriptionCount);
         }
     }
+
+    @Override
+    @Cacheable("popular")
+    public ActorAlertsDto findPopularActors() {
+        final ActorAlertsDto actorAlertsDto = new ActorAlertsDto();
+        final PersonResultsPage page = tmdbApi.getPeople().getPersonPopular(popularPageNumber);
+        page.getResults()
+                .parallelStream()
+                .forEach(person -> populateActorDetails(actorAlertsDto, person));
+
+        return actorAlertsDto;
+    }
+
+    private void populateActorDetails(final ActorAlertsDto actorAlertsDto, Person person) {
+        final ActorAlertDto actorAlertDto = new ActorAlertDto(Long.valueOf(person.getId()), person);
+        final ActorDetailsDto actorDetailsDto = findActorDetails(person.getId());
+        actorAlertDto.setDetails(actorDetailsDto);
+        actorAlertsDto.getActorAlerts().add(actorAlertDto);
+    }
+
 }
