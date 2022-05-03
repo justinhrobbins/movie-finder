@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.services;
+package org.robbins.moviefinder.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.robbins.moviefinder.dtos.UserDto;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.repositories.UserRepository;
+import org.robbins.moviefinder.services.UserService;
 import org.springframework.stereotype.Service;
 
 @Service

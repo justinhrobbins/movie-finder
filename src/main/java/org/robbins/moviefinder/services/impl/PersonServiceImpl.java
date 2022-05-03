@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.services;
+package org.robbins.moviefinder.services.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,6 +13,8 @@ import org.robbins.moviefinder.dtos.ActorAlertDto;
 import org.robbins.moviefinder.dtos.ActorAlertsDto;
 import org.robbins.moviefinder.dtos.ActorDetailsDto;
 import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCountsDto;
+import org.robbins.moviefinder.services.MovieService;
+import org.robbins.moviefinder.services.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;

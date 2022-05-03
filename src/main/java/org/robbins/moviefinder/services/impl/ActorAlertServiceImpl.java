@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.services;
+package org.robbins.moviefinder.services.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +9,9 @@ import org.robbins.moviefinder.dtos.ActorDetailsDto;
 import org.robbins.moviefinder.entities.ActorAlert;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.repositories.ActorAlertRepository;
+import org.robbins.moviefinder.services.ActorAlertService;
+import org.robbins.moviefinder.services.PersonService;
+import org.robbins.moviefinder.services.UserService;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.model.people.Person;
