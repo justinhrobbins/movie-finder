@@ -33,8 +33,8 @@ export const PopularActorsPage = () => {
   return (
     <div className="PopularActorsPage">
       <div className="actor-alerts-page-actors-list">
-        {popularActors.actorAlerts
-          .map(actorAlert => <ActorAlertDetailCard key={actorAlert.actorId} providedActor={actorAlert.person} actorDetails={actorAlert.details} />)
+        {popularActors.actors
+          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor.person} actorDetails={actor.details} />)
         }
       </div>
     </div>

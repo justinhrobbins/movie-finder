@@ -1,129 +1,78 @@
-package org.robbins.moviefinder.services;
+package org.robbins.moviefinder.services.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.robbins.moviefinder.dtos.ActorAlertDto;
-import org.robbins.moviefinder.dtos.ActorAlertsDto;
-import org.robbins.moviefinder.dtos.ActorDetailsDto;
+import org.robbins.moviefinder.dtos.ActorDto;
+import org.robbins.moviefinder.dtos.ActorMovieCountsDto;
 import org.robbins.moviefinder.dtos.ActorMovieSubscriptionCountsDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
+import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.services.ActorService;
+import org.robbins.moviefinder.services.MovieService;
+import org.robbins.moviefinder.services.PersonService;
 import org.springframework.stereotype.Service;
 
-import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbPeople.PersonResultsPage;
 import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.WatchProviders;
 import info.movito.themoviedbapi.model.WatchProviders.Provider;
 import info.movito.themoviedbapi.model.WatchProviders.Results.US;
-import info.movito.themoviedbapi.model.people.Person;
-import info.movito.themoviedbapi.model.people.PersonCredit;
 import info.movito.themoviedbapi.model.people.PersonCredits;
 import info.movito.themoviedbapi.model.people.PersonPeople;
 
 @Service
-public class PersonServiceImpl implements PersonService {
-    Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
+public class ActorServiceImpl implements ActorService {
 
-    final TmdbApi tmdbApi;
+    private final PersonService personService;
     final MovieService movieService;
-    final Integer popularPageNumber = 1;
 
-    public PersonServiceImpl(final TmdbApi tmdbApi, final MovieService movieService) {
-        this.tmdbApi = tmdbApi;
+    public ActorServiceImpl(final PersonService personService, final MovieService movieService) {
+        this.personService = personService;
         this.movieService = movieService;
     }
 
     @Override
-    public List<Person> searchPersons(String personName) {
-        return tmdbApi.getSearch().searchPerson(personName, false, 0).getResults();
-    }
-
-    @Override
-    @Cacheable("persons")
-    public PersonPeople findPersonDetails(int personId) {
-        return tmdbApi.getPeople().getPersonInfo(personId);
-    }
-
-    @Override
-    @Cacheable("movies")
-    public PersonCredits findPersonMovieCredits(int personId) {
-        final PersonCredits fullCredits = tmdbApi.getPeople().getCombinedPersonCredits(personId);
-        final PersonCredits castCredits = removeCrewCredits(fullCredits);
-        final PersonCredits movieCredits = filterForMovies(castCredits);
-        final PersonCredits sortedCredits = sortByPopularityAsc(movieCredits);
-
-        return sortedCredits;
-    }
-
-    @Override
-    @Cacheable("details")
-    public ActorDetailsDto findActorDetails(final int actorId) {
-        final PersonCredits personCredits = findPersonMovieCredits(actorId);
+    public ActorMovieCountsDto findActorMovieCounts(final Long actorId) {
+        final PersonCredits personCredits = personService.findPersonMovieCredits(actorId);
         final LocalDate today = LocalDate.now();
 
         final long totalMovies = personCredits.getCast().size();
 
         final long upcomingMovies = personCredits.getCast()
-                .parallelStream()
+                .stream()
                 .filter(credit -> !(credit.getReleaseDate() == null))
                 .filter(credit -> credit.getReleaseDate().length() > 0)
                 .filter(credit -> LocalDate.parse(credit.getReleaseDate()).isAfter(today))
                 .count();
 
         final long recentMovies = personCredits.getCast()
-                .parallelStream()
+                .stream()
                 .filter(credit -> !(credit.getReleaseDate() == null))
                 .filter(credit -> credit.getReleaseDate().length() > 0)
-                .filter(credit -> isWithinRange(LocalDate.parse(credit.getReleaseDate())))
+                .filter(credit -> isWithinRecentRange(LocalDate.parse(credit.getReleaseDate())))
                 .count();
 
         final List<ActorMovieSubscriptionCountsDto> subscriptionCounts = findSubscriptions(personCredits);
 
-        return new ActorDetailsDto(totalMovies, upcomingMovies, recentMovies, subscriptionCounts);
+        return new ActorMovieCountsDto(totalMovies, upcomingMovies, recentMovies, subscriptionCounts);
     }
 
-    private boolean isWithinRange(LocalDate date) {
+    private boolean isWithinRecentRange(LocalDate date) {
         final LocalDate startOfRange = LocalDate.now().minusMonths(12);
         final LocalDate endOfRange = LocalDate.now();
 
         return !(date.isBefore(startOfRange) || date.isAfter(endOfRange));
     }
 
-    private PersonCredits removeCrewCredits(final PersonCredits credits) {
-        credits.setCrew(Collections.emptyList());
-        return credits;
-    }
-
-    private PersonCredits filterForMovies(final PersonCredits credits) {
-        final List<PersonCredit> filteredCredits = credits.getCast()
-                .parallelStream()
-                .filter(castCredit -> castCredit.getMediaType().equals("movie"))
-                .collect(Collectors.toList());
-
-        credits.setCast(filteredCredits);
-        return credits;
-    }
-
-    private PersonCredits sortByPopularityAsc(final PersonCredits credits) {
-        credits.getCast().sort(Comparator.comparing(credit -> credit.getPopularity(),
-                Comparator.nullsLast(Comparator.reverseOrder())));
-        return credits;
-    }
-
     private List<ActorMovieSubscriptionCountsDto> findSubscriptions(final PersonCredits personCredits) {
         List<ActorMovieSubscriptionCountsDto> subscriptionCounts = new ArrayList<>();
 
         personCredits.getCast()
-                .parallelStream()
+                .stream()
                 .forEach(credit -> {
                     populateFlatrateProviders(credit.getId(), subscriptionCounts);
                 });
@@ -141,7 +90,7 @@ public class PersonServiceImpl implements PersonService {
             final List<Provider> flatRateProviders = us.getFlatrateProviders();
             if (flatRateProviders != null) {
                 flatRateProviders
-                        .parallelStream()
+                        .stream()
                         .forEach(provider -> populateFlatrateProvider(provider, subscriptionCounts));
             }
         }
@@ -151,7 +100,7 @@ public class PersonServiceImpl implements PersonService {
             final List<ActorMovieSubscriptionCountsDto> subscriptionCounts) {
 
         final Optional<ActorMovieSubscriptionCountsDto> counts = subscriptionCounts
-                .parallelStream()
+                .stream()
                 .filter(subscriptionCount -> StringUtils.equalsIgnoreCase(subscriptionCount.getSubcriptionService(),
                         provider.getProviderName()))
                 .findAny();
@@ -167,22 +116,45 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    @Cacheable("popular")
-    public ActorAlertsDto findPopularActors() {
-        final ActorAlertsDto actorAlertsDto = new ActorAlertsDto();
-        final PersonResultsPage page = tmdbApi.getPeople().getPersonPopular(popularPageNumber);
+    public ActorsDto findPopularActors() {
+        final ActorsDto actorContainer = new ActorsDto();
+        final PersonResultsPage page = personService.findPopularPeople();
         page.getResults()
                 .parallelStream()
-                .forEach(person -> populateActorDetails(actorAlertsDto, person));
+                .forEach(person -> populateActor(actorContainer, Long.valueOf(person.getId())));
 
-        return actorAlertsDto;
+        final List<ActorDto> actors = actorContainer.getActors();
+        actors.sort(Comparator.comparing((ActorDto actor) -> actor.getPerson().getPopularity()).reversed());
+        return actorContainer;
     }
 
-    private void populateActorDetails(final ActorAlertsDto actorAlertsDto, Person person) {
-        final ActorAlertDto actorAlertDto = new ActorAlertDto(Long.valueOf(person.getId()), person);
-        final ActorDetailsDto actorDetailsDto = findActorDetails(person.getId());
-        actorAlertDto.setDetails(actorDetailsDto);
-        actorAlertsDto.getActorAlerts().add(actorAlertDto);
+    private void populateActor(final ActorsDto actors, Long personId) {
+        final ActorDto actor = new ActorDto(personId);
+        final PersonPeople person = personService.findPerson(personId);
+        actor.setPerson(person);
+        final ActorMovieCountsDto actorMovieCounts = findActorMovieCounts(personId);
+        actor.setMovieCounts(actorMovieCounts);
+        actors.getActors().add(actor);
     }
 
+    @Override
+    public ActorDto findByActorId(Long actorId) {
+        final ActorDto actor = new ActorDto(Long.valueOf(actorId));
+        final ActorDto actorWithPerson = addPersonToActorAlert(actor);
+        final ActorDto actorWithMovieCounts = addMovieCounts(actorWithPerson);
+
+        return actorWithMovieCounts;
+    }
+
+    private ActorDto addPersonToActorAlert(final ActorDto actor) {
+        final PersonPeople person = personService.findPerson(actor.getActorId());
+        actor.setPerson(person);
+        return actor;
+    }
+
+    private ActorDto addMovieCounts(final ActorDto actor) {
+        final ActorMovieCountsDto actorMovieCounts = findActorMovieCounts(actor.getActorId());
+        actor.setMovieCounts(actorMovieCounts);
+        return actor;
+    }
 }

@@ -1,5 +1,6 @@
-package org.robbins.moviefinder.services;
+package org.robbins.moviefinder.services.impl;
 
+import org.robbins.moviefinder.services.MovieService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 

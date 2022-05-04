@@ -3,30 +3,30 @@ package org.robbins.moviefinder.dtos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActorAlertsDto {
+public class ActorsDto {
 
-    private List<ActorAlertDto> actorAlerts = new ArrayList<>();
-    private int actorAlertCount;
+    private List<ActorDto> actors = new ArrayList<>();
+    private int actorCount;
     private int upcomingMovieCount;
     private int recentMovieCount;
     
-    public ActorAlertsDto() {
+    public ActorsDto() {
     }
 
-    public List<ActorAlertDto> getActorAlerts() {
-        return actorAlerts;
+    public List<ActorDto> getActors() {
+        return actors;
     }
 
-    public void setActorAlerts(List<ActorAlertDto> actorAlerts) {
-        this.actorAlerts = actorAlerts;
+    public void setActors(List<ActorDto> actors) {
+        this.actors = actors;
     }
 
-    public int getActorAlertCount() {
-        return actorAlertCount;
+    public int getActorCount() {
+        return actorCount;
     }
 
-    public void setActorAlertCount(int actorAlertCount) {
-        this.actorAlertCount = actorAlertCount;
+    public void setActorCount(int actorCount) {
+        this.actorCount = actorCount;
     }
 
     public int getUpcomingMovieCount() {
