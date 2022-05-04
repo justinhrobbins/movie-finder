@@ -103,6 +103,7 @@ export const ActorDetailCard = ({ actor, removeActor }) => {
                         : <div><span className="actor-detail-card-content-section-label"></span></div>
                 }
                 <div><span className="actor-detail-card-content-section-label">Place of birth:</span> {actor.place_of_birth}</div>
+                <div><span className="actor-detail-card-content-section-label">Populariry:</span> {actor.popularity}</div>
                 <div className="actor-detail-card-content-section-alert-data">
                     <ActorDetailAlertDataCard key={actor.id} actor={actor} />
                 </div>

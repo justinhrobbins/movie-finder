@@ -2,8 +2,9 @@ package org.robbins.moviefinder.controllers;
 
 import java.util.List;
 
-import org.robbins.moviefinder.dtos.ActorAlertsDto;
-import org.robbins.moviefinder.dtos.ActorDetailsDto;
+import org.robbins.moviefinder.dtos.ActorMovieCountsDto;
+import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.PersonService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +22,11 @@ import info.movito.themoviedbapi.model.people.PersonPeople;
 @RequestMapping("person")
 public class PersonController {
     private final PersonService personService;
+    private final ActorService actorService;
 
-    public PersonController(final PersonService personService) {
+    public PersonController(final PersonService personService, final ActorService actorService) {
         this.personService = personService;
+        this.actorService = actorService;
     }
 
     @GetMapping("/find")
@@ -32,22 +35,22 @@ public class PersonController {
     }
 
     @GetMapping("/{personId}")
-    public PersonPeople getPersonDetails(@PathVariable("personId") final int personId) {
-        return personService.findPersonDetails(personId);
+    public PersonPeople getPersonById(@PathVariable("personId") final Long personId) {
+        return personService.findPerson(personId);
     }
 
     @GetMapping("/{personId}/movies")
-    public PersonCredits getMoviesForPerson(@PathVariable("personId") final int personId) {
+    public PersonCredits getMoviesForPerson(@PathVariable("personId") final Long personId) {
         return personService.findPersonMovieCredits(personId);
     }
 
-    @GetMapping("/{actorId}/details")
-    public ActorDetailsDto getDetailsForActor(@PathVariable("actorId") final int actorId) {
-        return personService.findActorDetails(actorId);
+    @GetMapping("/{actorId}/movie/counts")
+    public ActorMovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId) {
+        return actorService.findActorMovieCounts(actorId);
     }
 
     @GetMapping("/popular")
-    public ActorAlertsDto getPopluar() {
-        return personService.findPopularActors();
+    public ActorsDto getPopluar() {
+        return actorService.findPopularActors();
     }
 }

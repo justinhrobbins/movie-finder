@@ -3,45 +3,32 @@ package org.robbins.moviefinder.services.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.robbins.moviefinder.dtos.ActorAlertDto;
-import org.robbins.moviefinder.dtos.ActorAlertsDto;
-import org.robbins.moviefinder.dtos.ActorDetailsDto;
+import org.robbins.moviefinder.dtos.ActorDto;
+import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.entities.ActorAlert;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.repositories.ActorAlertRepository;
 import org.robbins.moviefinder.services.ActorAlertService;
-import org.robbins.moviefinder.services.PersonService;
+import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.UserService;
 import org.springframework.stereotype.Service;
-
-import info.movito.themoviedbapi.model.people.Person;
 
 @Service
 public class ActorAlertServiceImpl implements ActorAlertService {
 
     private final UserService userService;
+    private final ActorService actorService;
     private final ActorAlertRepository actorAlertRepository;
-    private final PersonService personService;
 
     public ActorAlertServiceImpl(final UserService userService, final ActorAlertRepository actorAlertRepository,
-            final PersonService personService) {
+            final ActorService actorService) {
         this.userService = userService;
         this.actorAlertRepository = actorAlertRepository;
-        this.personService = personService;
+        this.actorService = actorService;
     }
 
     @Override
-    public ActorAlertsDto findActorAlertsForUser(final String userEmail) {
-        final User user = userService.findByEmailUser(userEmail).get();
-
-        List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
-        final ActorAlertsDto actorAlertsDto = convertActorAlerts(actorAlerts);
-
-        return actorAlertsDto;
-    }
-
-    @Override
-    public Optional<ActorAlertDto> findByUserAndActorId(String userEmail, Long actorId) {
+    public Optional<ActorDto> findByUserAndActorId(String userEmail, Long actorId) {
         final User user = userService.findByEmailUser(userEmail).get();
 
         Optional<ActorAlert> actorAlert = actorAlertRepository.findByUserAndActorId(user, actorId);
@@ -49,16 +36,15 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         if (!actorAlert.isPresent()) {
             return Optional.empty();
         } else {
-            final ActorAlertDto actorAlertDto = new ActorAlertDto(actorAlert.get().getActorId());
-            return Optional.of(actorAlertDto);
+            final ActorDto actor = new ActorDto(actorAlert.get().getActorId());
+            return Optional.of(actor);
         }
     }
 
     @Override
-    public ActorAlertDto saveActorAlert(String userEmail, Long actorId) {
+    public void saveActorAlert(String userEmail, Long actorId) {
         final User user = userService.findByEmailUser(userEmail).get();
-        final ActorAlert actorAlert = actorAlertRepository.save(new ActorAlert(user, actorId));
-        return new ActorAlertDto(actorAlert.getActorId());
+        actorAlertRepository.save(new ActorAlert(user, actorId));
     }
 
     @Override
@@ -75,60 +61,57 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         }
     }
 
-    private ActorAlertsDto convertActorAlerts(final List<ActorAlert> actorAlerts) {
-        final ActorAlertsDto actorAlertsDto = new ActorAlertsDto();
+    @Override
+    public ActorsDto findActorAlertsForUser(final String userEmail) {
+        final User user = userService.findByEmailUser(userEmail).get();
 
-        actorAlerts.parallelStream().forEach(actorAlert -> {
-            final ActorAlertDto actorAlertDto = new ActorAlertDto(actorAlert.getActorId());
-            final ActorAlertDto actorWithPersonDetails = addPersonToActorAlert(actorAlertDto);
-            final ActorAlertDto actorWithMovieCounts = addMovieCounts(actorWithPersonDetails);
-            actorAlertsDto.getActorAlerts().add(actorWithMovieCounts);
-        });
+        List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
+        final ActorsDto actorAlertsDto = convertActorAlerts(actorAlerts);
 
-        final ActorAlertsDto actorAlertsDtoWithTotals = calculateTotals(actorAlertsDto);
+        return actorAlertsDto;
+    }
+
+    private ActorsDto convertActorAlerts(final List<ActorAlert> actorAlerts) {
+        final ActorsDto actorAlertsDto = new ActorsDto();
+
+        actorAlerts
+                .parallelStream()
+                .forEach(actorAlert -> {
+                    final ActorDto actor = actorService.findByActorId(actorAlert.getActorId());
+                    actorAlertsDto.getActors().add(actor);
+                });
+
+        final ActorsDto actorAlertsDtoWithTotals = calculateTotals(actorAlertsDto);
         return actorAlertsDtoWithTotals;
     }
 
-    private ActorAlertsDto calculateTotals(final ActorAlertsDto actorAlertsDto) {
-        actorAlertsDto.setActorAlertCount(calculateActorAlertsCount(actorAlertsDto));
+    private ActorsDto calculateTotals(final ActorsDto actorAlertsDto) {
+        actorAlertsDto.setActorCount(calculateActorAlertsCount(actorAlertsDto));
         actorAlertsDto.setUpcomingMovieCount(calculateUpcomingMovieCount(actorAlertsDto));
         actorAlertsDto.setRecentMovieCount(calculateRecentMovieCount(actorAlertsDto));
 
         return actorAlertsDto;
     }
 
-    private int calculateActorAlertsCount(final ActorAlertsDto actorAlertsDto) {
-        return actorAlertsDto.getActorAlerts().size();
+    private int calculateActorAlertsCount(final ActorsDto actorAlertsDto) {
+        return actorAlertsDto.getActors().size();
     }
 
-    private int calculateUpcomingMovieCount(final ActorAlertsDto actorAlertsDto) {
-        long upcomingMovieCount = actorAlertsDto.getActorAlerts()
+    private int calculateUpcomingMovieCount(final ActorsDto actorAlertsDto) {
+        long upcomingMovieCount = actorAlertsDto.getActors()
                 .parallelStream()
-                .filter(actorAlert -> actorAlert.getDetails().getUpcomingMovies() > 0)
+                .filter(actorAlert -> actorAlert.getMovieCounts().getUpcomingMovies() > 0)
                 .count();
 
         return Math.toIntExact(upcomingMovieCount);
     }
 
-    private int calculateRecentMovieCount(final ActorAlertsDto actorAlertsDto) {
-        long recentMovieCount = actorAlertsDto.getActorAlerts()
+    private int calculateRecentMovieCount(final ActorsDto actorAlertsDto) {
+        long recentMovieCount = actorAlertsDto.getActors()
                 .parallelStream()
-                .filter(actorAlert -> actorAlert.getDetails().getRecentMovies() > 0)
+                .filter(actorAlert -> actorAlert.getMovieCounts().getRecentMovies() > 0)
                 .count();
 
         return Math.toIntExact(recentMovieCount);
-    }
-
-    private ActorAlertDto addPersonToActorAlert(final ActorAlertDto actorAlertDto) {
-        final Person person = personService.findPersonDetails(Math.toIntExact(actorAlertDto.getActorId()));
-        actorAlertDto.setPerson(person);
-        return actorAlertDto;
-    }
-
-    private ActorAlertDto addMovieCounts(final ActorAlertDto actorAlertDto) {
-        final ActorDetailsDto actorDetailsDto = personService
-                .findActorDetails(Math.toIntExact(actorAlertDto.getActorId()));
-        actorAlertDto.setDetails(actorDetailsDto);
-        return actorAlertDto;
     }
 }

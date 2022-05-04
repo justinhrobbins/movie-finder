@@ -2,16 +2,16 @@ package org.robbins.moviefinder.dtos;
 
 import java.util.List;
 
-public class ActorDetailsDto {
+public class ActorMovieCountsDto {
     long upcomingMovies;
     long recentMovies;
     long totalMovies;
     List<ActorMovieSubscriptionCountsDto> subscriptions;
  
-    public ActorDetailsDto() {
+    public ActorMovieCountsDto() {
     }
 
-    public ActorDetailsDto(long totalMovies, long upcomingMovies, long recentMovies, List<ActorMovieSubscriptionCountsDto> subscriptions) {
+    public ActorMovieCountsDto(long totalMovies, long upcomingMovies, long recentMovies, List<ActorMovieSubscriptionCountsDto> subscriptions) {
         this.totalMovies = totalMovies;
         this.upcomingMovies = upcomingMovies;
         this.recentMovies = recentMovies;

@@ -77,15 +77,15 @@ export const ActorAlertsPage = () => {
       const filterActors = (allActorAlerts) => {
         let filteredActors;
         if (selectedFilterOption.value == "recent") {
-          filteredActors = allActorAlerts.actorAlerts.filter(function (el) {
-            return el.details.recentMovies > 0;
+          filteredActors = allActorAlerts.actors.filter(function (el) {
+            return el.movieCounts.recentMovies > 0;
           });
         } else if (selectedFilterOption.value == "upcoming") {
-          filteredActors = allActorAlerts.actorAlerts.filter(function (el) {
-            return el.details.upcomingMovies > 0;
+          filteredActors = allActorAlerts.actors.filter(function (el) {
+            return el.movieCounts.upcomingMovies > 0;
           });
         } else {
-          filteredActors = allActorAlerts.actorAlerts;
+          filteredActors = allActorAlerts.actors;
         }
         return filteredActors;
       };
@@ -97,20 +97,20 @@ export const ActorAlertsPage = () => {
         } else if (selectedSortOption.value == "name") {
           sortedActorAlerts = actorAlerts.sort((a, b) => a.person.name.localeCompare(b.person.name));
         } else if (selectedSortOption.value == "upcoming") {
-          sortedActorAlerts = actorAlerts.sort((a, b) => b.details.upcomingMovies - a.details.upcomingMovies);
+          sortedActorAlerts = actorAlerts.sort((a, b) => b.movieCounts.upcomingMovies - a.movieCounts.upcomingMovies);
         } else if (selectedSortOption.value == "recent") {
-          sortedActorAlerts = actorAlerts.sort((a, b) => b.details.recentMovies - a.details.recentMovies);
+          sortedActorAlerts = actorAlerts.sort((a, b) => b.movieCounts.recentMovies - a.movieCounts.recentMovies);
         } else {
-          sortedActorAlerts = actorAlerts.sort((a, b) => b.details.totalMovies - a.details.totalMovies);
+          sortedActorAlerts = actorAlerts.sort((a, b) => b.movieCounts.totalMovies - a.movieCounts.totalMovies);
         }
         return sortedActorAlerts;
       }
 
-      if (unfilteredUserActorAlerts.actorAlerts) {
+      if (unfilteredUserActorAlerts.actors) {
         const filteredActors = filterActors(unfilteredUserActorAlerts);
         const sortedActors = sortActors(filteredActors);
 
-        userActorAlerts.actorAlerts = sortedActors;
+        userActorAlerts.actors = sortedActors;
         setUserActorAlerts({ ...userActorAlerts });
       }
 
@@ -145,12 +145,12 @@ export const ActorAlertsPage = () => {
     return <h3>Login to configure your Actor Alerts</h3>
   }
 
-  if (!userActorAlerts || !userActorAlerts.actorAlerts) {
+  if (!userActorAlerts || !userActorAlerts.actors) {
 
     return <h3>Loading your Actor Alerts...</h3>
   }
 
-  if (userActorAlerts.actorAlerts.length === 0) {
+  if (userActorAlerts.actors.length === 0) {
 
     return <h3>You have no Actor Alerts configured</h3>
   }
@@ -185,8 +185,8 @@ export const ActorAlertsPage = () => {
         !loggedInUser ? "Please login to create Actor Alerts" : ""
       }
       <div className="actor-alerts-page-actors-list">
-        {userActorAlerts.actorAlerts
-          .map(actorAlert => <ActorAlertDetailCard key={actorAlert.actorId} providedActor={actorAlert.person} actorDetails={actorAlert.details} />)
+        {userActorAlerts.actors
+          .map(actors => <ActorAlertDetailCard key={actors.actorId} providedActor={actors.person} actorDetails={actors.movieCounts} />)
         }
       </div>
     </div>
