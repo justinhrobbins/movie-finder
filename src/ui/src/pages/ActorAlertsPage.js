@@ -37,7 +37,7 @@ export const ActorAlertsPage = () => {
       if (loggedInUser) {
         fetchActorAlerts();
       }
-    }, []
+    }, [loggedInUser]
   );
 
   const [searchParams] = useSearchParams();
