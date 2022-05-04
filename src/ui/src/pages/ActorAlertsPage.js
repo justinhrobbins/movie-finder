@@ -157,6 +157,9 @@ export const ActorAlertsPage = () => {
 
   return (
     <div className="ActorAlertsPage">
+      <div className="actor-alert-header">
+        <h2>My Actors:</h2>
+      </div>
       <div className="actor-alert-movie-list-section">
         <div className="actor-alert-movie-list-section-summary">
           <div className="actor-alert-movie-list-section-summary-data">

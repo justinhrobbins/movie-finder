@@ -8,13 +8,14 @@
     grid-template-rows: min-content auto;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 15px;
   }
 
   .app-header-name {
     justify-self: start;
     align-self: end;
     font-size: 2rem;
+    margin-bottom: 10px;
   }
 
   .app-header-login {
@@ -31,10 +32,24 @@
 
   .app-header-menu-link-active {
     text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid #8F8F8F;
+    padding-bottom: 5px;
+
+    &:hover {
+      color: #8F8F8F;
+      border-bottom: 1.5px solid #FFFFFF;
+    }
   }
 
   .app-header-menu-link-inactive {
-    text-decoration: underline;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      color: rgb(143, 143, 143);
+      border-bottom: 1.5px solid #FFFFFF;
+    }
   }
 
   .app-header-search-bar {
