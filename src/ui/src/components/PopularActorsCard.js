@@ -1,9 +1,9 @@
 import { React, useEffect, useState } from 'react';
-import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
+import { ActorAlertDetailCard } from './ActorAlertDetailCard';
 
-import './PopularActorsPage.scss';
+import './PopularActorsCard.scss';
 
-export const PopularActorsPage = () => {
+export const PopularActorsCard = () => {
   const [popularActors, setPopularActors] = useState(null);
 
   useEffect(
@@ -31,8 +31,11 @@ export const PopularActorsPage = () => {
   }
 
   return (
-    <div className="PopularActorsPage">
-      <div className="actor-alerts-page-actors-list">
+    <div className="PopularActorsCard">
+      <div className="popular-actors-card-header">
+        <h2>Popular Actors:</h2>
+      </div>
+      <div className="popular-actors-card-list">
         {popularActors.actors
           .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor.person} actorDetails={actor.details} />)
         }

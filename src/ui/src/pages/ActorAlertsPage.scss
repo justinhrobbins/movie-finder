@@ -1,9 +1,14 @@
 .ActorAlertsPage {
 
+    .actor-alert-header {
+        margin-bottom: 5px;
+    }
+
     .actor-alert-movie-list-section {
         display: flex;
         justify-content: space-between;
         margin-bottom: 30px;
+        margin-right: 20px;
     }
 
     .actor-alert-movie-list-section-summary {

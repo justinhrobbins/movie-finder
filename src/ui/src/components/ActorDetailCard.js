@@ -4,12 +4,12 @@ import { UserContext } from "../UserContext";
 import { ActorDetailAlertDataCard } from './ActorDetailAlertDataCard';
 import './ActorDetailCard.scss';
 
-export const ActorDetailCard = ({ actor, removeActor }) => {
+export const ActorDetailCard = ({ actor, showActorDeails, removeActor }) => {
     const { loggedInUser } = useContext(UserContext);
     const [isActorAlertActive, setIsActorAlertActive] = useState(false);
 
-    const createActorAlertText = "Add to my Actor Alerts";
-    const removeActorAlertText = "Remove from Actor Alerts";
+    const createActorAlertText = "Follow Actor";
+    const removeActorAlertText = "Unfollow Actor";
 
     useEffect(
         () => {
@@ -86,6 +86,7 @@ export const ActorDetailCard = ({ actor, removeActor }) => {
 
     return (
         <div className="ActorDetailCard">
+
             <div className="actor-detail-card-image-container">
                 <img className="actor-detail-card-image-container-image" src={actorPhotoUrl} alt={actor.name} title={actor.name} />
                 <div className="actor-detail-card-image-container-details">
@@ -94,16 +95,24 @@ export const ActorDetailCard = ({ actor, removeActor }) => {
                     </button>
                 </div>
             </div>
+
             <div className="actor-detail-card-content-section">
-                <div className="actor-detail-card-content-section-actor-name"><Link className="actor-detail-card-content-section-actor-name-link" to={actorDetailRoute}>{actor.name}</Link></div>
-                <div><span className="actor-detail-card-content-section-label">Birthday:</span> {actor.birthday}</div>
-                {
-                    (actor && actor.deathday && actor.deathday.length > 0)
+                <div className="actor-detail-card-content-actor-bio-container">
+                    <div className="actor-detail-card-content-section-actor-name"><Link className="actor-detail-card-content-section-actor-name-link" to={actorDetailRoute}>{actor.name}</Link></div>
+                    {showActorDeails == "true" &&
+                        <div><span className="actor-detail-card-content-section-label">Birthday:</span> {actor.birthday}</div>
+                    }
+                    {(actor && actor.deathday && actor.deathday.length > 0)
                         ? <div><span className="actor-detail-card-content-section-label">Day of Death:</span> {actor.deathday}</div>
                         : <div><span className="actor-detail-card-content-section-label"></span></div>
-                }
-                <div><span className="actor-detail-card-content-section-label">Place of birth:</span> {actor.place_of_birth}</div>
-                <div><span className="actor-detail-card-content-section-label">Populariry:</span> {actor.popularity}</div>
+                    }
+                    {showActorDeails == "true" &&
+                        <div>
+                            <div><span className="actor-detail-card-content-section-label">Place of birth:</span> {actor.place_of_birth}</div>
+                            <div><span className="actor-detail-card-content-section-label">Populariry:</span> {actor.popularity}</div>
+                        </div>
+                    }
+                </div>
                 <div className="actor-detail-card-content-section-alert-data">
                     <ActorDetailAlertDataCard key={actor.id} actor={actor} />
                 </div>

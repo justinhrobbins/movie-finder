@@ -1,0 +1,13 @@
+.PopularActorsCard {
+
+    .popular-actors-card-header {
+        margin-bottom: 15px;
+    }
+
+    .popular-actors-card-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        grid-column-gap: 50px;
+    }
+}
