@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-05-05T15:43:13.988Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36" etag="ShsqjrtYKUnA5y2idS4T" version="17.4.4" type="github">
+<mxfile host="app.diagrams.net" modified="2022-05-05T15:49:14.359Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36" etag="lJMOXbZtzIZ-TSRe6LTF" version="17.4.4" type="github">
   <diagram id="dFKEKhrqLx2nFAdBG5SY" name="Page-1">
-    <mxGraphModel dx="1720" dy="973" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+    <mxGraphModel dx="1577" dy="892" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -156,6 +156,9 @@
               <mxPoint x="440" y="210" />
             </Array>
           </mxGeometry>
+        </mxCell>
+        <mxCell id="WGCQ1PHkLu7HlypYQ9xg-58" value="Authentication and OAuth token retrieval" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="690" y="688" width="160" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
