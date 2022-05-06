@@ -24,6 +24,7 @@ public class PersonServiceImpl implements PersonService {
 
     final TmdbApi tmdbApi;
     final Integer popularPageNumber = 1;
+    final long numberOfPopularPeopleToReturn = 12;
 
     public PersonServiceImpl(final TmdbApi tmdbApi) {
         this.tmdbApi = tmdbApi;
@@ -76,6 +77,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     @Cacheable("popular")
     public PersonResultsPage findPopularPeople() {
-        return tmdbApi.getPeople().getPersonPopular(popularPageNumber);
+        final PersonResultsPage popularPeople = tmdbApi.getPeople().getPersonPopular(popularPageNumber);
+        final List<Person> filteredPeople = popularPeople.getResults()
+                .stream()
+                .limit(numberOfPopularPeopleToReturn)
+                .collect(Collectors.toList());
+        popularPeople.setResults(filteredPeople);
+
+        return popularPeople;
     }
 }

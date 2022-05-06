@@ -45,7 +45,8 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
-    private List<String> convertStreamingServices(final User user) {
+    @Override
+    public List<String> convertStreamingServices(final User user) {
         if (user.getStreamingServices() != null) {
             return Stream.of(user.getStreamingServices().split(","))
             .map(String::trim)
