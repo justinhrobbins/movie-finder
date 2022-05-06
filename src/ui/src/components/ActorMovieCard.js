@@ -15,7 +15,7 @@ export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
         () => {
             let isMounted = true;
             const fetchWatchProviders = async () => {
-                const response = await fetch(`http://localhost:8080/movie/${providedMovie.id}/watchproviders`);
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `movie/${providedMovie.id}/watchproviders`);
                 const movieWithWatchProviders = await response.json();
 
                 let flatrateProviders;

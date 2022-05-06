@@ -13,7 +13,7 @@ export const ActorDetailPage = () => {
     useEffect(
         () => {
             const fetchPerson = async () => {
-                const response = await fetch(`http://localhost:8080/person/${actorId}`);
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/${actorId}`);
                 const personData = await response.json();
                 setPerson(personData);
             };

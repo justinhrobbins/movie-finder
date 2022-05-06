@@ -18,7 +18,7 @@ export const ActorAlertsPage = () => {
       const fetchActorAlerts = async () => {
         try {
           setLoading(true);
-          const response = await fetch('http://localhost:8080/actoralerts', {
+          const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'actoralerts', {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${loggedInUser.tokenId}`
