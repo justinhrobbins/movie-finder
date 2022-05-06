@@ -9,6 +9,7 @@ public class ActorsDto {
     private int actorCount;
     private int upcomingMovieCount;
     private int recentMovieCount;
+    private int subscriptionCount;
     
     public ActorsDto() {
     }
@@ -45,5 +46,12 @@ public class ActorsDto {
         this.recentMovieCount = recentMovieCount;
     }
 
+    public int getSubscriptionCount() {
+        return subscriptionCount;
+    }
+
+    public void setSubscriptionCount(int subscriptionCount) {
+        this.subscriptionCount = subscriptionCount;
+    }
     
 }

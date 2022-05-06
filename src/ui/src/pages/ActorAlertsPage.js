@@ -1,7 +1,7 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActortAlertSummaryCard } from '../components/ActortAlertSummaryCard';
+import { ActorAlertSummaryCard } from '../components/ActorAlertSummaryCard';
 import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
 import Select from 'react-select';
 
@@ -25,7 +25,6 @@ export const ActorAlertsPage = () => {
             }
           });
           const userActorAlerts = await response.json();
-          setUserActorAlerts(userActorAlerts);
           setUnfilteredUserActorAlerts((userActorAlerts));
         } catch (error) {
           throw error;
@@ -54,7 +53,8 @@ export const ActorAlertsPage = () => {
   const filterOptions = [
     { value: 'all', label: 'No filter' },
     { value: 'upcoming', label: 'Has Upcoming Releases' },
-    { value: 'recent', label: 'Has Recent Releases' }
+    { value: 'recent', label: 'Has Recent Releases' },
+    { value: 'subscriptions', label: 'Has Movies on my Subscriptions' }
   ]
   useEffect(
     () => {
@@ -84,11 +84,21 @@ export const ActorAlertsPage = () => {
           filteredActors = allActorAlerts.actors.filter(function (el) {
             return el.movieCounts.upcomingMovies > 0;
           });
+        } else if (selectedFilterOption.value == "subscriptions") {
+          filteredActors = allActorAlerts.actors.filter(function (actor) {
+            return actorHasMoviesOnSubscriptions(actor);
+          });
         } else {
           filteredActors = allActorAlerts.actors;
         }
         return filteredActors;
       };
+
+      const actorHasMoviesOnSubscriptions = (actor) => {
+        const hasSubscriptions = actor.movieCounts.subscriptions
+          .some(subscription => loggedInUser.streamingServices.includes(subscription.subcriptionService))
+        return hasSubscriptions;
+      }
 
       const sortActors = (actorAlerts) => {
         let sortedActorAlerts;
@@ -150,7 +160,7 @@ export const ActorAlertsPage = () => {
     return <h3>Loading your Actor Alerts...</h3>
   }
 
-  if (userActorAlerts.actors.length === 0) {
+  if (unfilteredUserActorAlerts.actors.length === 0) {
 
     return <h3>You have no Actor Alerts configured</h3>
   }
@@ -163,7 +173,7 @@ export const ActorAlertsPage = () => {
       <div className="actor-alert-movie-list-section">
         <div className="actor-alert-movie-list-section-summary">
           <div className="actor-alert-movie-list-section-summary-data">
-            <ActortAlertSummaryCard userActorAlerts={userActorAlerts} />
+            <ActorAlertSummaryCard userActorAlerts={unfilteredUserActorAlerts} />
           </div>
         </div>
         <div className="actor-alert-movie-list-sort">

@@ -66,52 +66,69 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         final User user = userService.findByEmailUser(userEmail).get();
 
         List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
-        final ActorsDto actorAlertsDto = convertActorAlerts(actorAlerts);
+        final ActorsDto actorAlertsDto = convertActorAlerts(actorAlerts, user);
 
         return actorAlertsDto;
     }
 
-    private ActorsDto convertActorAlerts(final List<ActorAlert> actorAlerts) {
-        final ActorsDto actorAlertsDto = new ActorsDto();
+    private ActorsDto convertActorAlerts(final List<ActorAlert> actorAlerts, final User user) {
+        final ActorsDto actors = new ActorsDto();
 
         actorAlerts
                 .parallelStream()
                 .forEach(actorAlert -> {
                     final ActorDto actor = actorService.findByActorId(actorAlert.getActorId());
-                    actorAlertsDto.getActors().add(actor);
+                    actors.getActors().add(actor);
                 });
 
-        final ActorsDto actorAlertsDtoWithTotals = calculateTotals(actorAlertsDto);
+        final ActorsDto actorAlertsDtoWithTotals = calculateTotals(actors, user);
         return actorAlertsDtoWithTotals;
     }
 
-    private ActorsDto calculateTotals(final ActorsDto actorAlertsDto) {
-        actorAlertsDto.setActorCount(calculateActorAlertsCount(actorAlertsDto));
-        actorAlertsDto.setUpcomingMovieCount(calculateUpcomingMovieCount(actorAlertsDto));
-        actorAlertsDto.setRecentMovieCount(calculateRecentMovieCount(actorAlertsDto));
+    private ActorsDto calculateTotals(final ActorsDto actors, final User user) {
+        actors.setActorCount(calculateActorAlertsCount(actors));
+        actors.setUpcomingMovieCount(calculateUpcomingMovieCount(actors));
+        actors.setRecentMovieCount(calculateRecentMovieCount(actors));
+        actors.setSubscriptionCount(calculateSubscriptionCount(actors, user));
 
-        return actorAlertsDto;
+        return actors;
     }
 
-    private int calculateActorAlertsCount(final ActorsDto actorAlertsDto) {
-        return actorAlertsDto.getActors().size();
+    private int calculateActorAlertsCount(final ActorsDto actors) {
+        return actors.getActors().size();
     }
 
-    private int calculateUpcomingMovieCount(final ActorsDto actorAlertsDto) {
-        long upcomingMovieCount = actorAlertsDto.getActors()
+    private int calculateUpcomingMovieCount(final ActorsDto actors) {
+        long upcomingMovieCount = actors.getActors()
                 .parallelStream()
-                .filter(actorAlert -> actorAlert.getMovieCounts().getUpcomingMovies() > 0)
+                .filter(actor -> actor.getMovieCounts().getUpcomingMovies() > 0)
                 .count();
 
         return Math.toIntExact(upcomingMovieCount);
     }
 
-    private int calculateRecentMovieCount(final ActorsDto actorAlertsDto) {
-        long recentMovieCount = actorAlertsDto.getActors()
+    private int calculateRecentMovieCount(final ActorsDto actors) {
+        long recentMovieCount = actors.getActors()
                 .parallelStream()
-                .filter(actorAlert -> actorAlert.getMovieCounts().getRecentMovies() > 0)
+                .filter(actor -> actor.getMovieCounts().getRecentMovies() > 0)
                 .count();
 
         return Math.toIntExact(recentMovieCount);
+    }
+
+    private int calculateSubscriptionCount(final ActorsDto actors, final User user) {
+        long subscriptionCount = actors.getActors()
+        .stream()
+        .filter(actor -> actorHasMoviesMatchingUserSubscriptions(actor, user))
+        .count();
+        return Math.toIntExact(subscriptionCount);
+    }
+
+    private boolean actorHasMoviesMatchingUserSubscriptions(final ActorDto actor, final User user) {
+        List<String> userSubscriptions = userService.convertStreamingServices(user);
+
+        return actor.getMovieCounts().getSubscriptions()
+        .stream()
+        .anyMatch(subscription -> userSubscriptions.contains(subscription.getSubcriptionService()));
     }
 }
