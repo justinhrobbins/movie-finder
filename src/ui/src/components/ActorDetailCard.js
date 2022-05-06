@@ -15,7 +15,7 @@ export const ActorDetailCard = ({ actor, showActorDeails, removeActor }) => {
         () => {
             if (loggedInUser) {
                 const fetchActorAlert = async () => {
-                    const response = await fetch(`http://localhost:8080/actoralerts/${actor.id}`, {
+                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actoralerts/${actor.id}`, {
                         method: 'GET',
                         headers: {
                             "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const ActorDetailCard = ({ actor, showActorDeails, removeActor }) => {
         }
 
         if (isActorAlertActive === false) {
-            fetch('http://localhost:8080/actoralerts', {
+            fetch(process.env.REACT_APP_BACKEND_URL + 'actoralerts', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -67,7 +67,7 @@ export const ActorDetailCard = ({ actor, showActorDeails, removeActor }) => {
                 }
             })
         } else {
-            fetch(`http://localhost:8080/actoralerts/${actorId}/`, {
+            fetch(process.env.REACT_APP_BACKEND_URL + `actoralerts/${actorId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${loggedInUser.tokenId}`

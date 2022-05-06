@@ -16,7 +16,7 @@ export const ActorSearchCard = () => {
 
   const fetchActors = async (name) => {
     if (name && name.length > 0) {
-      const response = await fetch(`http://localhost:8080/person/find?name=${name}`);
+      const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/find?name=${name}`);
       const data = await response.json();
       setActors(data);
     }

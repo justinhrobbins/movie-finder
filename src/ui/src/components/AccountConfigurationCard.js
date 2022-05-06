@@ -37,7 +37,7 @@ export const AccountConfigurationCard = () => {
         user.streamingServices = Array.from(selectedCheckboxes);
 
         const persistUserSubscriptions = async () => {
-            const response = await fetch('http://localhost:8080/user', {
+            const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'user', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",

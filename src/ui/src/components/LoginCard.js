@@ -14,7 +14,7 @@ export const LoginCard = () => {
 
     const handleLogin = async (googleData) => {
 
-        const response = await fetch('http://localhost:8080/user', {
+        const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'user', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${googleData.tokenId}`,
