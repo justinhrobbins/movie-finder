@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ActorDetailCard } from '../components/ActorDetailCard';
 import { ActorMovieListCard } from '../components/ActorMovieListCard';
 
-import './ActorDetailPage.scss';
+import './scss/ActorDetailPage.scss';
 
 export const ActorDetailPage = () => {
     const [person, setPerson] = useState(null);

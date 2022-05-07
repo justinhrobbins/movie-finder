@@ -5,7 +5,7 @@ import { ActorAlertSummaryCard } from '../components/ActorAlertSummaryCard';
 import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
 import Select from 'react-select';
 
-import './ActorAlertsPage.scss';
+import './scss/ActorAlertsPage.scss';
 
 export const ActorAlertsPage = () => {
   const { loggedInUser } = useContext(UserContext);

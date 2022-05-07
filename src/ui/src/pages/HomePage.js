@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { PopularActorsCard } from '../components/PopularActorsCard';
 
-import './HomePage.scss';
+import './scss/HomePage.scss';
 
 export const HomePage = () => {
 

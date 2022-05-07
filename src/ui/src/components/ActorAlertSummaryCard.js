@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { Link } from 'react-router-dom';
 
-import './ActorAlertSummaryCard.scss';
+import './scss/ActorAlertSummaryCard.scss';
 
 export const ActorAlertSummaryCard = ({ userActorAlerts}) => {
 

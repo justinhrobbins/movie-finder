@@ -2,7 +2,7 @@ import { React, useContext, useEffect, useState } from 'react';
 import { UserContext } from "../UserContext";
 import { Link } from 'react-router-dom';
 
-import './ActorDetailAlertDataCard.scss';
+import './scss/ActorDetailAlertDataCard.scss';
 
 export const ActorDetailAlertDataCard = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);

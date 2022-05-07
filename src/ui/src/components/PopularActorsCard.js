@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { ActorAlertDetailCard } from './ActorAlertDetailCard';
 
-import './PopularActorsCard.scss';
+import './scss/PopularActorsCard.scss';
 
 export const PopularActorsCard = () => {
   const [popularActors, setPopularActors] = useState(null);

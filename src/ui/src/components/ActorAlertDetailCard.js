@@ -1,7 +1,7 @@
 import { React, useState } from 'react';
 import { ActorDetailCard } from './ActorDetailCard';
 
-import './ActorAlertDetailCard.scss';
+import './scss/ActorAlertDetailCard.scss';
 
 export const ActorAlertDetailCard = ({ providedActor, actorDetails }) => {
     const [actor, setActor] = useState(providedActor);

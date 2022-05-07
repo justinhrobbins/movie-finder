@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
 
-import "./AccountConfigurationCard.scss";
+import "./scss/AccountConfigurationCard.scss";
 import checkboxesData from './FlatrateProviders.json';
 
 export const AccountConfigurationCard = () => {

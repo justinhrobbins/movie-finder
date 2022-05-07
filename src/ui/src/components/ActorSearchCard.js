@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import { ActorSearchResultsCard } from './ActorSearchResultsCard';
 
-import './ActorSearchCard.scss';
+import './scss/ActorSearchCard.scss';
 
 export const ActorSearchCard = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);

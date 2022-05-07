@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext";
 import { ActorMovieCard } from './ActorMovieCard';
 import Select from 'react-select';
 
-import './ActorMovieListCard.scss';
+import './scss/ActorMovieListCard.scss';
 
 export const ActorMovieListCard = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);
