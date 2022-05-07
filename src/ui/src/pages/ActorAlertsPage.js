@@ -5,7 +5,7 @@ import { ActorAlertSummaryCard } from '../components/ActorAlertSummaryCard';
 import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
 import Select from 'react-select';
 
-import './ActorAlertsPage.scss';
+import './scss/ActorAlertsPage.scss';
 
 export const ActorAlertsPage = () => {
   const { loggedInUser } = useContext(UserContext);
@@ -52,9 +52,9 @@ export const ActorAlertsPage = () => {
   ]
   const filterOptions = [
     { value: 'all', label: 'No filter' },
-    { value: 'upcoming', label: 'Has Upcoming Releases' },
-    { value: 'recent', label: 'Has Recent Releases' },
-    { value: 'subscriptions', label: 'Has Movies on my Subscriptions' }
+    { value: 'upcoming', label: 'Actors with upcoming releases' },
+    { value: 'recent', label: 'Actors with recent releases' },
+    { value: 'subscriptions', label: 'Actors with movies on my subscriptions' }
   ]
   useEffect(
     () => {

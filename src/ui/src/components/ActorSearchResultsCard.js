@@ -1,7 +1,7 @@
 import { React } from 'react';
 import { Link } from 'react-router-dom';
 
-import './ActorSearchResultsCard.scss';
+import './scss/ActorSearchResultsCard.scss';
 
 export const ActorSearchResultsCard = ({ actor, clearSearchResults }) => {
     if (!actor) return null;

@@ -1,6 +1,6 @@
 import { React } from 'react';
 
-import './MovieFlatrateProviderCard.scss';
+import './scss/MovieFlatrateProviderCard.scss';
 
 export const MovieFlatrateProviderCard = ({ flatrateProvider }) => {
     if (!flatrateProvider) return null;

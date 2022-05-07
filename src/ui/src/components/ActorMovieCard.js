@@ -2,7 +2,7 @@ import { React, useContext, useEffect, useState } from 'react';
 import { UserContext } from "../UserContext";
 import { MovieFlatrateProviderCard } from './MovieFlatrateProviderCard';
 
-import './ActorMovieCard.scss';
+import './scss/ActorMovieCard.scss';
 
 export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
     const { loggedInUser } = useContext(UserContext);

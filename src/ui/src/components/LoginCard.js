@@ -3,7 +3,7 @@ import { GoogleLogin } from 'react-google-login';
 import { UserContext } from "../UserContext";
 import { AccountConfigurationCard } from './AccountConfigurationCard';
 
-import './LoginCard.scss';
+import './scss/LoginCard.scss';
 
 export const LoginCard = () => {
     const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);

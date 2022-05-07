@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext";
 import { ActorMovieCard } from './ActorMovieCard';
 import Select from 'react-select';
 
-import './ActorMovieListCard.scss';
+import './scss/ActorMovieListCard.scss';
 
 export const ActorMovieListCard = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);
@@ -47,9 +47,9 @@ export const ActorMovieListCard = ({ actor }) => {
     ]
     const filterOptions = [
         { value: 'all', label: 'All Movies' },
-        { value: 'upcoming', label: 'Upcoming Releases' },
-        { value: 'recent', label: 'Recent Release' },
-        { value: 'subscriptions', label: 'My Subscriptions' }
+        { value: 'upcoming', label: 'Upcoming releases' },
+        { value: 'recent', label: 'Recent release' },
+        { value: 'subscriptions', label: 'Movies on my subscriptions' }
     ]
     useEffect(
         () => {
