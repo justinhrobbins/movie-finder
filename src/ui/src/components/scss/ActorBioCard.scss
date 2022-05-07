@@ -1,4 +1,29 @@
 .ActorBioCard {
     flex: 1;
     padding-right: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #8F8F8F;
+
+    .actor-bio-card-content-container {
+        padding-bottom: 3px;
+    }
+
+    .actor-bio-card-link {
+        text-decoration: underline;
+        
+        &:hover {
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+
+    .actor-bio-card-content-label{
+        font-weight: bold;
+    }
+
+    .actor-bio-card-bio {
+        display: inline-block;
+        margin-left: 3px;
+        margin-top: 3px;
+    }
 }

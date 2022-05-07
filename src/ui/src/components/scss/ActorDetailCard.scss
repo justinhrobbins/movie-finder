@@ -33,13 +33,8 @@
         font-size: .85rem;
     }
 
-    .actor-detail-card-content-actor-bio-container {
-        padding-top: 10px;
-        border-top: 1px solid #8F8F8F;
-    }
-
-    .actor-detail-card-content-container {
-        padding-bottom: 3px;
+    .actor-detail-card-content-alert-data {
+        margin-top: 5px;
     }
 
     .actor-detail-card-content-actor-name {
@@ -50,25 +45,9 @@
 
     .actor-detail-card-content-actor-name-link {
         text-decoration: none;
-        
+
         &:hover {
             text-decoration: underline;
-        }
-    }
-
-    .actor-detail-card-content-label{
-        font-weight: bold;
-    }
-
-    .actor-detail-card-link {
-        text-decoration: underline;
-
-        &:hover {
-            text-decoration: none;
         } 
-    }
-
-    .actor-detail-card-content-alert-data {
-        margin-top: 5px;
     }
 }
