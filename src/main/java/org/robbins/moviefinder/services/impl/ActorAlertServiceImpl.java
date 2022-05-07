@@ -66,12 +66,12 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         final User user = userService.findByEmailUser(userEmail).get();
 
         List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
-        final ActorsDto actorAlertsDto = convertActorAlerts(actorAlerts, user);
+        final ActorsDto actorAlertsDto = convertActorAlertsToActors(actorAlerts, user);
 
         return actorAlertsDto;
     }
 
-    private ActorsDto convertActorAlerts(final List<ActorAlert> actorAlerts, final User user) {
+    private ActorsDto convertActorAlertsToActors(final List<ActorAlert> actorAlerts, final User user) {
         final ActorsDto actors = new ActorsDto();
 
         actorAlerts
