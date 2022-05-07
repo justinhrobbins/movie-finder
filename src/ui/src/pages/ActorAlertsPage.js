@@ -42,7 +42,7 @@ export const ActorAlertsPage = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const [selectedSortOption, setSelectedSortOption] = useState({ value: 'popularity', label: 'Popularity' });
-  const [selectedFilterOption, setSelectedFilterOption] = useState({ value: 'all', label: 'All Actors' });
+  const [selectedFilterOption, setSelectedFilterOption] = useState({ value: 'all', label: 'All My Actors' });
   const sortOptions = [
     { value: 'name', label: 'Name' },
     { value: 'popularity', label: 'Popularity' },
@@ -51,7 +51,7 @@ export const ActorAlertsPage = () => {
     { value: 'total', label: 'Total Releases' }
   ]
   const filterOptions = [
-    { value: 'all', label: 'No filter' },
+    { value: 'all', label: 'All My Actors' },
     { value: 'upcoming', label: 'Actors with upcoming releases' },
     { value: 'recent', label: 'Actors with recent releases' },
     { value: 'subscriptions', label: 'Actors with movies on my subscriptions' }

@@ -2,13 +2,13 @@ import { React, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from "../UserContext";
 import { ActorDetailAlertDataCard } from './ActorDetailAlertDataCard';
+import { ActorBioCard } from './ActorBioCard';
 
 import './scss/ActorDetailCard.scss';
 
-export const ActorDetailCard = ({ actor, showActorDeails, removeActor }) => {
+export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
     const { loggedInUser } = useContext(UserContext);
     const [isActorAlertActive, setIsActorAlertActive] = useState(false);
-    const [showFullBio, setShowFullBio] = useState(false);
 
     const createActorAlertText = "Follow Actor";
     const removeActorAlertText = "Unfollow Actor";
@@ -86,10 +86,6 @@ export const ActorDetailCard = ({ actor, showActorDeails, removeActor }) => {
         };
     };
 
-    const toggleBio = () => {
-        setShowFullBio(!showFullBio)
-    }
-
     return (
         <div className="ActorDetailCard">
 
@@ -103,46 +99,15 @@ export const ActorDetailCard = ({ actor, showActorDeails, removeActor }) => {
             </div>
 
             <div className="actor-detail-card-content">
-                <div className="actor-detail-card-content-actor-bio-container">
-                    <div className="actor-detail-card-content-actor-name"><Link className="actor-detail-card-content-actor-name-link" to={actorDetailRoute}>{actor.name}</Link>
-                    </div>
-                    {showActorDeails == "true" &&
-                        <div className="actor-detail-card-content-container">
-                            <span className="actor-detail-card-content-label">Birthday:</span> {actor.birthday}
-                        </div>
-                    }
-                    {(showActorDeails == "true" && actor && actor.deathday && actor.deathday.length > 0)
-                        ? <div className="actor-detail-card-content-container">
-                            <span className="actor-detail-card-content-label">Day of Death:</span> {actor.deathday}
-                        </div>
-                        : <div className="actor-detail-card-content-container">
-                            <span className="actor-detail-card-content-label"></span>
-                        </div>
-                    }
-                    {showActorDeails == "true" &&
-                        <div>
-                            <div className="actor-detail-card-content-container">
-                                <span className="actor-detail-card-content-label">Place of birth:</span> {actor.place_of_birth}
-                            </div>
-                            <div className="actor-detail-card-content-container">
-                                <span className="actor-detail-card-content-label">Biography:</span><br />
-                                {actor.biography && actor.biography.length > 1000 && showFullBio == true &&
-                                    <span>{actor.biography} <span className="actor-detail-card-link" onClick={toggleBio}>Show less</span></span>
-                                }
-                                {actor.biography && actor.biography.length > 1000 && showFullBio == false &&
-                                    <span>{actor.biography.substring(0, 1000)}... <span className="actor-detail-card-link" onClick={toggleBio}>Show more</span></span>
-                                }
-                                {actor.biography && actor.biography.length < 1001 &&
-                                    <span>{actor.biography}</span>
-                                }
-
-                            </div>
-                        </div>
-                    }
+                <div className="actor-detail-card-content-actor-name">
+                    <Link className="actor-detail-card-content-actor-name-link" to={actorDetailRoute}>{actor.name}</Link>
                 </div>
                 <div className="actor-detail-card-content-alert-data">
                     <ActorDetailAlertDataCard key={actor.id} actor={actor} />
                 </div>
+                {showActorBio == "true" &&
+                    <ActorBioCard key={actor.id} actor={actor} />
+                }
             </div>
         </div>
     );

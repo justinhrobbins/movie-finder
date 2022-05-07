@@ -12,7 +12,7 @@ export const ActorAlertDetailCard = ({ providedActor, actorDetails }) => {
 
     return (
         <div className="ActorAlertDetailCard">
-            <ActorDetailCard key={actor.id} actor={actor} actorDetails={actorDetails} removeActor={removeActor} showActorDeails="false" />
+            <ActorDetailCard key={actor.id} actor={actor} actorDetails={actorDetails} removeActor={removeActor} showActorBio="false" />
         </div>
     );
 }
