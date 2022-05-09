@@ -20,7 +20,7 @@ import info.movito.themoviedbapi.model.people.PersonPeople;
 
 @Service
 public class PersonServiceImpl implements PersonService {
-    Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
+    final Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
 
     final TmdbApi tmdbApi;
     final Integer popularPageNumber = 1;

@@ -24,7 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 @CrossOrigin
 @RequestMapping("actoralerts")
 public class ActorAlertController extends AbstractSecuredController {
-    Logger logger = LoggerFactory.getLogger(ActorAlertController.class);
+    final Logger logger = LoggerFactory.getLogger(ActorAlertController.class);
 
     private final ActorAlertService actorAlertService;
 

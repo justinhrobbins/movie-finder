@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.robbins.moviefinder.dtos.ActorMovieCountsDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.PersonService;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,10 +24,13 @@ import info.movito.themoviedbapi.model.people.PersonPeople;
 public class ActorController {
     private final PersonService personService;
     private final ActorService actorService;
+    private final ActorMovieCountService movieCountService;
 
-    public ActorController(final PersonService personService, final ActorService actorService) {
+    public ActorController(final PersonService personService,
+            final ActorService actorService, final ActorMovieCountService movieCountService) {
         this.personService = personService;
         this.actorService = actorService;
+        this.movieCountService = movieCountService;
     }
 
     @GetMapping("/find")
@@ -46,7 +50,7 @@ public class ActorController {
 
     @GetMapping("/{actorId}/movies/counts")
     public ActorMovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId) {
-        return actorService.findActorMovieCounts(actorId);
+        return movieCountService.findActorMovieCounts(actorId);
     }
 
     @GetMapping("/popular")

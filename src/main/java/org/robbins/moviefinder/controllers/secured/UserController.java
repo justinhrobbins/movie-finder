@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("user")
 public class UserController extends AbstractSecuredController {
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    final Logger logger = LoggerFactory.getLogger(UserController.class);
     
     private final UserService userService;
 
@@ -40,8 +40,6 @@ public class UserController extends AbstractSecuredController {
 
     @PostMapping
     public UserDto saveSubscriptionServices(final Principal principal, @RequestBody UserDto userDto) {
-        logger.info(userDto.toString());
-
         final String userEmail = extractUserEmailFromPrincipal(principal);
         final UserDto updatedUser = userService.updateUserSubscriptions(userEmail, userDto.getStreamingServices());
         return updatedUser;

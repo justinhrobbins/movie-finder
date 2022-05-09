@@ -6,10 +6,7 @@ import java.util.List;
 public class ActorsDto {
 
     private List<ActorDto> actors = new ArrayList<>();
-    private int actorCount;
-    private int upcomingMovieCount;
-    private int recentMovieCount;
-    private int subscriptionCount;
+    private ActorCountsDto counts;
     
     public ActorsDto() {
     }
@@ -22,36 +19,11 @@ public class ActorsDto {
         this.actors = actors;
     }
 
-    public int getActorCount() {
-        return actorCount;
+    public ActorCountsDto getCounts() {
+        return counts;
     }
 
-    public void setActorCount(int actorCount) {
-        this.actorCount = actorCount;
+    public void setCounts(ActorCountsDto counts) {
+        this.counts = counts;
     }
-
-    public int getUpcomingMovieCount() {
-        return upcomingMovieCount;
-    }
-
-    public void setUpcomingMovieCount(int upcomingMovieCount) {
-        this.upcomingMovieCount = upcomingMovieCount;
-    }
-
-    public int getRecentMovieCount() {
-        return recentMovieCount;
-    }
-
-    public void setRecentMovieCount(int recentMovieCount) {
-        this.recentMovieCount = recentMovieCount;
-    }
-
-    public int getSubscriptionCount() {
-        return subscriptionCount;
-    }
-
-    public void setSubscriptionCount(int subscriptionCount) {
-        this.subscriptionCount = subscriptionCount;
-    }
-    
 }
