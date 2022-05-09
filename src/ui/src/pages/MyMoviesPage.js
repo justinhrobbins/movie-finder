@@ -1,6 +1,6 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { UserContext } from "../UserContext";
-import { ActorMovieCard } from '../components/ActorMovieCard';
+import { MyMovieActorCard } from '../components/MyMovieActorCard';
 
 import './scss/MyMoviesPage.scss';
 
@@ -12,7 +12,7 @@ export const MyMoviesPage = () => {
         () => {
             const fetchMovies = async () => {
                 try {
-                  const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'actoralerts/movies', {
+                  const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'actoralerts/movies?filter=RECENT', {
                     method: 'GET',
                     headers: {
                       'Authorization': `Bearer ${loggedInUser.tokenId}`
@@ -30,7 +30,7 @@ export const MyMoviesPage = () => {
         }, []
     );
 
-    if (!movies || !movies.movies) {
+    if (!movies || !movies.actors) {
         return <span>Searching for movies for your actors</span>
     }
 
@@ -47,11 +47,8 @@ export const MyMoviesPage = () => {
                 </ul>
             </div>
             {
-                movies.movies
-                    .map(movie => <ActorMovieCard
-                        key={movie.id}
-                        providedMovie={movie}
-                        filterBySubscriptions="false" />)
+                movies.actors
+                    .map(actor => <MyMovieActorCard key={actor.actorId} actor={actor} />)
             }
         </div>
     );

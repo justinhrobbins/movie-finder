@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.robbins.moviefinder.dtos.ActorMovieCountsDto;
@@ -19,6 +20,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 import info.movito.themoviedbapi.model.WatchProviders;
 import info.movito.themoviedbapi.model.WatchProviders.Provider;
 import info.movito.themoviedbapi.model.WatchProviders.Results.US;
+import info.movito.themoviedbapi.model.people.PersonCredit;
 import info.movito.themoviedbapi.model.people.PersonCredits;
 
 @Service
@@ -37,27 +39,45 @@ public class ActorMovieCountServiceImpl implements ActorMovieCountService {
     public ActorMovieCountsDto findActorMovieCounts(final Long actorId) {
         final PersonCredits personCredits = personService.findPersonMovieCredits(actorId);
 
-        final LocalDate today = LocalDate.now();
-
         final long totalMovies = personCredits.getCast().size();
 
-        final long upcomingMovies = personCredits.getCast()
-                .stream()
-                .filter(credit -> !(credit.getReleaseDate() == null))
-                .filter(credit -> credit.getReleaseDate().length() > 0)
-                .filter(credit -> LocalDate.parse(credit.getReleaseDate()).isAfter(today))
-                .count();
+        final long upcomingMovies = filterByUpcoming(personCredits).getCast().size();
 
-        final long recentMovies = personCredits.getCast()
-                .stream()
-                .filter(credit -> !(credit.getReleaseDate() == null))
-                .filter(credit -> credit.getReleaseDate().length() > 0)
-                .filter(credit -> isWithinRecentRange(LocalDate.parse(credit.getReleaseDate())))
-                .count();
+        final long recentMovies = filterbyRecent(personCredits).getCast().size();
 
         final List<ActorMovieSubscriptionCountsDto> subscriptionCounts = findSubscriptions(personCredits);
 
         return new ActorMovieCountsDto(totalMovies, upcomingMovies, recentMovies, subscriptionCounts);
+    }
+
+    @Override
+    public PersonCredits filterByUpcoming(final PersonCredits personCredits) {
+        final LocalDate today = LocalDate.now();
+
+        final List<PersonCredit> filteredCastCredits = personCredits.getCast()
+                .stream()
+                .filter(credit -> !(credit.getReleaseDate() == null))
+                .filter(credit -> credit.getReleaseDate().length() > 0)
+                .filter(credit -> LocalDate.parse(credit.getReleaseDate()).isAfter(today))
+                .collect(Collectors.toList());
+
+        final PersonCredits filteredPersonCredits = new PersonCredits();
+        filteredPersonCredits.setCast(filteredCastCredits);
+        return filteredPersonCredits;
+    }
+
+    @Override
+    public PersonCredits filterbyRecent(final PersonCredits personCredits) {
+        final List<PersonCredit> filteredCastCredits = personCredits.getCast()
+                .stream()
+                .filter(credit -> !(credit.getReleaseDate() == null))
+                .filter(credit -> credit.getReleaseDate().length() > 0)
+                .filter(credit -> isWithinRecentRange(LocalDate.parse(credit.getReleaseDate())))
+                .collect(Collectors.toList());
+
+        final PersonCredits filteredPersonCredits = new PersonCredits();
+        filteredPersonCredits.setCast(filteredCastCredits);
+        return filteredPersonCredits;
     }
 
     private boolean isWithinRecentRange(LocalDate date) {

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.dtos.MoviesDto;
 import org.robbins.moviefinder.entities.ActorAlert;
 import org.robbins.moviefinder.entities.User;
@@ -102,7 +103,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public MoviesDto findMyMovies(String userEmail) {
+    public MoviesDto findMyMovies(String userEmail, final Filters filter) {
         final User user = userService.findByEmailUser(userEmail).get();
         List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
 
@@ -111,8 +112,10 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         actorAlerts
                 .stream()
                 .forEach(actorAlert -> {
-                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId());
-                    movies.getMovies().addAll(actor.getMovieCredits().getCast());
+                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), filter);
+                    if (actor.getMovieCredits().getCast().size() > 0) {
+                        movies.getActors().add(actor);
+                    }
                 });
 
         return movies;

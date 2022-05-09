@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.dtos.MoviesDto;
 import org.robbins.moviefinder.services.ActorAlertService;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -69,10 +71,10 @@ public class ActorAlertController extends AbstractSecuredController {
     }
 
     @GetMapping("/movies")
-    public MoviesDto findMyMovies(final Principal principal) {
+    public MoviesDto findMyMovies(@RequestParam(required = false) final Filters filter, final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
 
-        final MoviesDto movies = actorAlertService.findMyMovies(userEmail);
+        final MoviesDto movies = actorAlertService.findMyMovies(userEmail, filter);
         return movies;
     }
 }

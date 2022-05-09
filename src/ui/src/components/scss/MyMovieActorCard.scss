@@ -1,0 +1,12 @@
+.MyMovieActorCard{
+    .my-movie-actor-card-section{ 
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        margin-right: 5px;
+    }
+
+    .my-movie-actor-card-labell{
+        flex: 50%;
+    }
+}

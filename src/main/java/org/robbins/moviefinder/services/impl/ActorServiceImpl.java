@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.entities.User;
+import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.PersonService;
 import org.slf4j.Logger;
@@ -21,9 +23,11 @@ public class ActorServiceImpl implements ActorService {
     final Logger logger = LoggerFactory.getLogger(ActorServiceImpl.class);
 
     private final PersonService personService;
+    private final ActorMovieCountService movieCountService;
 
-    public ActorServiceImpl(final PersonService personService) {
+    public ActorServiceImpl(final PersonService personService, final ActorMovieCountService movieCountService) {
         this.personService = personService;
+        this.movieCountService = movieCountService;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorsDto findActors(List<Long> actorIds, final User user) {
+    public ActorsDto findActors(final List<Long> actorIds, final User user) {
         final ActorsDto actors = new ActorsDto();
 
         actorIds.forEach(id -> actors.getActors().add(findActor(id)));
@@ -50,7 +54,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto findActor(Long actorId) {
+    public ActorDto findActor(final Long actorId) {
         final ActorDto actor = new ActorDto(Long.valueOf(actorId));
         final ActorDto actorWithPerson = addPersonToActor(actor);
 
@@ -64,10 +68,24 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto findActorWithMovies(Long actorId) {
+    public ActorDto findActorWithMovies(final Long actorId, final Filters filter) {
         final ActorDto actor = findActor(actorId);
-        final PersonCredits credits = personService.findPersonMovieCredits(actorId);
-        actor.setMovieCredits(credits);
+        final PersonCredits allCredits = personService.findPersonMovieCredits(actorId);
+        final PersonCredits filteredCredits = filterCredits(allCredits, filter);
+        actor.setMovieCredits(filteredCredits);
         return actor;
+    }
+
+    private PersonCredits filterCredits(final PersonCredits credits, final Filters filter) {
+
+        switch (filter) {
+            case RECENT:
+                return movieCountService.filterbyRecent(credits);
+            case UPCOMING:
+                return movieCountService.filterByUpcoming(credits);
+            case SUBSCRIPTIONS:
+                break;
+        }
+        return credits;
     }
 }

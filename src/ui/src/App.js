@@ -29,7 +29,7 @@ function App() {
               <span>|</span>
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/actoralerts/'>My Actors</NavLink>
               <span>|</span>
-              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/mymovies/'>My Movies</NavLink>
+              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/mymovies?filter=recent'>My Movies</NavLink>
             </div>
             <div className="app-header-search-bar">
               <ActorSearchCard />

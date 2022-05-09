@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.entities.User;
 
 public interface ActorService {
@@ -13,5 +14,5 @@ public interface ActorService {
 
     public ActorsDto findPopularActors();
 
-    public ActorDto findActorWithMovies(final Long actorId);
+    public ActorDto findActorWithMovies(final Long actorId, final Filters filter);
 }
