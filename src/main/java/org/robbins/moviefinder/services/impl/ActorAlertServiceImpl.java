@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.MoviesDto;
 import org.robbins.moviefinder.entities.ActorAlert;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.repositories.ActorAlertRepository;
@@ -28,17 +29,12 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public Optional<ActorDto> findByUserAndActorId(String userEmail, Long actorId) {
+    public Boolean isUserFollowingActor(String userEmail, Long actorId) {
         final User user = userService.findByEmailUser(userEmail).get();
 
         Optional<ActorAlert> actorAlert = actorAlertRepository.findByUserAndActorId(user, actorId);
 
-        if (!actorAlert.isPresent()) {
-            return Optional.empty();
-        } else {
-            final ActorDto actor = new ActorDto(actorAlert.get().getActorId());
-            return Optional.of(actor);
-        }
+        return actorAlert.isPresent() ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
@@ -62,7 +58,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public ActorsDto findActorAlertsForUser(final String userEmail) {
+    public ActorsDto findAMyActors(final String userEmail) {
         final User user = userService.findByEmailUser(userEmail).get();
 
         List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
@@ -118,9 +114,9 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
     private int calculateSubscriptionCount(final ActorsDto actors, final User user) {
         long subscriptionCount = actors.getActors()
-        .stream()
-        .filter(actor -> actorHasMoviesMatchingUserSubscriptions(actor, user))
-        .count();
+                .stream()
+                .filter(actor -> actorHasMoviesMatchingUserSubscriptions(actor, user))
+                .count();
         return Math.toIntExact(subscriptionCount);
     }
 
@@ -128,7 +124,24 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         List<String> userSubscriptions = userService.convertStreamingServices(user);
 
         return actor.getMovieCounts().getSubscriptions()
-        .stream()
-        .anyMatch(subscription -> userSubscriptions.contains(subscription.getSubcriptionService()));
+                .stream()
+                .anyMatch(subscription -> userSubscriptions.contains(subscription.getSubcriptionService()));
+    }
+
+    @Override
+    public MoviesDto findMyMovies(String userEmail) {
+        final User user = userService.findByEmailUser(userEmail).get();
+        List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
+
+        final MoviesDto movies = new MoviesDto();
+
+        actorAlerts
+                .stream()
+                .forEach(actorAlert -> {
+                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId());
+                    movies.getMovies().addAll(actor.getMovieCredits().getCast());
+                });
+
+        return movies;
     }
 }

@@ -19,12 +19,12 @@ import info.movito.themoviedbapi.model.people.PersonPeople;
 
 @RestController
 @CrossOrigin
-@RequestMapping("person")
-public class PersonController {
+@RequestMapping("actors")
+public class ActorController {
     private final PersonService personService;
     private final ActorService actorService;
 
-    public PersonController(final PersonService personService, final ActorService actorService) {
+    public ActorController(final PersonService personService, final ActorService actorService) {
         this.personService = personService;
         this.actorService = actorService;
     }
@@ -34,17 +34,17 @@ public class PersonController {
         return personService.searchPersons(personName);
     }
 
-    @GetMapping("/{personId}")
-    public PersonPeople getPersonById(@PathVariable("personId") final Long personId) {
+    @GetMapping("/{actorId}")
+    public PersonPeople getPersonById(@PathVariable("actorId") final Long personId) {
         return personService.findPerson(personId);
     }
 
-    @GetMapping("/{personId}/movies")
-    public PersonCredits getMoviesForPerson(@PathVariable("personId") final Long personId) {
+    @GetMapping("/{actorId}/movies")
+    public PersonCredits getMoviesForPerson(@PathVariable("actorId") final Long personId) {
         return personService.findPersonMovieCredits(personId);
     }
 
-    @GetMapping("/{actorId}/movie/counts")
+    @GetMapping("/{actorId}/movies/counts")
     public ActorMovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId) {
         return actorService.findActorMovieCounts(actorId);
     }

@@ -17,7 +17,7 @@ export const ActorMovieListCard = ({ actor }) => {
             const fetchPersonCredits = async () => {
                 try {
                     setLoading(true);
-                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/${actor.id}/movies`);
+                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.id}/movies`);
                     const movieData = await response.json();
                     setUnfilteredPersonCredits(movieData);
                 } catch (error) {

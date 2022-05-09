@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, NavLink } from 'react
 import { HomePage } from './pages/HomePage';
 import { ActorDetailPage } from './pages/ActorDetailPage';
 import { ActorAlertsPage } from './pages/ActorAlertsPage';
+import { MyMoviesPage } from './pages/MyMoviesPage';
 import { ActorSearchCard } from './components/ActorSearchCard';
 import { LoginCard } from './components/LoginCard';
 import { UserContext } from "./UserContext";
@@ -27,6 +28,8 @@ function App() {
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to="/">Home</NavLink>
               <span>|</span>
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/actoralerts/'>My Actors</NavLink>
+              <span>|</span>
+              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/mymovies/'>My Movies</NavLink>
             </div>
             <div className="app-header-search-bar">
               <ActorSearchCard />
@@ -37,6 +40,8 @@ function App() {
             <Route path='/' element={<HomePage />} />
             <Route path='/actors/:actorId' element={<ActorDetailPage />} />
             <Route path='/actoralerts/' element={<ActorAlertsPage />} />
+            <Route path='/actoralerts/' element={<ActorAlertsPage />} />
+            <Route path='/mymovies/' element={<MyMoviesPage />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

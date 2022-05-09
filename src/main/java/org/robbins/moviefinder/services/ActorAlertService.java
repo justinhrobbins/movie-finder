@@ -1,13 +1,12 @@
 package org.robbins.moviefinder.services;
 
-import java.util.Optional;
-
-import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.MoviesDto;
 
 public interface ActorAlertService {
     public void saveActorAlert(final String userEmail, final Long actorId);
     public void deleteActorAlert(final String userEmail, final Long actorId);
-    public Optional<ActorDto> findByUserAndActorId(final String userEmail, final Long actorId);
-    public ActorsDto findActorAlertsForUser(final String userEmail);
+    public Boolean isUserFollowingActor(final String userEmail, final Long actorId);
+    public ActorsDto findAMyActors(final String userEmail);
+    public MoviesDto findMyMovies(final String userEmail);
 }

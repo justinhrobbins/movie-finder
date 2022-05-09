@@ -157,4 +157,12 @@ public class ActorServiceImpl implements ActorService {
         actor.setMovieCounts(actorMovieCounts);
         return actor;
     }
+
+    @Override
+    public ActorDto findActorWithMovies(Long actorId) {
+        final ActorDto actor = findByActorId(actorId);
+        final PersonCredits credits = personService.findPersonMovieCredits(actorId);
+        actor.setMovieCredits(credits);
+        return actor;
+    }
 }

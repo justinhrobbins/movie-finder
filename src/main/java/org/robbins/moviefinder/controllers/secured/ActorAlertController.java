@@ -1,10 +1,10 @@
 package org.robbins.moviefinder.controllers.secured;
 
 import java.security.Principal;
-import java.util.Optional;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.MoviesDto;
 import org.robbins.moviefinder.services.ActorAlertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +33,11 @@ public class ActorAlertController extends AbstractSecuredController {
     }
 
     @GetMapping
-    public ActorsDto findActorAlerts(final Principal principal) {
+    public ActorsDto findMyActors(final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
-        
-        final ActorsDto actorAlertsDto = actorAlertService.findActorAlertsForUser(userEmail);
-        
+
+        final ActorsDto actorAlertsDto = actorAlertService.findAMyActors(userEmail);
+
         return actorAlertsDto;
     }
 
@@ -45,13 +45,7 @@ public class ActorAlertController extends AbstractSecuredController {
     public Boolean doesActorAlertExistForUser(@PathVariable("actorId") final Long actorId, final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
 
-        Optional<ActorDto> actor = actorAlertService.findByUserAndActorId(userEmail, actorId);
-
-        if (actor.isPresent()) {
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
-        }
+       return actorAlertService.isUserFollowingActor(userEmail, actorId);
     }
 
     @PostMapping
@@ -72,5 +66,13 @@ public class ActorAlertController extends AbstractSecuredController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor Alert Not found for user");
         }
         return;
+    }
+
+    @GetMapping("/movies")
+    public MoviesDto findMyMovies(final Principal principal) {
+        final String userEmail = extractUserEmailFromPrincipal(principal);
+
+        final MoviesDto movies = actorAlertService.findMyMovies(userEmail);
+        return movies;
     }
 }

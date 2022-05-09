@@ -8,4 +8,5 @@ public interface ActorService {
     public ActorMovieCountsDto findActorMovieCounts(final Long actorId);
     public ActorsDto findPopularActors();
     public ActorDto findByActorId(final Long actorId);
+    public ActorDto findActorWithMovies(final Long actorId);
 }

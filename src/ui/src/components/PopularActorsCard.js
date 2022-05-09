@@ -10,7 +10,7 @@ export const PopularActorsCard = () => {
     () => {
       const fetchPopularActors = async () => {
         try {
-          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/popular`, {
+          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/popular`, {
             method: 'GET'
           });
           const popularActors = await response.json();

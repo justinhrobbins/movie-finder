@@ -12,7 +12,7 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
     useEffect(
         () => {
             const fetchActorMovieCounts = async () => {
-                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/${actor.id}/movie/counts`, {
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.id}/movies/counts`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json"
