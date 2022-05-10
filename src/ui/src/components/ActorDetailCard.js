@@ -88,7 +88,6 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
 
     return (
         <div className="ActorDetailCard">
-
             <div className="actor-detail-card-image-container">
                 <img className="actor-detail-card-image-image" src={actorPhotoUrl} alt={actor.name} title={actor.name} />
                 <div className="actor-detail-card-image-details">
@@ -105,7 +104,7 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
                 <div className="actor-detail-card-content-alert-data">
                     <ActorDetailAlertDataCard key={actor.id} actor={actor} />
                 </div>
-                {showActorBio == "true" &&
+                {showActorBio == true &&
                     <ActorBioCard key={actor.id} actor={actor} />
                 }
             </div>

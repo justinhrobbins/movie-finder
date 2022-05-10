@@ -30,6 +30,10 @@ export const MyMoviesPage = () => {
         }, []
     );
 
+    if (!loggedInUser) {
+        return <h3>Login to view Movies from your Actors</h3>
+      }
+
     if (!movies || !movies.actors) {
         return <span>Searching for movies for your actors</span>
     }

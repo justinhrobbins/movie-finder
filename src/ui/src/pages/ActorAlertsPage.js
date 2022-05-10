@@ -152,17 +152,17 @@ export const ActorAlertsPage = () => {
   }
 
   if (!loggedInUser) {
-    return <h3>Login to configure your Actor Alerts</h3>
+    return <h3>Login to configure your Actors</h3>
   }
 
   if (!userActorAlerts || !userActorAlerts.actors) {
 
-    return <h3>Loading your Actor Alerts...</h3>
+    return <h3>Loading your Actors...</h3>
   }
 
   if (unfilteredUserActorAlerts.actors.length === 0) {
 
-    return <h3>You have no Actor Alerts configured</h3>
+    return <h3>You are not following any Actors</h3>
   }
 
   return (
@@ -199,7 +199,7 @@ export const ActorAlertsPage = () => {
       }
       <div className="actor-alerts-page-actors-list">
         {userActorAlerts.actors
-          .map(actors => <ActorAlertDetailCard key={actors.actorId} providedActor={actors.person} actorDetails={actors.movieCounts} />)
+          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor.person} actorDetails={actor.movieCounts} />)
         }
       </div>
     </div>

@@ -40,7 +40,6 @@ function App() {
             <Route path='/' element={<HomePage />} />
             <Route path='/actors/:actorId' element={<ActorDetailPage />} />
             <Route path='/actoralerts/' element={<ActorAlertsPage />} />
-            <Route path='/actoralerts/' element={<ActorAlertsPage />} />
             <Route path='/mymovies/' element={<MyMoviesPage />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />

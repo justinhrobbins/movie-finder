@@ -1,13 +1,26 @@
 import { React, useContext, useEffect, useState } from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation, Link } from 'react-router-dom';
 import { UserContext } from "../UserContext";
 import { ActorMovieCard } from './ActorMovieCard';
-import Select from 'react-select';
+import { ActorAlertDetailCard } from './ActorAlertDetailCard';
 
 import './scss/MyMovieActorCard.scss';
 
 export const MyMovieActorCard = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);
+    const actorDetailRoute = `/actors/${actor.actorId}`;
+    const [searchParams, setSearchParams] = useSearchParams();
+    const filterParam = searchParams.get('filter');
+
+    const createActorLabel = () => {
+        if (filterParam === "recent") {
+            return <span>Recent releases</span>
+        } else if (filterParam === "upcoming") {
+            return <span>New releases</span>
+        } else {
+            return <span>Movies on your streaming subscriptions</span>
+        }
+    }
 
     if (!actor || !actor.movieCredits) {
         return <span>Searching for movies for: {actor.name}</span>
@@ -16,15 +29,32 @@ export const MyMovieActorCard = ({ actor }) => {
     return (
         <div className="MyMovieActorCard">
             <div className="my-movie-actor-card-section">
-                <h2 className="my-movie-actor-card-label">Movies for: {actor.person.name}</h2>
+                <div className="my-movie-actor-card-section-actor-details">
+                    <div>
+                        <ActorAlertDetailCard key={actor.actorId} providedActor={actor.person} actorDetails={actor.movieCounts} />
+                    </div>
+                </div>
+                <div className="my-movie-actor-card-section-movies">
+                    <div className="my-movie-actor-card-actor-name">
+                        {createActorLabel()}
+                    </div>
+                    <div className="my-movie-actor-card-movies-container">
+                        {
+                            actor.movieCredits.cast
+                                .map(
+                                    movie =>
+                                        <div className="my-movie-actor-card-movies-item">
+                                            <ActorMovieCard
+                                                key={movie.id}
+                                                providedMovie={movie}
+                                                shouldShowFullOverview={false}
+                                                filterBySubscriptions={false} />
+                                        </div>
+                                )
+                        }
+                    </div>
+                </div>
             </div>
-            {
-                actor.movieCredits.cast
-                    .map(movie => <ActorMovieCard
-                        key={movie.id}
-                        providedMovie={movie}
-                        filterBySubscriptions="false" />)
-            }
         </div>
     );
 }

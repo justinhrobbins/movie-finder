@@ -58,7 +58,7 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
             <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=upcoming`}>Upcoming Movies: {actorMoveCounts.upcomingMovies}</Link></div>
             <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=recent`}>Recent Movies: {actorMoveCounts.recentMovies}</Link></div>
             <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=all`}>Total Movies: {actorMoveCounts.totalMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-label">{subscriptionsLink}</div>
+            <div className="actor-detail-alert-data-card-subscription-label">{subscriptionsLink}</div>
         </div>
     );
 }

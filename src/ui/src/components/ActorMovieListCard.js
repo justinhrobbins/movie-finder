@@ -180,6 +180,7 @@ export const ActorMovieListCard = ({ actor }) => {
                     .map(movie => <ActorMovieCard
                         key={movie.id}
                         providedMovie={movie}
+                        shouldShowFullOverview={true}
                         filterBySubscriptions={sortAndFilterOptions.filterOption.value == "subscriptions" ? true : false} />)
             }
         </div>
