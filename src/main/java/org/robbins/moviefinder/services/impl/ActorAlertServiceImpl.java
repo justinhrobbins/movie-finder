@@ -113,11 +113,16 @@ public class ActorAlertServiceImpl implements ActorAlertService {
                 .stream()
                 .forEach(actorAlert -> {
                     final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), filter);
+                    actor.setMovieCounts(actorMovieCountService.findActorMovieCounts(actor.getActorId()));
                     if (actor.getMovieCredits().getCast().size() > 0) {
                         movies.getActors().add(actor);
                     }
                 });
 
         return movies;
+    }
+
+    private MoviesDto calculateCounts(final MoviesDto movies) {
+        return null;
     }
 }

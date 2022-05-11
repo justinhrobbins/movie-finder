@@ -91,19 +91,16 @@ export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBy
                     <span className="actor-movie-card-info-content-overview-label">OVERVIEW:</span><br />
                     {movie.overview && movie.overview.length > 100 && showFullOverview == true &&
                         <div>
-                            {console.log("here")}
                             <span className="actor-movie-card-info-content-overview"> {movie.overview} <span className="actor-movie-card-info-content-overview-link" onClick={toggleOverview}>Show less</span></span>
                         </div>
                     }
                     {movie.overview && movie.overview.length > 100 && showFullOverview == false &&
                         <div>
-                            {console.log("there")}
                             <span className="actor-movie-card-info-content-overview">{movie.overview.substring(0, 100)}... <span className="actor-movie-card-info-content-overview-link" onClick={toggleOverview}>Show more</span></span>
                         </div>
                     }
                     {movie.overview && movie.overview.length < 101 &&
                         <div>
-                            {console.log("showFullOverview: " + showFullOverview)}
                             <span className="actor-movie-card-info-content-overview">{movie.overview}</span>
                         </div>
                     }

@@ -1,4 +1,5 @@
 import { React, useContext, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { UserContext } from "../UserContext";
 import { MyMovieActorCard } from '../components/MyMovieActorCard';
 
@@ -7,12 +8,14 @@ import './scss/MyMoviesPage.scss';
 export const MyMoviesPage = () => {
     const { loggedInUser } = useContext(UserContext);
     const [movies, setMovies] = useState();
+    const [searchParams] = useSearchParams();
+    const filterParam = searchParams.get('filter');
 
     useEffect(
         () => {
             const fetchMovies = async () => {
                 try {
-                  const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'actoralerts/movies?filter=RECENT', {
+                  const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actoralerts/movies?filter=${filterParam}`, {
                     method: 'GET',
                     headers: {
                       'Authorization': `Bearer ${loggedInUser.tokenId}`

@@ -1,22 +1,19 @@
-import { React, useContext, useEffect, useState } from 'react';
-import { useSearchParams, useLocation, Link } from 'react-router-dom';
-import { UserContext } from "../UserContext";
+import { React, useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ActorMovieCard } from './ActorMovieCard';
 import { ActorAlertDetailCard } from './ActorAlertDetailCard';
 
 import './scss/MyMovieActorCard.scss';
 
 export const MyMovieActorCard = ({ actor }) => {
-    const { loggedInUser } = useContext(UserContext);
-    const actorDetailRoute = `/actors/${actor.actorId}`;
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const filterParam = searchParams.get('filter');
 
     const createActorLabel = () => {
         if (filterParam === "recent") {
             return <span>Recent releases</span>
         } else if (filterParam === "upcoming") {
-            return <span>New releases</span>
+            return <span>Upcoming releases</span>
         } else {
             return <span>Movies on your streaming subscriptions</span>
         }
