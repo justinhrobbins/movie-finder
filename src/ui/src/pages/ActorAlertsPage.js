@@ -85,21 +85,14 @@ export const ActorAlertsPage = () => {
             return el.movieCounts.upcomingMovies > 0;
           });
         } else if (selectedFilterOption.value == "subscriptions") {
-          filteredActors = allActorAlerts.actors.filter(function (actor) {
-            return actorHasMoviesOnSubscriptions(actor);
+          filteredActors = allActorAlerts.actors.filter(function (el) {
+            return el.movieCounts.moviesOnSubscriptions > 0;
           });
         } else {
           filteredActors = allActorAlerts.actors;
         }
         return filteredActors;
       };
-
-      const actorHasMoviesOnSubscriptions = (actor) => {
-        const hasSubscriptions = actor.movieCounts.subscriptions
-          .some(subscription => loggedInUser.streamingServices.includes(subscription.subcriptionService))
-          console.log("hasSubscriptions: " + hasSubscriptions);
-        return hasSubscriptions;
-      }
 
       const sortActors = (actorAlerts) => {
         let sortedActorAlerts;
