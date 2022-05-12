@@ -7,8 +7,8 @@ import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.entities.User;
-import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.ActorService;
+import org.robbins.moviefinder.services.MovieFilterinService;
 import org.robbins.moviefinder.services.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +23,11 @@ public class ActorServiceImpl implements ActorService {
     final Logger logger = LoggerFactory.getLogger(ActorServiceImpl.class);
 
     private final PersonService personService;
-    private final ActorMovieCountService movieCountService;
+    private final MovieFilterinService movieFilterService;
 
-    public ActorServiceImpl(final PersonService personService, final ActorMovieCountService movieCountService) {
+    public ActorServiceImpl(final PersonService personService, final MovieFilterinService movieFilterService) {
         this.personService = personService;
-        this.movieCountService = movieCountService;
+        this.movieFilterService = movieFilterService;
     }
 
     @Override
@@ -68,23 +68,24 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto findActorWithMovies(final Long actorId, final Filters filter) {
+    public ActorDto findActorWithMovies(final Long actorId, final Filters filter, final User user) {
         final ActorDto actor = findActor(actorId);
         final PersonCredits allCredits = personService.findPersonMovieCredits(actorId);
-        final PersonCredits filteredCredits = filterCredits(allCredits, filter);
+        final PersonCredits filteredCredits = filterCredits(allCredits, filter, user);
         actor.setMovieCredits(filteredCredits);
         return actor;
     }
 
-    private PersonCredits filterCredits(final PersonCredits credits, final Filters filter) {
+    // potentially move this method into MovieFilterService
+    private PersonCredits filterCredits(final PersonCredits credits, final Filters filter, final User user) {
 
         switch (filter) {
             case RECENT:
-                return movieCountService.filterbyRecent(credits);
+                return movieFilterService.filterByRecent(credits);
             case UPCOMING:
-                return movieCountService.filterByUpcoming(credits);
+                return movieFilterService.filterByUpcoming(credits);
             case SUBSCRIPTIONS:
-                break;
+            return movieFilterService.filterBySubscriptions(credits, user);
         }
         return credits;
     }

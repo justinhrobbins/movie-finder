@@ -2,6 +2,7 @@ package org.robbins.moviefinder.controllers.secured;
 
 import java.security.Principal;
 
+import org.robbins.moviefinder.controllers.AbstractController;
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.dtos.Filters;
@@ -25,7 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @CrossOrigin
 @RequestMapping("actoralerts")
-public class ActorAlertController extends AbstractSecuredController {
+public class ActorAlertController extends AbstractController {
     final Logger logger = LoggerFactory.getLogger(ActorAlertController.class);
 
     private final ActorAlertService actorAlertService;

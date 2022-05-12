@@ -2,6 +2,7 @@ package org.robbins.moviefinder.controllers.secured;
 
 import java.security.Principal;
 
+import org.robbins.moviefinder.controllers.AbstractController;
 import org.robbins.moviefinder.dtos.UserDto;
 import org.robbins.moviefinder.services.UserService;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @RequestMapping("user")
-public class UserController extends AbstractSecuredController {
+public class UserController extends AbstractController {
     final Logger logger = LoggerFactory.getLogger(UserController.class);
     
     private final UserService userService;

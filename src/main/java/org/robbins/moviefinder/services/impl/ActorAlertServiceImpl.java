@@ -76,15 +76,15 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     public ActorsDto findAMyActors(final String userEmail) {
         final User user = userService.findByEmailUser(userEmail).get();
         final ActorsDto actors = findMyActorsWithoutCounts(userEmail);
-        final ActorsDto actorsWithMovieCounts = populateActorMovieCounts(actors);
+        final ActorsDto actorsWithMovieCounts = populateActorMovieCounts(actors, user);
         actorsWithMovieCounts.setCounts(actorCountService.calculateTotals(actorsWithMovieCounts, user));
         return actorsWithMovieCounts;
     }
 
-    private ActorsDto populateActorMovieCounts(final ActorsDto actors) {
+    private ActorsDto populateActorMovieCounts(final ActorsDto actors, final User user) {
         actors.getActors()
                 .forEach(actor -> {
-                    actor.setMovieCounts(actorMovieCountService.findActorMovieCounts(actor.getActorId()));
+                    actor.setMovieCounts(actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
                 });
 
         return actors;
@@ -112,8 +112,8 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         actorAlerts
                 .stream()
                 .forEach(actorAlert -> {
-                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), filter);
-                    actor.setMovieCounts(actorMovieCountService.findActorMovieCounts(actor.getActorId()));
+                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), filter, user);
+                    actor.setMovieCounts(actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
                     if (actor.getMovieCredits().getCast().size() > 0) {
                         movies.getActors().add(actor);
                     }

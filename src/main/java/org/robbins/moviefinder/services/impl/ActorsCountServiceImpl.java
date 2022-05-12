@@ -1,23 +1,15 @@
 package org.robbins.moviefinder.services.impl;
 
-import java.util.List;
-
 import org.robbins.moviefinder.dtos.ActorCountsDto;
-import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.services.ActorsCountService;
-import org.robbins.moviefinder.services.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ActorsCountServiceImpl implements ActorsCountService {
 
-    private final UserService userService;
-
-    public ActorsCountServiceImpl(final UserService userService) {
-        this.userService = userService;
-    }
+    public ActorsCountServiceImpl() {}
 
     @Override
     public ActorCountsDto calculateTotals(ActorsDto actors, User user) {
@@ -55,16 +47,8 @@ public class ActorsCountServiceImpl implements ActorsCountService {
     private int calculateSubscriptionCount(final ActorsDto actors, final User user) {
         long subscriptionCount = actors.getActors()
                 .stream()
-                .filter(actor -> actorHasMoviesMatchingUserSubscriptions(actor, user))
+                .filter(actor -> actor.getMovieCounts().getMoviesOnSubscriptions() > 0)
                 .count();
         return Math.toIntExact(subscriptionCount);
-    }
-
-    private boolean actorHasMoviesMatchingUserSubscriptions(final ActorDto actor, final User user) {
-        List<String> userSubscriptions = userService.convertStreamingServices(user);
-
-        return actor.getMovieCounts().getSubscriptions()
-                .stream()
-                .anyMatch(subscription -> userSubscriptions.contains(subscription.getSubcriptionService()));
     }
 }

@@ -6,7 +6,7 @@ import info.movito.themoviedbapi.model.people.PersonPeople;
 public class ActorDto {
     private Long actorId;
     private PersonPeople person;
-    private ActorMovieCountsDto movieCounts;
+    private MovieCountsDto movieCounts;
     private PersonCredits movieCredits;
 
     public ActorDto() {
@@ -37,11 +37,11 @@ public class ActorDto {
         this.person = person;
     }
 
-    public ActorMovieCountsDto getMovieCounts() {
+    public MovieCountsDto getMovieCounts() {
         return movieCounts;
     }
 
-    public void setMovieCounts(ActorMovieCountsDto movieCounts) {
+    public void setMovieCounts(MovieCountsDto movieCounts) {
         this.movieCounts = movieCounts;
     }
 

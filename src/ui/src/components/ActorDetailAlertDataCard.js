@@ -12,12 +12,20 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
     useEffect(
         () => {
             const fetchActorMovieCounts = async () => {
-                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.id}/movies/counts`, {
+                var headers = new Headers();
+                headers.append("Content-Type", "application/json");
+
+                if (loggedInUser) {
+                    headers.append("Authorization", `Bearer ${loggedInUser.tokenId}`);
+                }
+
+                const requestOptions = {
                     method: 'GET',
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
+                    headers: headers
+                };
+
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.id}/movies/counts`,
+                    requestOptions);
                 const actorMoveCounts = await response.json();
                 setActorMovieCounts(actorMoveCounts);
             };
@@ -34,16 +42,7 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
                 setSubscriptionsLink("Configure your Subscriptions to filter by Subscriptions");
             } else {
                 if (actorMoveCounts) {
-                    let subscriptionCount = 0;
-                    actorMoveCounts.subscriptions
-                        .map(subscription => {
-                            if (loggedInUser.streamingServices.includes(subscription.subcriptionService)) {
-                                subscriptionCount = subscriptionCount + subscription.movieCount;
-                            } else {
-                                subscriptionCount = subscriptionCount + 0;
-                            }
-                        });
-                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>On your Subscriptions: {subscriptionCount}</Link>)
+                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>On your Subscriptions: {actorMoveCounts.moviesOnSubscriptions}</Link>)
                 }
             }
         }, [loggedInUser, actorMoveCounts]

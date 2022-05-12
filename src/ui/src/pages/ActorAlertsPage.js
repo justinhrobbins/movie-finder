@@ -97,6 +97,7 @@ export const ActorAlertsPage = () => {
       const actorHasMoviesOnSubscriptions = (actor) => {
         const hasSubscriptions = actor.movieCounts.subscriptions
           .some(subscription => loggedInUser.streamingServices.includes(subscription.subcriptionService))
+          console.log("hasSubscriptions: " + hasSubscriptions);
         return hasSubscriptions;
       }
 

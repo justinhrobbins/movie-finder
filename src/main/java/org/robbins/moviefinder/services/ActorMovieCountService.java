@@ -1,11 +1,10 @@
 package org.robbins.moviefinder.services;
 
-import org.robbins.moviefinder.dtos.ActorMovieCountsDto;
+import java.util.Optional;
 
-import info.movito.themoviedbapi.model.people.PersonCredits;
+import org.robbins.moviefinder.dtos.MovieCountsDto;
+import org.robbins.moviefinder.entities.User;
 
 public interface ActorMovieCountService {
-    public ActorMovieCountsDto findActorMovieCounts(final Long actorId);
-    public PersonCredits filterByUpcoming(final PersonCredits personCredits);
-    public PersonCredits filterbyRecent(final PersonCredits personCredits);
+    public MovieCountsDto findActorMovieCounts(final Long actorId, final Optional<User> user);
 }

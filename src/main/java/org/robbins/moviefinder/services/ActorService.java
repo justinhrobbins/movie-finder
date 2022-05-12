@@ -14,5 +14,5 @@ public interface ActorService {
 
     public ActorsDto findPopularActors();
 
-    public ActorDto findActorWithMovies(final Long actorId, final Filters filter);
+    public ActorDto findActorWithMovies(final Long actorId, final Filters filter, final User user);
 }
