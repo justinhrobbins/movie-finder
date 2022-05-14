@@ -1,18 +1,24 @@
 package org.robbins.moviefinder.dtos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MoviesDto {
 
-    private List<ActorDto> actors = new ArrayList<>();
+    private ActorsDto actors = new ActorsDto();
+    private MovieCountsDto movieCounts;
 
-    public List<ActorDto> getActors() {
+    public ActorsDto getActors() {
         return actors;
     }
 
-    public void setActors(List<ActorDto> actors) {
+    public void setActors(ActorsDto actors) {
         this.actors = actors;
     }
-    
+
+    public MovieCountsDto getMovieCounts() {
+        return movieCounts;
+    }
+
+    public void setMovieCounts(MovieCountsDto movieCounts) {
+        this.movieCounts = movieCounts;
+    }
+
 }

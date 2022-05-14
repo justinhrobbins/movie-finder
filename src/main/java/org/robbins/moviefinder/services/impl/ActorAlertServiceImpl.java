@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.robbins.moviefinder.dtos.ActorAlertDto;
+import org.robbins.moviefinder.dtos.ActorAlertsDto;
+import org.robbins.moviefinder.dtos.ActorCountsDto;
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.dtos.Filters;
+import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.dtos.MoviesDto;
 import org.robbins.moviefinder.entities.ActorAlert;
 import org.robbins.moviefinder.entities.User;
@@ -44,6 +48,20 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
+    public ActorAlertsDto findMyActorAlerts(String userEmail, final Filters filter) {
+        final User user = userService.findByEmailUser(userEmail).get();
+        final ActorAlertsDto actorAlerts = new ActorAlertsDto();
+        final List<ActorAlert> entities = actorAlertRepository.findByUser(user);
+
+        entities.forEach(entity -> {
+            final ActorAlertDto actorAlert = new ActorAlertDto(entity.getActorId());
+            actorAlerts.getActorAlerts().add(actorAlert);
+        });
+
+        return actorAlerts;
+    }
+
+    @Override
     public Boolean isUserFollowingActor(String userEmail, Long actorId) {
         final User user = userService.findByEmailUser(userEmail).get();
 
@@ -75,24 +93,29 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     @Override
     public ActorsDto findAMyActors(final String userEmail) {
         final User user = userService.findByEmailUser(userEmail).get();
-        final ActorsDto actors = findMyActorsWithoutCounts(userEmail);
-        final ActorsDto actorsWithMovieCounts = populateActorMovieCounts(actors, user);
-        actorsWithMovieCounts.setCounts(actorCountService.calculateTotals(actorsWithMovieCounts, user));
+        final ActorsDto actorsWithMovieCounts = findActorsWithCounts(user);
+        actorsWithMovieCounts.setActorCounts(actorCountService.calculateTotals(actorsWithMovieCounts));
+        actorsWithMovieCounts.setMovieCounts(calculateMovieCounts(actorsWithMovieCounts));
         return actorsWithMovieCounts;
     }
 
     private ActorsDto populateActorMovieCounts(final ActorsDto actors, final User user) {
         actors.getActors()
                 .forEach(actor -> {
-                    actor.setMovieCounts(actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
+                    actor.setMovieCounts(
+                            actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
                 });
 
         return actors;
     }
 
-    private ActorsDto findMyActorsWithoutCounts(final String userEmail) {
-        final User user = userService.findByEmailUser(userEmail).get();
+    private ActorsDto findActorsWithCounts(final User user) {
+        final ActorsDto actors = findMyActorsWithoutCounts(user);
+        final ActorsDto actorsWithMovieCounts = populateActorMovieCounts(actors, user);
+        return actorsWithMovieCounts;
+    }
 
+    private ActorsDto findMyActorsWithoutCounts(final User user) {
         List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
 
         List<Long> actorIds = actorAlerts
@@ -103,6 +126,14 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
+    public ActorCountsDto findMyActorCounts(String userEmail) {
+        final User user = userService.findByEmailUser(userEmail).get();
+        final ActorsDto actorsWithMovieCounts = findActorsWithCounts(user);
+        final ActorCountsDto actorCounts = actorCountService.calculateTotals(actorsWithMovieCounts);
+        return actorCounts;
+    }
+
+    @Override
     public MoviesDto findMyMovies(String userEmail, final Filters filter) {
         final User user = userService.findByEmailUser(userEmail).get();
         List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
@@ -110,19 +141,43 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         final MoviesDto movies = new MoviesDto();
 
         actorAlerts
-                .stream()
+                .parallelStream()
                 .forEach(actorAlert -> {
                     final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), filter, user);
-                    actor.setMovieCounts(actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
+                    actor.setMovieCounts(
+                            actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
                     if (actor.getMovieCredits().getCast().size() > 0) {
-                        movies.getActors().add(actor);
+                        movies.getActors().getActors().add(actor);
                     }
                 });
 
+        final MovieCountsDto movieCounts = calculateMovieCounts(movies.getActors());
+        movies.setMovieCounts(movieCounts);
         return movies;
     }
 
-    private MoviesDto calculateCounts(final MoviesDto movies) {
-        return null;
+    private MovieCountsDto calculateMovieCounts(final ActorsDto actorsDto) {
+        long totalMovies = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getTotalMovies())
+                .sum();
+
+        long upcomingMovies = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getUpcomingMovies())
+                .sum();
+
+        long recentMovies = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getRecentMovies())
+                .sum();
+
+        long moviesOnSubscriptions = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getMoviesOnSubscriptions())
+                .sum();
+
+        return new MovieCountsDto(totalMovies, upcomingMovies, recentMovies,
+                moviesOnSubscriptions);
     }
 }

@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.entities.User;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import info.movito.themoviedbapi.model.people.Person;
 import info.movito.themoviedbapi.model.people.PersonCredits;
-import info.movito.themoviedbapi.model.people.PersonPeople;
 
 @RestController
 @CrossOrigin
@@ -46,8 +46,8 @@ public class ActorController extends AbstractController {
     }
 
     @GetMapping("/{actorId}")
-    public PersonPeople getPersonById(@PathVariable("actorId") final Long personId) {
-        return personService.findPerson(personId);
+    public ActorDto getPersonById(@PathVariable("actorId") final Long personId) {
+        return actorService.findActor(personId);
     }
 
     @GetMapping("/{actorId}/movies")

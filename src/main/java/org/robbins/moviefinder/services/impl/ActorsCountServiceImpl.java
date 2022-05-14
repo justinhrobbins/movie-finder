@@ -2,31 +2,33 @@ package org.robbins.moviefinder.services.impl;
 
 import org.robbins.moviefinder.dtos.ActorCountsDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
-import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.services.ActorsCountService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ActorsCountServiceImpl implements ActorsCountService {
 
-    public ActorsCountServiceImpl() {}
+    public ActorsCountServiceImpl() {
+    }
 
     @Override
-    public ActorCountsDto calculateTotals(ActorsDto actors, User user) {
+    public ActorCountsDto calculateTotals(ActorsDto actors) {
         final ActorCountsDto actorCounts = new ActorCountsDto();
-        actorCounts.setActorCount(calculateActorAlertsCount(actors));
-        actorCounts.setUpcomingMovieCount(calculateUpcomingMovieCount(actors));
-        actorCounts.setRecentMovieCount(calculateRecentMovieCount(actors));
-        actorCounts.setSubscriptionCount(calculateSubscriptionCount(actors, user));
+        actorCounts.setActorCount(countActors(actors));
+        actorCounts.setUpcomingMovieCount(countActorsWithUpcomingMovies(actors));
+        actorCounts.setRecentMovieCount(countActorsWithRecentMovies(actors));
+        actorCounts.setSubscriptionCount(countActorsWithSubscriptions(actors));
 
         return actorCounts;
     }
 
-    private int calculateActorAlertsCount(final ActorsDto actors) {
+    @Override
+    public long countActors(final ActorsDto actors) {
         return actors.getActors().size();
     }
 
-    private int calculateUpcomingMovieCount(final ActorsDto actors) {
+    @Override
+    public long countActorsWithUpcomingMovies(final ActorsDto actors) {
         long upcomingMovieCount = actors.getActors()
                 .parallelStream()
                 .filter(actor -> actor.getMovieCounts().getUpcomingMovies() > 0)
@@ -35,7 +37,8 @@ public class ActorsCountServiceImpl implements ActorsCountService {
         return Math.toIntExact(upcomingMovieCount);
     }
 
-    private int calculateRecentMovieCount(final ActorsDto actors) {
+    @Override
+    public long countActorsWithRecentMovies(final ActorsDto actors) {
         long recentMovieCount = actors.getActors()
                 .parallelStream()
                 .filter(actor -> actor.getMovieCounts().getRecentMovies() > 0)
@@ -44,9 +47,10 @@ public class ActorsCountServiceImpl implements ActorsCountService {
         return Math.toIntExact(recentMovieCount);
     }
 
-    private int calculateSubscriptionCount(final ActorsDto actors, final User user) {
+    @Override
+    public long countActorsWithSubscriptions(final ActorsDto actors) {
         long subscriptionCount = actors.getActors()
-                .stream()
+                .parallelStream()
                 .filter(actor -> actor.getMovieCounts().getMoviesOnSubscriptions() > 0)
                 .count();
         return Math.toIntExact(subscriptionCount);

@@ -48,7 +48,9 @@ public class ActorServiceImpl implements ActorService {
     public ActorsDto findActors(final List<Long> actorIds, final User user) {
         final ActorsDto actors = new ActorsDto();
 
-        actorIds.forEach(id -> actors.getActors().add(findActor(id)));
+        actorIds
+                .parallelStream()
+                .forEach(id -> actors.getActors().add(findActor(id)));
 
         return actors;
     }
@@ -76,7 +78,7 @@ public class ActorServiceImpl implements ActorService {
         return actor;
     }
 
-    // potentially move this method into MovieFilterService
+    // move this method into MovieFilterService?
     private PersonCredits filterCredits(final PersonCredits credits, final Filters filter, final User user) {
 
         switch (filter) {
@@ -85,7 +87,7 @@ public class ActorServiceImpl implements ActorService {
             case UPCOMING:
                 return movieFilterService.filterByUpcoming(credits);
             case SUBSCRIPTIONS:
-            return movieFilterService.filterBySubscriptions(credits, user);
+                return movieFilterService.filterBySubscriptions(credits, user);
         }
         return credits;
     }

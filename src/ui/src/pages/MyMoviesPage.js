@@ -54,7 +54,7 @@ export const MyMoviesPage = () => {
                 </ul>
             </div>
             {
-                movies.actors
+                movies.actors.actors
                     .map(actor => <MyMovieActorCard key={actor.actorId} actor={actor} />)
             }
         </div>

@@ -28,7 +28,7 @@ export const MyMovieActorCard = ({ actor }) => {
             <div className="my-movie-actor-card-section">
                 <div className="my-movie-actor-card-section-actor-details">
                     <div>
-                        <ActorAlertDetailCard key={actor.actorId} providedActor={actor.person} actorDetails={actor.movieCounts} />
+                        <ActorAlertDetailCard key={actor.actorId} providedActor={actor} />
                     </div>
                 </div>
                 <div className="my-movie-actor-card-section-movies">

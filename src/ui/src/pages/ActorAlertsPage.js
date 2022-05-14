@@ -138,6 +138,8 @@ export const ActorAlertsPage = () => {
     control: (styles) => ({
       ...styles,
       backgroundColor: "#181a1e",
+      minHeight: 36,
+      width: "200px"
     }),
     singleValue: (provided, { data }) => ({
       ...provided,
@@ -167,7 +169,7 @@ export const ActorAlertsPage = () => {
       <div className="actor-alert-movie-list-section">
         <div className="actor-alert-movie-list-section-summary">
           <div className="actor-alert-movie-list-section-summary-data">
-            <ActorAlertSummaryCard userActorAlerts={unfilteredUserActorAlerts} />
+            <ActorAlertSummaryCard actors={unfilteredUserActorAlerts} />
           </div>
         </div>
         <div className="actor-alert-movie-list-sort">
@@ -193,7 +195,7 @@ export const ActorAlertsPage = () => {
       }
       <div className="actor-alerts-page-actors-list">
         {userActorAlerts.actors
-          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor.person} actorDetails={actor.movieCounts} />)
+          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} />)
         }
       </div>
     </div>

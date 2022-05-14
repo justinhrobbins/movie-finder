@@ -1,40 +1,40 @@
 package org.robbins.moviefinder.dtos;
 
 public class ActorCountsDto {
-    private int actorCount;
-    private int upcomingMovieCount;
-    private int recentMovieCount;
-    private int subscriptionCount;
+    private long actorCount;
+    private long upcomingMovieCount;
+    private long recentMovieCount;
+    private long subscriptionCount;
 
-    public int getActorCount() {
+    public long getActorCount() {
         return actorCount;
     }
 
-    public void setActorCount(int actorCount) {
+    public void setActorCount(long actorCount) {
         this.actorCount = actorCount;
     }
 
-    public int getUpcomingMovieCount() {
+    public long getUpcomingMovieCount() {
         return upcomingMovieCount;
     }
 
-    public void setUpcomingMovieCount(int upcomingMovieCount) {
+    public void setUpcomingMovieCount(long upcomingMovieCount) {
         this.upcomingMovieCount = upcomingMovieCount;
     }
 
-    public int getRecentMovieCount() {
+    public long getRecentMovieCount() {
         return recentMovieCount;
     }
 
-    public void setRecentMovieCount(int recentMovieCount) {
+    public void setRecentMovieCount(long recentMovieCount) {
         this.recentMovieCount = recentMovieCount;
     }
 
-    public int getSubscriptionCount() {
+    public long getSubscriptionCount() {
         return subscriptionCount;
     }
 
-    public void setSubscriptionCount(int subscriptionCount) {
+    public void setSubscriptionCount(long subscriptionCount) {
         this.subscriptionCount = subscriptionCount;
     }
 }
