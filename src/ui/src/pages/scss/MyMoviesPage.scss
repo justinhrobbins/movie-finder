@@ -16,4 +16,19 @@
     .my-movies-page-about-list {
         margin-left: 15px;
     }
+
+    .my-movies-header-section{ 
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        margin-right: 20px;
+    }
+
+    .my-movies-header-label{
+        flex: 70%;
+    }
+
+    .my-movies-header-filter{
+        flex: 30%;
+    }
 }

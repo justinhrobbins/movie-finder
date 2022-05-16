@@ -1,5 +1,6 @@
 package org.robbins.moviefinder.services.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -143,7 +144,8 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         actorAlerts
                 .parallelStream()
                 .forEach(actorAlert -> {
-                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), Optional.of(filter), Optional.of(user));
+                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(),
+                            Optional.of(filter), Optional.of(user));
                     actor.setMovieCounts(
                             actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
                     if (actor.getMovieCredits().getCast().size() > 0) {
@@ -153,6 +155,9 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
         final MovieCountsDto movieCounts = calculateMovieCounts(movies.getActors());
         movies.setMovieCounts(movieCounts);
+
+        movies.getActors().getActors()
+                .sort(Comparator.comparing((ActorDto actor) -> actor.getPerson().getPopularity()).reversed());
         return movies;
     }
 

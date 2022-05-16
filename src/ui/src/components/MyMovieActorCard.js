@@ -9,16 +9,6 @@ export const MyMovieActorCard = ({ actor }) => {
     const [searchParams] = useSearchParams();
     const filterParam = searchParams.get('filter');
 
-    const createActorLabel = () => {
-        if (filterParam === "recent") {
-            return <span>Recent releases</span>
-        } else if (filterParam === "upcoming") {
-            return <span>Upcoming releases</span>
-        } else {
-            return <span>Movies on your streaming subscriptions</span>
-        }
-    }
-
     if (!actor || !actor.movieCredits) {
         return <span>Searching for movies for: {actor.name}</span>
     }
@@ -32,9 +22,7 @@ export const MyMovieActorCard = ({ actor }) => {
                     </div>
                 </div>
                 <div className="my-movie-actor-card-section-movies">
-                    <div className="my-movie-actor-card-actor-name">
-                        {createActorLabel()}
-                    </div>
+
                     <div className="my-movie-actor-card-movies-container">
                         {
                             actor.movieCredits.cast

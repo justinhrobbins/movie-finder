@@ -142,6 +142,8 @@ export const ActorMovieListCard = ({ actor }) => {
         control: (styles) => ({
             ...styles,
             backgroundColor: "#181a1e",
+            minHeight: 36,
+            width: "200px"
         }),
         singleValue: (provided, { data }) => ({
             ...provided,
@@ -157,6 +159,14 @@ export const ActorMovieListCard = ({ actor }) => {
         <div className="ActorMovieListCard">
             <div className="actor-movie-list-section">
                 <h2 className="actor-movie-list-label">Movies for {actor.name}</h2>
+                <div className="actor-movie-list-filter">Flter by:
+                    <Select
+                        onChange={handleFilterChange}
+                        options={filterOptions}
+                        styles={colourStyles}
+                        value={sortAndFilterOptions.filterOption}
+                    />
+                </div>
                 <div className="actor-movie-list-sort">
                     Sort by:
                     <Select
@@ -164,14 +174,6 @@ export const ActorMovieListCard = ({ actor }) => {
                         options={sortOptions}
                         value={sortAndFilterOptions.sortOption}
                         styles={colourStyles}
-                    />
-                </div>
-                <div className="actor-movie-list-filter">Flter by:
-                    <Select
-                        onChange={handleFilterChange}
-                        options={filterOptions}
-                        styles={colourStyles}
-                        value={sortAndFilterOptions.filterOption}
                     />
                 </div>
             </div>

@@ -172,6 +172,14 @@ export const ActorAlertsPage = () => {
             <ActorAlertSummaryCard actors={unfilteredUserActorAlerts} />
           </div>
         </div>
+        <div className="actor-alert-movie-list-filter">Flter by:
+          <Select
+            onChange={handleFilterChange}
+            options={filterOptions}
+            styles={colourStyles}
+            value={selectedFilterOption}
+          />
+        </div>
         <div className="actor-alert-movie-list-sort">
           Sort by:
           <Select
@@ -179,14 +187,6 @@ export const ActorAlertsPage = () => {
             options={sortOptions}
             value={selectedSortOption}
             styles={colourStyles}
-          />
-        </div>
-        <div className="actor-alert-movie-list-filter">Flter by:
-          <Select
-            onChange={handleFilterChange}
-            options={filterOptions}
-            styles={colourStyles}
-            value={selectedFilterOption}
           />
         </div>
       </div>
