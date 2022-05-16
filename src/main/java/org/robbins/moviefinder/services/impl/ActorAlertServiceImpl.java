@@ -122,7 +122,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
                 .stream()
                 .map(ActorAlert::getActorId)
                 .collect(Collectors.toList());
-        return actorService.findActors(actorIds, user);
+        return actorService.findActors(actorIds);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         actorAlerts
                 .parallelStream()
                 .forEach(actorAlert -> {
-                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), filter, user);
+                    final ActorDto actor = actorService.findActorWithMovies(actorAlert.getActorId(), Optional.of(filter), Optional.of(user));
                     actor.setMovieCounts(
                             actorMovieCountService.findActorMovieCounts(actor.getActorId(), Optional.of(user)));
                     if (actor.getMovieCredits().getCast().size() > 0) {
