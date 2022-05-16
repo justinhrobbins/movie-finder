@@ -4,9 +4,10 @@ import { MovieFlatrateProviderCard } from './MovieFlatrateProviderCard';
 
 import './scss/ActorMovieCard.scss';
 
-export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
+export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubscriptions }) => {
     const { loggedInUser } = useContext(UserContext);
     const [movie, setMovie] = useState(providedMovie);
+    const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
     const [flatrateProviders, setFlatrateProviders] = useState(null);
     const [movieUrl, setMovieUrl] = useState(null);
     const [flatrateProviderLabel, setFlatrateProviderLabel] = useState(null);
@@ -15,7 +16,7 @@ export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
         () => {
             let isMounted = true;
             const fetchWatchProviders = async () => {
-                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `movie/${providedMovie.id}/watchproviders`);
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `movies/${providedMovie.id}/watchproviders`);
                 const movieWithWatchProviders = await response.json();
 
                 let flatrateProviders;
@@ -59,13 +60,17 @@ export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
             }
             if (filterBySubscriptions == true && flatrateProviders) {
                 if (!loggedInUser
-                    || !loggedInUser.streamingServices 
+                    || !loggedInUser.streamingServices
                     || !flatrateProviders.some(e => loggedInUser.streamingServices.includes(e.provider_name))) {
                     setMovie(null);
                 }
             }
         }, [flatrateProviders]
     );
+
+    const toggleOverview = () => {
+        setShowFullOverview(!showFullOverview)
+    }
 
     if (!movie) return null;
     if (!flatrateProviders) return null;
@@ -82,8 +87,24 @@ export const ActorMovieCard = ({ providedMovie, filterBySubscriptions }) => {
                 <div className="actor-movie-card-info-content">RELEASE DATE: {movie.release_date} ({movie.original_language})</div>
                 <div className="actor-movie-card-info-content">LANGUAGE: {movie.original_language}</div>
                 <div className="actor-movie-card-info-content">ROLE: {movie.character}</div>
-                <div className="actor-movie-card-info-content">Popularity: {movie.popularity}</div>
-                <div className="actor-movie-card-info-content">OVERVIEW: {movie.overview}</div>
+                <div className="actor-movie-card-info-content">
+                    <span className="actor-movie-card-info-content-overview-label">OVERVIEW:</span><br />
+                    {movie.overview && movie.overview.length > 100 && showFullOverview == true &&
+                        <div>
+                            <span className="actor-movie-card-info-content-overview"> {movie.overview} <span className="actor-movie-card-info-content-overview-link" onClick={toggleOverview}>Show less</span></span>
+                        </div>
+                    }
+                    {movie.overview && movie.overview.length > 100 && showFullOverview == false &&
+                        <div>
+                            <span className="actor-movie-card-info-content-overview">{movie.overview.substring(0, 100)}... <span className="actor-movie-card-info-content-overview-link" onClick={toggleOverview}>Show more</span></span>
+                        </div>
+                    }
+                    {movie.overview && movie.overview.length < 101 &&
+                        <div>
+                            <span className="actor-movie-card-info-content-overview">{movie.overview}</span>
+                        </div>
+                    }
+                </div>
             </div>
             <div className="actor-movie-card-providers-section">
                 <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div>

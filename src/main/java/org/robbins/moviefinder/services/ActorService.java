@@ -1,11 +1,19 @@
 package org.robbins.moviefinder.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.robbins.moviefinder.dtos.ActorDto;
-import org.robbins.moviefinder.dtos.ActorMovieCountsDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
+import org.robbins.moviefinder.dtos.Filters;
+import org.robbins.moviefinder.entities.User;
 
 public interface ActorService {
-    public ActorMovieCountsDto findActorMovieCounts(final Long actorId);
+    public ActorDto findActor(final Long actorId);
+
+    public ActorsDto findActors(final List<Long> actorIds);
+
     public ActorsDto findPopularActors();
-    public ActorDto findByActorId(final Long actorId);
+
+    public ActorDto findActorWithMovies(final Long actorId, final Optional<Filters> filter, final Optional<User> user);
 }

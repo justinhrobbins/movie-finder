@@ -6,30 +6,30 @@ import { ActorMovieListCard } from '../components/ActorMovieListCard';
 import './scss/ActorDetailPage.scss';
 
 export const ActorDetailPage = () => {
-    const [person, setPerson] = useState(null);
+    const [actor, setActor] = useState(null);
 
     const { actorId } = useParams();
 
     useEffect(
         () => {
             const fetchPerson = async () => {
-                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/${actorId}`);
-                const personData = await response.json();
-                setPerson(personData);
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actorId}`);
+                const actorData = await response.json();
+                setActor(actorData);
             };
             fetchPerson();
 
         }, [actorId]
     );
 
-    if (!person) {
+    if (!actor) {
         return <h1>Searching for actor</h1>
     }
 
     return (
         <div className="ActorDetailPage">
-            <ActorDetailCard key={person.id} actor={person} showActorDeails="true" />
-            <ActorMovieListCard id={actorId} actor={person} />
+            <ActorDetailCard key={actor.actorId} actor={actor} showActorBio={true} />
+            <ActorMovieListCard id={actorId} actor={actor.person} />
         </div>
     );
 }

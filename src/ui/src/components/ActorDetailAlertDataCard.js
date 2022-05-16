@@ -6,23 +6,34 @@ import './scss/ActorDetailAlertDataCard.scss';
 
 export const ActorDetailAlertDataCard = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);
-    const [actorMoveCounts, setActorMovieCounts] = useState(null);
+    const [actorMoveCounts, setActorMovieCounts] = useState(actor.movieCounts);
     const [subscriptionsLink, setSubscriptionsLink] = useState(null);
 
     useEffect(
         () => {
             const fetchActorMovieCounts = async () => {
-                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/${actor.id}/movie/counts`, {
+                var headers = new Headers();
+                headers.append("Content-Type", "application/json");
+
+                if (loggedInUser) {
+                    headers.append("Authorization", `Bearer ${loggedInUser.tokenId}`);
+                }
+
+                const requestOptions = {
                     method: 'GET',
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
+                    headers: headers
+                };
+
+                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.actorId}/movies/counts`,
+                    requestOptions);
                 const actorMoveCounts = await response.json();
                 setActorMovieCounts(actorMoveCounts);
             };
 
-            fetchActorMovieCounts();
+            if (!actorMoveCounts) {
+                fetchActorMovieCounts();
+            }
+
         }, []
     );
 
@@ -34,16 +45,7 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
                 setSubscriptionsLink("Configure your Subscriptions to filter by Subscriptions");
             } else {
                 if (actorMoveCounts) {
-                    let subscriptionCount = 0;
-                    actorMoveCounts.subscriptions
-                        .map(subscription => {
-                            if (loggedInUser.streamingServices.includes(subscription.subcriptionService)) {
-                                subscriptionCount = subscriptionCount + subscription.movieCount;
-                            } else {
-                                subscriptionCount = subscriptionCount + 0;
-                            }
-                        });
-                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=subscriptions`}>On your Subscriptions: {subscriptionCount}</Link>)
+                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=subscriptions`}>On your Subscriptions: {actorMoveCounts.moviesOnSubscriptions}</Link>)
                 }
             }
         }, [loggedInUser, actorMoveCounts]
@@ -55,10 +57,10 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
 
     return (
         <div className="ActorDetailAlertDataCard">
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=upcoming`}>Upcoming Movies: {actorMoveCounts.upcomingMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=recent`}>Recent Movies: {actorMoveCounts.recentMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.id}?sort=newest&filter=all`}>Total Movies: {actorMoveCounts.totalMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-label">{subscriptionsLink}</div>
+            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=upcoming`}>Upcoming Movies: {actorMoveCounts.upcomingMovies}</Link></div>
+            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=recent`}>Recent Movies: {actorMoveCounts.recentMovies}</Link></div>
+            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=all`}>Total Movies: {actorMoveCounts.totalMovies}</Link></div>
+            <div className="actor-detail-alert-data-card-subscription-label">{subscriptionsLink}</div>
         </div>
     );
 }

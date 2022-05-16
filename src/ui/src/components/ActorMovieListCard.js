@@ -17,7 +17,7 @@ export const ActorMovieListCard = ({ actor }) => {
             const fetchPersonCredits = async () => {
                 try {
                     setLoading(true);
-                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/${actor.id}/movies`);
+                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.id}/movies`);
                     const movieData = await response.json();
                     setUnfilteredPersonCredits(movieData);
                 } catch (error) {
@@ -142,6 +142,8 @@ export const ActorMovieListCard = ({ actor }) => {
         control: (styles) => ({
             ...styles,
             backgroundColor: "#181a1e",
+            minHeight: 36,
+            width: "200px"
         }),
         singleValue: (provided, { data }) => ({
             ...provided,
@@ -157,6 +159,14 @@ export const ActorMovieListCard = ({ actor }) => {
         <div className="ActorMovieListCard">
             <div className="actor-movie-list-section">
                 <h2 className="actor-movie-list-label">Movies for {actor.name}</h2>
+                <div className="actor-movie-list-filter">Flter by:
+                    <Select
+                        onChange={handleFilterChange}
+                        options={filterOptions}
+                        styles={colourStyles}
+                        value={sortAndFilterOptions.filterOption}
+                    />
+                </div>
                 <div className="actor-movie-list-sort">
                     Sort by:
                     <Select
@@ -166,20 +176,13 @@ export const ActorMovieListCard = ({ actor }) => {
                         styles={colourStyles}
                     />
                 </div>
-                <div className="actor-movie-list-filter">Flter by:
-                    <Select
-                        onChange={handleFilterChange}
-                        options={filterOptions}
-                        styles={colourStyles}
-                        value={sortAndFilterOptions.filterOption}
-                    />
-                </div>
             </div>
             {
                 personCredits.cast
                     .map(movie => <ActorMovieCard
                         key={movie.id}
                         providedMovie={movie}
+                        shouldShowFullOverview={true}
                         filterBySubscriptions={sortAndFilterOptions.filterOption.value == "subscriptions" ? true : false} />)
             }
         </div>

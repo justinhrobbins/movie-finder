@@ -12,20 +12,21 @@
     }
 
     .actor-alert-movie-list-section-summary {
-        flex: 50%;
+        flex: 70%;
+        padding-right: 30px;
     }
 
     .actor-alert-movie-list-section-summary-data {
         margin-top: auto;
     }
 
-    .actor-alert-movie-list-sort {
-        flex: 25%;
-        margin-right: 20px;
+    .actor-alert-movie-list-filter {
+        flex: 15%;
+        margin-right: 10px;
     }
 
-    .actor-alert-movie-list-filter {
-        flex: 25%;
+    .actor-alert-movie-list-sort {
+        flex: 15%;
     }
 
     .actor-alerts-page-actors-list {

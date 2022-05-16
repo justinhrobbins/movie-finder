@@ -42,7 +42,7 @@ export const ActorAlertsPage = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const [selectedSortOption, setSelectedSortOption] = useState({ value: 'popularity', label: 'Popularity' });
-  const [selectedFilterOption, setSelectedFilterOption] = useState({ value: 'all', label: 'All Actors' });
+  const [selectedFilterOption, setSelectedFilterOption] = useState({ value: 'all', label: 'All My Actors' });
   const sortOptions = [
     { value: 'name', label: 'Name' },
     { value: 'popularity', label: 'Popularity' },
@@ -51,7 +51,7 @@ export const ActorAlertsPage = () => {
     { value: 'total', label: 'Total Releases' }
   ]
   const filterOptions = [
-    { value: 'all', label: 'No filter' },
+    { value: 'all', label: 'All My Actors' },
     { value: 'upcoming', label: 'Actors with upcoming releases' },
     { value: 'recent', label: 'Actors with recent releases' },
     { value: 'subscriptions', label: 'Actors with movies on my subscriptions' }
@@ -85,20 +85,14 @@ export const ActorAlertsPage = () => {
             return el.movieCounts.upcomingMovies > 0;
           });
         } else if (selectedFilterOption.value == "subscriptions") {
-          filteredActors = allActorAlerts.actors.filter(function (actor) {
-            return actorHasMoviesOnSubscriptions(actor);
+          filteredActors = allActorAlerts.actors.filter(function (el) {
+            return el.movieCounts.moviesOnSubscriptions > 0;
           });
         } else {
           filteredActors = allActorAlerts.actors;
         }
         return filteredActors;
       };
-
-      const actorHasMoviesOnSubscriptions = (actor) => {
-        const hasSubscriptions = actor.movieCounts.subscriptions
-          .some(subscription => loggedInUser.streamingServices.includes(subscription.subcriptionService))
-        return hasSubscriptions;
-      }
 
       const sortActors = (actorAlerts) => {
         let sortedActorAlerts;
@@ -144,6 +138,8 @@ export const ActorAlertsPage = () => {
     control: (styles) => ({
       ...styles,
       backgroundColor: "#181a1e",
+      minHeight: 36,
+      width: "200px"
     }),
     singleValue: (provided, { data }) => ({
       ...provided,
@@ -152,17 +148,17 @@ export const ActorAlertsPage = () => {
   }
 
   if (!loggedInUser) {
-    return <h3>Login to configure your Actor Alerts</h3>
+    return <h3>Login to configure your Actors</h3>
   }
 
   if (!userActorAlerts || !userActorAlerts.actors) {
 
-    return <h3>Loading your Actor Alerts...</h3>
+    return <h3>Loading your Actors...</h3>
   }
 
   if (unfilteredUserActorAlerts.actors.length === 0) {
 
-    return <h3>You have no Actor Alerts configured</h3>
+    return <h3>You are not following any Actors</h3>
   }
 
   return (
@@ -173,8 +169,16 @@ export const ActorAlertsPage = () => {
       <div className="actor-alert-movie-list-section">
         <div className="actor-alert-movie-list-section-summary">
           <div className="actor-alert-movie-list-section-summary-data">
-            <ActorAlertSummaryCard userActorAlerts={unfilteredUserActorAlerts} />
+            <ActorAlertSummaryCard actors={unfilteredUserActorAlerts} />
           </div>
+        </div>
+        <div className="actor-alert-movie-list-filter">Flter by:
+          <Select
+            onChange={handleFilterChange}
+            options={filterOptions}
+            styles={colourStyles}
+            value={selectedFilterOption}
+          />
         </div>
         <div className="actor-alert-movie-list-sort">
           Sort by:
@@ -185,21 +189,13 @@ export const ActorAlertsPage = () => {
             styles={colourStyles}
           />
         </div>
-        <div className="actor-alert-movie-list-filter">Flter by:
-          <Select
-            onChange={handleFilterChange}
-            options={filterOptions}
-            styles={colourStyles}
-            value={selectedFilterOption}
-          />
-        </div>
       </div>
       {
         !loggedInUser ? "Please login to create Actor Alerts" : ""
       }
       <div className="actor-alerts-page-actors-list">
         {userActorAlerts.actors
-          .map(actors => <ActorAlertDetailCard key={actors.actorId} providedActor={actors.person} actorDetails={actors.movieCounts} />)
+          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} />)
         }
       </div>
     </div>

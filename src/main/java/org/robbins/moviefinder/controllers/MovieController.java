@@ -12,7 +12,7 @@ import info.movito.themoviedbapi.model.MovieDb;
 
 @RestController
 @CrossOrigin
-@RequestMapping("movie")
+@RequestMapping("movies")
 public class MovieController {
     final TmdbApi tmdbApi;
     final MovieService movieService;

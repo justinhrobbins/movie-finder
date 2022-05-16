@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { ActorAlertDetailCard } from './ActorAlertDetailCard';
+import { ActorDetailCard } from './ActorDetailCard';
 
 import './scss/PopularActorsCard.scss';
 
@@ -10,7 +10,7 @@ export const PopularActorsCard = () => {
     () => {
       const fetchPopularActors = async () => {
         try {
-          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `person/popular`, {
+          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/popular`, {
             method: 'GET'
           });
           const popularActors = await response.json();
@@ -25,6 +25,9 @@ export const PopularActorsCard = () => {
     }, []
   );
 
+  const removeActor = (actor) => {
+  }
+
   if (!popularActors) {
 
     return <h3>Loading popular actors...</h3>
@@ -37,7 +40,11 @@ export const PopularActorsCard = () => {
       </div>
       <div className="popular-actors-card-list">
         {popularActors.actors
-          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor.person} actorDetails={actor.details} />)
+          .map(actor => 
+            <div className="popular-actors-card-list-item" key={actor.actorId}>
+              <ActorDetailCard key={actor.actorId} actor={actor} removeActor={removeActor} showActorBio={false} />
+            </div>
+            )
         }
       </div>
     </div>

@@ -1,15 +1,14 @@
 package org.robbins.moviefinder.dtos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ActorsDto {
 
-    private List<ActorDto> actors = new ArrayList<>();
-    private int actorCount;
-    private int upcomingMovieCount;
-    private int recentMovieCount;
-    private int subscriptionCount;
+    private List<ActorDto> actors = Collections.synchronizedList(new ArrayList<>());
+    private ActorCountsDto actorCounts;
+    private MovieCountsDto movieCounts;
     
     public ActorsDto() {
     }
@@ -22,36 +21,21 @@ public class ActorsDto {
         this.actors = actors;
     }
 
-    public int getActorCount() {
-        return actorCount;
+    public ActorCountsDto getActorCounts() {
+        return actorCounts;
     }
 
-    public void setActorCount(int actorCount) {
-        this.actorCount = actorCount;
+    public void setActorCounts(ActorCountsDto actorCounts) {
+        this.actorCounts = actorCounts;
     }
 
-    public int getUpcomingMovieCount() {
-        return upcomingMovieCount;
+    public MovieCountsDto getMovieCounts() {
+        return movieCounts;
     }
 
-    public void setUpcomingMovieCount(int upcomingMovieCount) {
-        this.upcomingMovieCount = upcomingMovieCount;
+    public void setMovieCounts(MovieCountsDto movieCounts) {
+        this.movieCounts = movieCounts;
     }
 
-    public int getRecentMovieCount() {
-        return recentMovieCount;
-    }
-
-    public void setRecentMovieCount(int recentMovieCount) {
-        this.recentMovieCount = recentMovieCount;
-    }
-
-    public int getSubscriptionCount() {
-        return subscriptionCount;
-    }
-
-    public void setSubscriptionCount(int subscriptionCount) {
-        this.subscriptionCount = subscriptionCount;
-    }
     
 }
