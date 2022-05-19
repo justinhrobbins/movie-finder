@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from '@react-oauth/google';
 import { UserContext } from "../UserContext";
 import { AccountConfigurationCard } from './AccountConfigurationCard';
 
-import './scss/LoginCard.scss';
+// import './scss/NewLoginCard.scss';
 
-export const LoginCard = () => {
+export const NewLoginCard = () => {
     const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
 
     const handleFailure = (failure) => {
@@ -18,12 +18,12 @@ export const LoginCard = () => {
         const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'user', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${googleData.tokenId}`,
+                'Authorization': `Bearer ${googleData.credential}`,
             }
         });
 
         const userData = await response.json();
-        userData.tokenId = googleData.tokenId;
+        userData.tokenId = googleData.credential;
         localStorage.setItem("loginData", JSON.stringify(userData));
 
         setLoggedInUserContext(userData);
@@ -35,7 +35,7 @@ export const LoginCard = () => {
     };
 
     return (
-        <div className="LoginCard">
+        <div className="NewLoginCard">
             {loggedInUser ? (
                 <div className="login-card-logged-in">
                     <div>
@@ -47,13 +47,9 @@ export const LoginCard = () => {
             ) : (
                 <div className="login-card-logged-in">
                     <GoogleLogin
-                        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                        buttonText="Login with Google"
                         onSuccess={handleLogin}
-                        onFailure={handleFailure}
-                        cookiePolicy={'single_host_origin'}
-                        // accessType="offline"
-                        // responseType="code"
+                        onError={handleFailure}
+                        theme="filled_black"
                     />
                 </div>
             )}
