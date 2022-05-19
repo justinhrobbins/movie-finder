@@ -29,12 +29,18 @@ public class FlatrateProviderServiceImpl implements FlatrateProviderService {
 
     @Override
     public List<Provider> findFlatrateProviders(final int movieId) {
+        final List<Provider> flatRateProviders = new ArrayList<>();
+
         final MovieDb movie = movieService.findMovieWatchProviders(movieId, "en");
         final WatchProviders watchProviders = movie.getWatchProviders();
+
+        if (watchProviders == null) {
+            return flatRateProviders;
+        }
+
         final WatchProviders.Results results = watchProviders.getResults();
         final US us = results.getUS();
 
-        final List<Provider> flatRateProviders = new ArrayList<>();
         if ((us != null) && (us.getFlatrateProviders() != null)) {
             flatRateProviders.addAll(us.getFlatrateProviders());
         }
