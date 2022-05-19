@@ -42,10 +42,7 @@ export const LoginCard = () => {
             const loginData = JSON.parse(localStorage.getItem('loginData'));
             if (!loginData) return;
 
-            console.log("Existing token: " + loginData.tokenId);
-
             const newAuthRes = await res.reloadAuthResponse();
-            console.log('newAuthRes:', newAuthRes.id_token);
             refreshTiming = (newAuthRes.expires_in || 3600 - 5 * 60) * 1000;
             
             loginData.tokenId = newAuthRes.id_token;
