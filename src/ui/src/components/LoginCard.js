@@ -24,13 +24,38 @@ export const LoginCard = () => {
         const userData = await response.json();
         userData.tokenId = googleData.tokenId;
         localStorage.setItem("loginData", JSON.stringify(userData));
-
         setLoggedInUserContext(userData);
+
+        refreshTokenSetup(googleData);
     };
 
     const handleLogout = () => {
         localStorage.removeItem('loginData');
         setLoggedInUserContext(null);
+    };
+
+    const refreshTokenSetup = (res) => {
+        let refreshTiming = (res.tokenObj.expires_in || 3600 - 5 * 60) * 1000;
+
+        const refreshToken = async () => {
+            
+            const loginData = JSON.parse(localStorage.getItem('loginData'));
+            if (!loginData) return;
+
+            console.log("Existing token: " + loginData.tokenId);
+
+            const newAuthRes = await res.reloadAuthResponse();
+            console.log('newAuthRes:', newAuthRes.id_token);
+            refreshTiming = (newAuthRes.expires_in || 3600 - 5 * 60) * 1000;
+            
+            loginData.tokenId = newAuthRes.id_token;
+            localStorage.setItem('loginData', JSON.stringify(loginData));
+            setLoggedInUserContext(loginData);
+
+            setTimeout(refreshToken, refreshTiming);
+        };
+
+        setTimeout(refreshToken, refreshTiming);
     };
 
     return (
