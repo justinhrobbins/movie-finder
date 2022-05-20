@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { UserContext } from "../UserContext";
 import { AccountConfigurationCard } from './AccountConfigurationCard';
@@ -7,6 +7,12 @@ import './scss/LoginCard.scss';
 
 export const LoginCard = () => {
     const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
+
+    useEffect(
+        () => {
+            setTimeout(checkForValidLogin, 5000);
+        }, []
+      );
 
     const handleFailure = (failure) => {
         console.log(failure);
@@ -39,7 +45,8 @@ export const LoginCard = () => {
     };
 
     const refreshTokenSetup = (res) => {
-        let refreshTiming = (res.tokenObj.expires_in || 3600 - 5 * 60) * 1000;
+        let refreshTiming = ( (res.tokenObj.expires_in || 3600) - 1800) * 1000;
+        console.log("Next refreshTiming at: " + refreshTiming);
 
         const refreshToken = async () => {
             console.log("Entering refreshToken()");
@@ -47,33 +54,33 @@ export const LoginCard = () => {
             if (!loginData) return;
 
             const newAuthRes = await res.reloadAuthResponse();
-            // console.log("newAuthRes: " + JSON.stringify(newAuthRes));
             console.log("Updating expiresAt to " + newAuthRes.expires_at);
-            refreshTiming = (newAuthRes.expires_in || 3600 - 5 * 60) * 1000;
+            refreshTiming = ( (newAuthRes.expires_in || 3600) - 1800) * 1000;
+            console.log("Next refreshTiming in " + refreshTiming);
             
             loginData.tokenId = newAuthRes.id_token;
             loginData.expiresAt = newAuthRes.expires_at;
             localStorage.setItem('loginData', JSON.stringify(loginData));
             setLoggedInUserContext(loginData);
 
-            setTimeout(refreshToken, 10000);
+            setTimeout(refreshToken, refreshTiming);
         };
 
-        setTimeout(refreshToken, 10000);
+        setTimeout(refreshToken, refreshTiming);
     };
 
-    const loggedInWithValidToken = () => {
-        if ((loggedInUser) && (loggedInUser.expiresAt > Date.now())) {
-            return true;
-        } else {
+    const checkForValidLogin = () => {
+        console.log("Checking for valid login");
+        if ((loggedInUser) && (loggedInUser.expiresAt < Date.now())) {
+            console.log("loggedInUser: " + loggedInUser);
+            console.log("Login is expired, cleaning up");
             logoutAndCleanupUser();
-            return false;
         }
+        setTimeout(checkForValidLogin, 5000);
     }
 
     return (
         <div className="LoginCard">
-            {/* {loggedInWithValidToken() == true ? ( */}
             {loggedInUser ? (
                 <div className="login-card-logged-in">
                     <div>
