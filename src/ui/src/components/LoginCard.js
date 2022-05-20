@@ -13,7 +13,6 @@ export const LoginCard = () => {
     };
 
     const handleLogin = async (googleData) => {
-
         const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'user', {
             method: 'GET',
             headers: {
@@ -23,40 +22,58 @@ export const LoginCard = () => {
 
         const userData = await response.json();
         userData.tokenId = googleData.tokenId;
+        userData.expiresAt = googleData.tokenObj.expires_at;
         localStorage.setItem("loginData", JSON.stringify(userData));
         setLoggedInUserContext(userData);
 
         refreshTokenSetup(googleData);
     };
 
-    const handleLogout = () => {
+    const logoutAndCleanupUser = () => {
         localStorage.removeItem('loginData');
-        setLoggedInUserContext(null);
+        setLoggedInUserContext(null);        
+    }
+
+    const handleLogout = () => {
+        logoutAndCleanupUser();
     };
 
     const refreshTokenSetup = (res) => {
         let refreshTiming = (res.tokenObj.expires_in || 3600 - 5 * 60) * 1000;
 
         const refreshToken = async () => {
-            
+            console.log("Entering refreshToken()");
             const loginData = JSON.parse(localStorage.getItem('loginData'));
             if (!loginData) return;
 
             const newAuthRes = await res.reloadAuthResponse();
+            // console.log("newAuthRes: " + JSON.stringify(newAuthRes));
+            console.log("Updating expiresAt to " + newAuthRes.expires_at);
             refreshTiming = (newAuthRes.expires_in || 3600 - 5 * 60) * 1000;
             
             loginData.tokenId = newAuthRes.id_token;
+            loginData.expiresAt = newAuthRes.expires_at;
             localStorage.setItem('loginData', JSON.stringify(loginData));
             setLoggedInUserContext(loginData);
 
-            setTimeout(refreshToken, refreshTiming);
+            setTimeout(refreshToken, 10000);
         };
 
-        setTimeout(refreshToken, refreshTiming);
+        setTimeout(refreshToken, 10000);
     };
+
+    const loggedInWithValidToken = () => {
+        if ((loggedInUser) && (loggedInUser.expiresAt > Date.now())) {
+            return true;
+        } else {
+            logoutAndCleanupUser();
+            return false;
+        }
+    }
 
     return (
         <div className="LoginCard">
+            {/* {loggedInWithValidToken() == true ? ( */}
             {loggedInUser ? (
                 <div className="login-card-logged-in">
                     <div>

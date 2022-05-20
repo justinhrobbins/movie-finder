@@ -31,7 +31,9 @@ export const MyMoviesPage = () => {
         }
       };
 
-      fetchMovies();
+      if (loggedInUser) {
+        fetchMovies();
+      }
 
       const filterOption = filterOptions.find(option => option.value === filterParam);
       if (filterOption) {
