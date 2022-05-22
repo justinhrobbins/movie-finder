@@ -1,4 +1,4 @@
-package org.robbins.moviefinder;
+package org.robbins.moviefinder.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

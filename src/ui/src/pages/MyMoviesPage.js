@@ -24,6 +24,7 @@ export const MyMoviesPage = () => {
             }
           });
           const movies = await response.json();
+          console.log(JSON.stringify(movies));
           setMovies((movies));
         } catch (error) {
           throw error;
@@ -39,13 +40,13 @@ export const MyMoviesPage = () => {
       if (filterOption) {
         sortAndFilterOptions.filterOption = filterOption;
       }
-      setSortAndFilterOptions({...sortAndFilterOptions});
+      setSortAndFilterOptions({ ...sortAndFilterOptions });
     }, [location]
   );
 
   const createActorLabel = () => {
     if (filterParam === "recent") {
-      return <span>Recent releases from you actors</span>
+      return <span>Recent releases from your actors</span>
     } else if (filterParam === "upcoming") {
       return <span>Upcoming releases from your actors</span>
     } else {
@@ -95,9 +96,15 @@ export const MyMoviesPage = () => {
     return <h3>Login to view Movies from your Actors</h3>
   }
 
-  if (!movies || !movies.actors) {
+  // if (!movies || !movies.actors) {
+  //   return <span>Searching for movies for your actors</span>
+  // }
+
+  if (!movies || !movies.movies) {
     return <span>Searching for movies for your actors</span>
   }
+
+  let x = 0;
 
   return (
     <div className="MyMoviesPage">
@@ -122,9 +129,17 @@ export const MyMoviesPage = () => {
           />
         </div>
       </div>
-      {
+      {/* {
         movies.actors.actors
           .map(actor => <MyMovieActorCard key={actor.actorId} actor={actor} />)
+      } */}
+      {
+        <div>credits: {movies.movies.length}</div>
+      }
+      {
+        movies.movies
+          .map((movie, index) =>
+            <div key={index}>{movie.credit.title}</div>)
       }
     </div>
   );

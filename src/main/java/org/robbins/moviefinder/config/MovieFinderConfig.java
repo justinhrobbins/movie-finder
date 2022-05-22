@@ -1,4 +1,4 @@
-package org.robbins.moviefinder;
+package org.robbins.moviefinder.config;
 
 import org.robbins.moviefinder.filters.MovieFinderRequestLoggingFilter;
 import org.springframework.context.annotation.Bean;

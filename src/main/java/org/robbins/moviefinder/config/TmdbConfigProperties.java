@@ -1,4 +1,4 @@
-package org.robbins.moviefinder;
+package org.robbins.moviefinder.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;

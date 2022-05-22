@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.controllers;
+package org.robbins.moviefinder.converters;
 
 import org.robbins.moviefinder.dtos.Filters;
 import org.springframework.core.convert.converter.Converter;
