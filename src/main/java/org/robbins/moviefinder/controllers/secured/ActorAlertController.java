@@ -1,6 +1,7 @@
 package org.robbins.moviefinder.controllers.secured;
 
 import java.security.Principal;
+import java.util.Optional;
 
 import org.robbins.moviefinder.controllers.AbstractController;
 import org.robbins.moviefinder.dtos.ActorCountsDto;
@@ -85,7 +86,8 @@ public class ActorAlertController extends AbstractController {
     public MoviesDto findMyMovies(@RequestParam(required = false) final Filters filter, final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
 
-        final MoviesDto movies = actorAlertService.findMyMovies(userEmail, filter);
+        Optional<Filters> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
+        final MoviesDto movies = actorAlertService.findMyMovies(userEmail, optionalFilter);
         return movies;
     }
 }

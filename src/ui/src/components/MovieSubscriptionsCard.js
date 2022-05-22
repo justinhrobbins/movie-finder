@@ -1,8 +1,8 @@
 import { React } from 'react';
 
-import './scss/MovieFlatrateProviderCard.scss';
+import './scss/MovieSubscriptionsCard.scss';
 
-export const MovieFlatrateProviderCard = ({ flatrateProvider }) => {
+export const MovieSubscriptionsCard = ({ flatrateProvider }) => {
     if (!flatrateProvider) return null;
 
     const baseUrl = "https://image.tmdb.org/t/p/w45/";
@@ -10,7 +10,7 @@ export const MovieFlatrateProviderCard = ({ flatrateProvider }) => {
     const providerUrl = !flatrateProvider.logo_path || flatrateProvider.logo_path === "" ? defaultMovieUrl : baseUrl + flatrateProvider.logo_path;
 
     return (
-        <div className="MovieFlatrateProviderCard">
+        <div className="MovieSubscriptionsCard">
             <div className="movie-flatrate-provider-card-image"><img alt={flatrateProvider.provider_name} title={flatrateProvider.provider_name} src={providerUrl} /></div>
         </div>
     );

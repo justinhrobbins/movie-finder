@@ -1,17 +1,17 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { MyMovieActorCard } from '../components/MyMovieActorCard';
+import { MyMovieCard } from '../components/MyMovieCard';
 import Select from 'react-select';
 
 import './scss/MyMoviesPage.scss';
 
 export const MyMoviesPage = () => {
   const { loggedInUser } = useContext(UserContext);
-  const [movies, setMovies] = useState();
+  const [myMovies, setMyMovies] = useState();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const filterParam = searchParams.get('filter');
+  const filterParam = searchParams.get('filter') ? searchParams.get('filter') : '';
 
   useEffect(
     () => {
@@ -23,9 +23,8 @@ export const MyMoviesPage = () => {
               'Authorization': `Bearer ${loggedInUser.tokenId}`
             }
           });
-          const movies = await response.json();
-          console.log(JSON.stringify(movies));
-          setMovies((movies));
+          const myMovies = await response.json();
+          setMyMovies(myMovies);
         } catch (error) {
           throw error;
         } finally {
@@ -96,15 +95,9 @@ export const MyMoviesPage = () => {
     return <h3>Login to view Movies from your Actors</h3>
   }
 
-  // if (!movies || !movies.actors) {
-  //   return <span>Searching for movies for your actors</span>
-  // }
-
-  if (!movies || !movies.movies) {
-    return <span>Searching for movies for your actors</span>
+  if (!myMovies || !myMovies.movies) {
+    return <span>Searching for movies from your actors</span>
   }
-
-  let x = 0;
 
   return (
     <div className="MyMoviesPage">
@@ -129,18 +122,15 @@ export const MyMoviesPage = () => {
           />
         </div>
       </div>
-      {/* {
-        movies.actors.actors
-          .map(actor => <MyMovieActorCard key={actor.actorId} actor={actor} />)
-      } */}
       {
-        <div>credits: {movies.movies.length}</div>
+        myMovies.movies
+          .map((movie, index) => <MyMovieCard key={index} movie={movie} />)
       }
-      {
-        movies.movies
+      {/* {
+        myMovies.movies
           .map((movie, index) =>
             <div key={index}>{movie.credit.title}</div>)
-      }
+      } */}
     </div>
   );
 }

@@ -1,10 +1,11 @@
-import { React, useEffect, useState } from 'react';
-import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
+import { React, useContext, useEffect, useState } from 'react';
+import { UserContext } from "../UserContext";
 
-import './scss/ActorMovieCard.scss';
+import './scss/MovieCard.scss';
 
-export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubscriptions }) => {
-    const [movie] = useState(providedMovie);
+export const MovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubscriptions }) => {
+    const { loggedInUser } = useContext(UserContext);
+    const [movie, setMovie] = useState(providedMovie);
     const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
     const [movieUrl, setMovieUrl] = useState(null);
 
@@ -56,14 +57,12 @@ export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBy
                 </div>
             </div>
             <div className="actor-movie-card-providers-section">
-                <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} filterBySubscriptions={filterBySubscriptions} />
-
-                {/* <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div>
+                {/* <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div> */}
                 <div className="actor-movie-card-providers-section-content">
                     {
-                        flatrateProviders.map(flatrateProvider => <MovieSubscriptionsListCard key={movie.id} movie={movie} />)
+                        // flatrateProviders.map(flatrateProvider => <MovieFlatrateProviderCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
                     }
-                </div> */}
+                </div>
             </div>
         </div>
     );

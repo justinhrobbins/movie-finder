@@ -1,5 +1,7 @@
 package org.robbins.moviefinder.services;
 
+import java.util.Optional;
+
 import org.robbins.moviefinder.dtos.ActorAlertsDto;
 import org.robbins.moviefinder.dtos.ActorCountsDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
@@ -13,5 +15,5 @@ public interface ActorAlertService {
     public ActorCountsDto findMyActorCounts(final String userEmail);
     public Boolean isUserFollowingActor(final String userEmail, final Long actorId);
     public ActorsDto findAMyActors(final String userEmail);
-    public MoviesDto findMyMovies(final String userEmail, final Filters filter);
+    public MoviesDto findMyMovies(final String userEmail, final Optional<Filters> filter);
 }

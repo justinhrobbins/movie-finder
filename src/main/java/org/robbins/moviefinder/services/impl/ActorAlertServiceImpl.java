@@ -129,14 +129,15 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         return actorService.findActors(actorIds);
     }
 
-    private ActorsDto findMyActorsWithMoviesAndCount(final Filters filter, final User user) {
+    private ActorsDto findMyActorsWithMoviesAndCount(final Optional<Filters> filter, final User user) {
+        
         final List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
 
         final ActorsDto myActors = new ActorsDto();
 
         final List<ActorDto> actors = actorAlerts
                 .stream()
-                .map(actorAlert -> actorService.findActorWithMovies(actorAlert.getActorId(), Optional.of(filter),
+                .map(actorAlert -> actorService.findActorWithMovies(actorAlert.getActorId(), filter,
                         Optional.of(user)))
                 .collect(Collectors.toList());
 
@@ -158,7 +159,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public MoviesDto findMyMovies(String userEmail, final Filters filter) {
+    public MoviesDto findMyMovies(String userEmail, final Optional<Filters> filter) {
         final User user = userService.findByEmailUser(userEmail).get();
 
         final ActorsDto actors = findMyActorsWithMoviesAndCount(filter, user);
@@ -175,8 +176,24 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
     private List<MovieDto> addMoviesAndActors(final ActorsDto actors) {
         final List<MovieDto> uniqueMovies = addUniqueMoviesForActors(actors);
-        final List<MovieDto> moviesWithActors = addActorsForEachMovie(uniqueMovies, actors);
+        final List<MovieDto> sanitizedReleaseDates = sanitizeReleaseDates(uniqueMovies);
+        final List<MovieDto> moviesWithActors = addActorsForEachMovie(sanitizedReleaseDates, actors);
         return moviesWithActors;
+    }
+
+    private List<MovieDto> sanitizeReleaseDates(final List<MovieDto> movies) {
+        final List<MovieDto> sanitizedMovies = movies
+        .stream()
+        .map(movie -> sanitizeReleaseDate(movie))
+        .collect(Collectors.toList());
+
+        return sanitizedMovies;
+    }
+
+    private MovieDto sanitizeReleaseDate(final MovieDto movie) {
+        final String sanitizedReleaseDate = movie.getCredit().getReleaseDate() != null ? movie.getCredit().getReleaseDate() : "";
+        movie.getCredit().setReleaseDate(sanitizedReleaseDate);
+        return movie;
     }
 
     private List<MovieDto> addUniqueMoviesForActors(final ActorsDto actors) {
