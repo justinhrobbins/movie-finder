@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.robbins.moviefinder.dtos.ActorDto;
-import org.robbins.moviefinder.dtos.Filters;
+import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.services.ActorFilteringService;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class ActorFilteringServiceImpl implements ActorFilteringService {
 
     @Override
-    public List<ActorDto> filter(List<ActorDto> actors, Filters filter) {
+    public List<ActorDto> filter(List<ActorDto> actors, MovieFilter filter) {
 
         switch (filter) {
             case ALL:

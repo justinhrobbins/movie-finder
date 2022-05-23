@@ -7,8 +7,9 @@ import org.robbins.moviefinder.controllers.AbstractController;
 import org.robbins.moviefinder.dtos.ActorCountsDto;
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
-import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.dtos.MoviesDto;
+import org.robbins.moviefinder.enums.ActorSort;
+import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.services.ActorAlertService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +39,15 @@ public class ActorAlertController extends AbstractController {
     }
 
     @GetMapping
-    public ActorsDto findMyActors(@RequestParam(required = false) final Filters filter, final Principal principal) {
-        final String userEmail = extractUserEmailFromPrincipal(principal);
-        Optional<Filters> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
+    public ActorsDto findMyActors(@RequestParam(name = "filter", required = false) final MovieFilter filter,
+            @RequestParam(name = "sort", required = false) final ActorSort sort,
+            final Principal principal) {
 
-        final ActorsDto actorAlertsDto = actorAlertService.findAMyActors(userEmail, optionalFilter);
+        final String userEmail = extractUserEmailFromPrincipal(principal);
+        Optional<MovieFilter> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
+        Optional<ActorSort> optionalSort = sort != null ? Optional.of(sort) : Optional.empty();
+
+        final ActorsDto actorAlertsDto = actorAlertService.findAMyActors(userEmail, optionalFilter, optionalSort);
 
         return actorAlertsDto;
     }
@@ -60,7 +65,7 @@ public class ActorAlertController extends AbstractController {
     public Boolean doesActorAlertExistForUser(@PathVariable("actorId") final Long actorId, final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
 
-       return actorAlertService.isUserFollowingActor(userEmail, actorId);
+        return actorAlertService.isUserFollowingActor(userEmail, actorId);
     }
 
     @PostMapping
@@ -84,10 +89,11 @@ public class ActorAlertController extends AbstractController {
     }
 
     @GetMapping("/movies")
-    public MoviesDto findMyMovies(@RequestParam(required = false) final Filters filter, final Principal principal) {
+    public MoviesDto findMyMovies(@RequestParam(name = "filter", required = false) final MovieFilter filter,
+            final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
 
-        Optional<Filters> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
+        Optional<MovieFilter> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
         final MoviesDto movies = actorAlertService.findMyMovies(userEmail, optionalFilter);
         return movies;
     }

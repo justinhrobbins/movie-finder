@@ -8,17 +8,19 @@ import java.util.stream.Collectors;
 import org.robbins.moviefinder.dtos.ActorCountsDto;
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
-import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.dtos.MovieDto;
 import org.robbins.moviefinder.dtos.MoviesDto;
 import org.robbins.moviefinder.entities.ActorAlert;
 import org.robbins.moviefinder.entities.User;
+import org.robbins.moviefinder.enums.ActorSort;
+import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.repositories.ActorAlertRepository;
 import org.robbins.moviefinder.services.ActorAlertService;
 import org.robbins.moviefinder.services.ActorFilteringService;
 import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.ActorService;
+import org.robbins.moviefinder.services.ActorSortingService;
 import org.robbins.moviefinder.services.ActorsCountService;
 import org.robbins.moviefinder.services.UserService;
 import org.slf4j.Logger;
@@ -37,13 +39,15 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     private final ActorsCountService actorCountService;
     private final ActorMovieCountService actorMovieCountService;
     private final ActorFilteringService actorFilteringService;
+    private final ActorSortingService actorSortingService;
 
     public ActorAlertServiceImpl(final UserService userService,
             final ActorAlertRepository actorAlertRepository,
             final ActorService actorService,
             final ActorsCountService actorCountService,
             final ActorMovieCountService actorMovieCountService,
-            final ActorFilteringService actorFilteringService) {
+            final ActorFilteringService actorFilteringService,
+            final ActorSortingService actorSortingService) {
 
         this.userService = userService;
         this.actorAlertRepository = actorAlertRepository;
@@ -51,6 +55,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         this.actorCountService = actorCountService;
         this.actorMovieCountService = actorMovieCountService;
         this.actorFilteringService = actorFilteringService;
+        this.actorSortingService = actorSortingService;
     }
 
     @Override
@@ -83,18 +88,33 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public ActorsDto findAMyActors(final String userEmail, final Optional<Filters> filter) {
-        final User user = userService.findByEmailUser(userEmail).get();
-        final ActorsDto actors = findMyActorsWithCounts(user);
-        actors.setActorCounts(actorCountService.calculateTotals(actors));
-        actors.setMovieCounts(calculateMovieCounts(actors));
+    public ActorsDto findAMyActors(final String userEmail, final Optional<MovieFilter> filter,
+            final Optional<ActorSort> sort) {
 
+        final User user = userService.findByEmailUser(userEmail).get();
+        final ActorsDto myActors = findMyActorsWithCounts(user);
+        myActors.setActorCounts(actorCountService.calculateTotals(myActors));
+        myActors.setMovieCounts(calculateMovieCounts(myActors));
+
+        final List<ActorDto> filteredActors = filterActors(myActors.getActors(), filter);
+        final List<ActorDto> sortedActors = sortActors(filteredActors, sort);
+        myActors.setActors(sortedActors);
+
+        return myActors;
+    }
+
+    private List<ActorDto> filterActors(final List<ActorDto> actors, final Optional<MovieFilter> filter) {
         if (filter.isEmpty()) {
             return actors;
         }
+        return actorFilteringService.filter(actors, filter.get());
+    }
 
-        actors.setActors(actorFilteringService.filter(actors.getActors(), filter.get()));
-        return actors;
+    private List<ActorDto> sortActors(final List<ActorDto> actors, final Optional<ActorSort> sort) {
+        if (sort.isEmpty()) {
+            return actors;
+        }
+        return actorSortingService.sort(actors, sort.get());
     }
 
     private ActorsDto populateActorMovieCounts(final ActorsDto actors, final User user) {
@@ -123,7 +143,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         return actorService.findActors(actorIds);
     }
 
-    private ActorsDto findMyActorsWithMoviesAndCount(final Optional<Filters> filter, final User user) {
+    private ActorsDto findMyActorsWithMoviesAndCount(final Optional<MovieFilter> filter, final User user) {
 
         final List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
 
@@ -153,7 +173,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public MoviesDto findMyMovies(String userEmail, final Optional<Filters> filter) {
+    public MoviesDto findMyMovies(String userEmail, final Optional<MovieFilter> filter) {
         final User user = userService.findByEmailUser(userEmail).get();
 
         final ActorsDto actors = findMyActorsWithMoviesAndCount(filter, user);

@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
-import org.robbins.moviefinder.dtos.Filters;
 import org.robbins.moviefinder.entities.User;
+import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.MovieFilterinService;
 import org.robbins.moviefinder.services.PersonService;
@@ -83,7 +83,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto findActorWithMovies(final Long actorId, final Optional<Filters> filter, final Optional<User> user) {
+    public ActorDto findActorWithMovies(final Long actorId, final Optional<MovieFilter> filter, final Optional<User> user) {
         final ActorDto actor = findActor(actorId);
         final PersonCredits allCredits = personService.findPersonMovieCredits(actorId);
         final PersonCredits filteredCredits = filterCredits(allCredits, filter, user);
@@ -92,7 +92,7 @@ public class ActorServiceImpl implements ActorService {
     }
 
     // move this method into MovieFilterService?
-    private PersonCredits filterCredits(final PersonCredits credits, final Optional<Filters> filter, final Optional<User> user) {
+    private PersonCredits filterCredits(final PersonCredits credits, final Optional<MovieFilter> filter, final Optional<User> user) {
 
         if (filter.isEmpty()) {
             return credits;

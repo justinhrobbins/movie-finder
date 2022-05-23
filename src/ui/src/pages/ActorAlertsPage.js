@@ -20,9 +20,10 @@ export const ActorAlertsPage = () => {
   const sortOptions = [
     { value: 'name', label: 'Name' },
     { value: 'popularity', label: 'Popularity' },
-    { value: 'upcoming', label: 'Upcoming Releases' },
-    { value: 'recent', label: 'Recent Releases' },
-    { value: 'total', label: 'Total Releases' }
+    { value: 'upcoming', label: 'Upcoming Movies' },
+    { value: 'recent', label: 'Recent Movies' },
+    { value: 'subscription', label: 'Movies on my subscriptions' },
+    { value: 'total', label: 'Total Movies' }
   ]
   const filterOptions = [
     { value: 'all', label: 'All My Actors' },
