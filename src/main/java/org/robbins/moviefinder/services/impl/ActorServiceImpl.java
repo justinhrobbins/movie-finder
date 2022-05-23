@@ -99,6 +99,8 @@ public class ActorServiceImpl implements ActorService {
         }
 
         switch (filter.get()) {
+            case ALL:
+                return credits;
             case RECENT:
                 return movieFilterService.filterByRecent(credits);
             case UPCOMING:

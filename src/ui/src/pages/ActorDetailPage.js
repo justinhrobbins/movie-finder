@@ -28,7 +28,7 @@ export const ActorDetailPage = () => {
 
     return (
         <div className="ActorDetailPage">
-            <ActorDetailCard key={actor.actorId} actor={actor} showActorBio={true} />
+            <ActorDetailCard key={actor.actorId} providedActor={actor} showActorBio={true} />
             <ActorMovieListCard id={actorId} actor={actor.person} />
         </div>
     );

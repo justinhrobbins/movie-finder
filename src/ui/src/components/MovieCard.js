@@ -1,13 +1,18 @@
-import { React, useContext, useEffect, useState } from 'react';
-import { UserContext } from "../UserContext";
+import { React, useEffect, useState } from 'react';
+import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
 
 import './scss/MovieCard.scss';
 
 export const MovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubscriptions }) => {
-    const { loggedInUser } = useContext(UserContext);
     const [movie, setMovie] = useState(providedMovie);
     const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
     const [movieUrl, setMovieUrl] = useState(null);
+
+    useEffect(
+        () => {
+            setMovie(providedMovie);
+        }, [providedMovie]
+    );
 
     useEffect(
         () => {
@@ -57,11 +62,8 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubsc
                 </div>
             </div>
             <div className="actor-movie-card-providers-section">
-                {/* <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div> */}
                 <div className="actor-movie-card-providers-section-content">
-                    {
-                        // flatrateProviders.map(flatrateProvider => <MovieFlatrateProviderCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
-                    }
+                    <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} filterBySubscriptions={filterBySubscriptions} />
                 </div>
             </div>
         </div>

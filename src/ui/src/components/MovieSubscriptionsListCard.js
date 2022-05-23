@@ -36,7 +36,7 @@ export const MovieSubscriptionsListCard = ({ providedMovie, filterBySubscription
             return () => {
                 isMounted = false
             };
-        }, []
+        }, [movie]
     );
 
     useEffect(
@@ -56,7 +56,7 @@ export const MovieSubscriptionsListCard = ({ providedMovie, filterBySubscription
         }, [flatrateProviders]
     );
 
-    if (!movie) return null;
+    
     if (!flatrateProviders) return null;
 
     return (
@@ -64,7 +64,7 @@ export const MovieSubscriptionsListCard = ({ providedMovie, filterBySubscription
             <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div>
             <div className="actor-movie-card-providers-section-content">
                 {
-                    flatrateProviders.map(flatrateProvider => <MovieSubscriptionsCard key={movie.id} movie={movie} />)
+                    flatrateProviders.map(flatrateProvider => <MovieSubscriptionsCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
                 }
             </div>
         </div>

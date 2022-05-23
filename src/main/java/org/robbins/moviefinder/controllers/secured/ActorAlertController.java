@@ -38,10 +38,11 @@ public class ActorAlertController extends AbstractController {
     }
 
     @GetMapping
-    public ActorsDto findMyActors(final Principal principal) {
+    public ActorsDto findMyActors(@RequestParam(required = false) final Filters filter, final Principal principal) {
         final String userEmail = extractUserEmailFromPrincipal(principal);
+        Optional<Filters> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
 
-        final ActorsDto actorAlertsDto = actorAlertService.findAMyActors(userEmail);
+        final ActorsDto actorAlertsDto = actorAlertService.findAMyActors(userEmail, optionalFilter);
 
         return actorAlertsDto;
     }

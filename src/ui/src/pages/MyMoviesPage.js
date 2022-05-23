@@ -56,9 +56,6 @@ export const MyMoviesPage = () => {
   const [sortAndFilterOptions, setSortAndFilterOptions] = useState({
     "filterOption": {
       "value": 'all', "label": "All Movies"
-    },
-    "sortOption": {
-      "value": "popularity", "label": "Popularity"
     }
   });
   const filterOptions = [

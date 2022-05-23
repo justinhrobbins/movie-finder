@@ -6,17 +6,24 @@ import { ActorBioCard } from './ActorBioCard';
 
 import './scss/ActorDetailCard.scss';
 
-export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
+export const ActorDetailCard = ({ providedActor, showActorBio, removeActor }) => {
     const { loggedInUser } = useContext(UserContext);
-    const [isActorAlertActive, setIsActorAlertActive] = useState(false);
+    const [actor, setActor] = useState(providedActor);
+    const [isUserFollowingActor, setIsUserFollowingActor] = useState(false);
 
     const createActorAlertText = "Follow Actor";
     const removeActorAlertText = "Unfollow Actor";
 
     useEffect(
         () => {
+            setActor(providedActor);
+        }, [providedActor]
+    );
+
+    useEffect(
+        () => {
             if (loggedInUser) {
-                const fetchActorAlert = async () => {
+                const fetchIsUserFollowingActor = async () => {
                     const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actoralerts/${actor.actorId}`, {
                         method: 'GET',
                         headers: {
@@ -27,13 +34,13 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
                         .then(response => response.text())
                         .then(isAlertActiveForActor => {
                             if (isAlertActiveForActor == 'true') {
-                                setIsActorAlertActive(true);
+                                setIsUserFollowingActor(true);
                             } else {
-                                setIsActorAlertActive(false);
+                                setIsUserFollowingActor(false);
                             }
                         });
                 };
-                fetchActorAlert();
+                fetchIsUserFollowingActor();
             }
         }, []
     );
@@ -47,7 +54,7 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
 
     const actorDetailRoute = `/actors/${actor.actorId}`;
 
-    const manageActorAlert = (actorId) => {
+    const toggleActorAlert = (actorId) => {
         const actorAlert = { actorId: actorId };
 
         if (!loggedInUser) {
@@ -55,7 +62,7 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
             return;
         }
 
-        if (isActorAlertActive === false) {
+        if (isUserFollowingActor === false) {
             fetch(process.env.REACT_APP_BACKEND_URL + 'actoralerts', {
                 method: 'POST',
                 headers: {
@@ -65,7 +72,7 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
                 body: JSON.stringify(actorAlert)
             }).then(response => {
                 if (response.status == 200) {
-                    setIsActorAlertActive(true)
+                    setIsUserFollowingActor(true)
                 }
             })
         } else {
@@ -76,7 +83,7 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
                 }
             }).then(response => {
                 if (response.status == 204) {
-                    setIsActorAlertActive(false)
+                    setIsUserFollowingActor(false)
 
                     if (removeActor) {
                         removeActor(null);
@@ -91,8 +98,8 @@ export const ActorDetailCard = ({ actor, showActorBio, removeActor }) => {
             <div className="actor-detail-card-image-container">
                 <img className="actor-detail-card-image-image" src={actorPhotoUrl} alt={actor.person.name} title={actor.person.name} />
                 <div className="actor-detail-card-image-details">
-                    <button className="actor-detail-card-image-button" value={actor.actorId} onClick={(e) => { manageActorAlert(e.target.value) }}>
-                        {isActorAlertActive === true ? removeActorAlertText : createActorAlertText}
+                    <button className="actor-detail-card-image-button" value={actor.actorId} onClick={(e) => { toggleActorAlert(e.target.value) }}>
+                        {isUserFollowingActor === true ? removeActorAlertText : createActorAlertText}
                     </button>
                 </div>
             </div>

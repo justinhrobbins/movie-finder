@@ -57,13 +57,6 @@ export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBy
             </div>
             <div className="actor-movie-card-providers-section">
                 <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} filterBySubscriptions={filterBySubscriptions} />
-
-                {/* <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div>
-                <div className="actor-movie-card-providers-section-content">
-                    {
-                        flatrateProviders.map(flatrateProvider => <MovieSubscriptionsListCard key={movie.id} movie={movie} />)
-                    }
-                </div> */}
             </div>
         </div>
     );

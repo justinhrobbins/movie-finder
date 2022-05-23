@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.robbins.moviefinder.dtos.ActorAlertDto;
-import org.robbins.moviefinder.dtos.ActorAlertsDto;
 import org.robbins.moviefinder.dtos.ActorCountsDto;
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
@@ -18,6 +16,7 @@ import org.robbins.moviefinder.entities.ActorAlert;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.repositories.ActorAlertRepository;
 import org.robbins.moviefinder.services.ActorAlertService;
+import org.robbins.moviefinder.services.ActorFilteringService;
 import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.ActorsCountService;
@@ -37,32 +36,21 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     private final ActorAlertRepository actorAlertRepository;
     private final ActorsCountService actorCountService;
     private final ActorMovieCountService actorMovieCountService;
+    private final ActorFilteringService actorFilteringService;
 
     public ActorAlertServiceImpl(final UserService userService,
             final ActorAlertRepository actorAlertRepository,
             final ActorService actorService,
             final ActorsCountService actorCountService,
-            final ActorMovieCountService actorMovieCountService) {
+            final ActorMovieCountService actorMovieCountService,
+            final ActorFilteringService actorFilteringService) {
 
         this.userService = userService;
         this.actorAlertRepository = actorAlertRepository;
         this.actorService = actorService;
         this.actorCountService = actorCountService;
         this.actorMovieCountService = actorMovieCountService;
-    }
-
-    @Override
-    public ActorAlertsDto findMyActorAlerts(String userEmail, final Filters filter) {
-        final User user = userService.findByEmailUser(userEmail).get();
-        final ActorAlertsDto actorAlerts = new ActorAlertsDto();
-        final List<ActorAlert> entities = actorAlertRepository.findByUser(user);
-
-        entities.forEach(entity -> {
-            final ActorAlertDto actorAlert = new ActorAlertDto(entity.getActorId());
-            actorAlerts.getActorAlerts().add(actorAlert);
-        });
-
-        return actorAlerts;
+        this.actorFilteringService = actorFilteringService;
     }
 
     @Override
@@ -95,12 +83,18 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public ActorsDto findAMyActors(final String userEmail) {
+    public ActorsDto findAMyActors(final String userEmail, final Optional<Filters> filter) {
         final User user = userService.findByEmailUser(userEmail).get();
-        final ActorsDto actorsWithMovieCounts = findMyActorsWithCounts(user);
-        actorsWithMovieCounts.setActorCounts(actorCountService.calculateTotals(actorsWithMovieCounts));
-        actorsWithMovieCounts.setMovieCounts(calculateMovieCounts(actorsWithMovieCounts));
-        return actorsWithMovieCounts;
+        final ActorsDto actors = findMyActorsWithCounts(user);
+        actors.setActorCounts(actorCountService.calculateTotals(actors));
+        actors.setMovieCounts(calculateMovieCounts(actors));
+
+        if (filter.isEmpty()) {
+            return actors;
+        }
+
+        actors.setActors(actorFilteringService.filter(actors.getActors(), filter.get()));
+        return actors;
     }
 
     private ActorsDto populateActorMovieCounts(final ActorsDto actors, final User user) {
@@ -130,7 +124,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     private ActorsDto findMyActorsWithMoviesAndCount(final Optional<Filters> filter, final User user) {
-        
+
         final List<ActorAlert> actorAlerts = actorAlertRepository.findByUser(user);
 
         final ActorsDto myActors = new ActorsDto();
@@ -183,15 +177,17 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
     private List<MovieDto> sanitizeReleaseDates(final List<MovieDto> movies) {
         final List<MovieDto> sanitizedMovies = movies
-        .stream()
-        .map(movie -> sanitizeReleaseDate(movie))
-        .collect(Collectors.toList());
+                .stream()
+                .map(movie -> sanitizeReleaseDate(movie))
+                .collect(Collectors.toList());
 
         return sanitizedMovies;
     }
 
     private MovieDto sanitizeReleaseDate(final MovieDto movie) {
-        final String sanitizedReleaseDate = movie.getCredit().getReleaseDate() != null ? movie.getCredit().getReleaseDate() : "";
+        final String sanitizedReleaseDate = movie.getCredit().getReleaseDate() != null
+                ? movie.getCredit().getReleaseDate()
+                : "";
         movie.getCredit().setReleaseDate(sanitizedReleaseDate);
         return movie;
     }
@@ -208,30 +204,30 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
     private List<MovieDto> addActorsForEachMovie(List<MovieDto> movies, final ActorsDto actors) {
         List<MovieDto> moviesWithActors = movies
-            .stream()
-            .map(movie -> addActorsForMovie(movie, actors))
-            .collect(Collectors.toList());
+                .stream()
+                .map(movie -> addActorsForMovie(movie, actors))
+                .collect(Collectors.toList());
 
         List<MovieDto> moviesWithCleanedActors = moviesWithActors
-            .stream()
-            .map(movie -> cleanActorCreditsFromMovie(movie))
-            .collect(Collectors.toList());
+                .stream()
+                .map(movie -> cleanActorCreditsFromMovie(movie))
+                .collect(Collectors.toList());
 
         return moviesWithCleanedActors;
     }
 
     private MovieDto cleanActorCreditsFromMovie(final MovieDto movie) {
         movie.getActors()
-            .forEach(actor -> actor.setMovieCredits(null));
+                .forEach(actor -> actor.setMovieCredits(null));
 
         return movie;
     }
 
     private MovieDto addActorsForMovie(final MovieDto movie, final ActorsDto actors) {
         final List<ActorDto> actorsInMovie = actors.getActors()
-            .stream()
-            .filter(actor -> isActorInMovie(actor, movie.getCredit()))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(actor -> isActorInMovie(actor, movie.getCredit()))
+                .collect(Collectors.toList());
 
         movie.setActors(actorsInMovie);
         return movie;
@@ -239,8 +235,8 @@ public class ActorAlertServiceImpl implements ActorAlertService {
 
     private boolean isActorInMovie(final ActorDto actor, final PersonCredit credit) {
         return actor.getMovieCredits().getCast()
-            .stream()
-            .anyMatch(personCredit -> personCredit.getId() == credit.getId());
+                .stream()
+                .anyMatch(personCredit -> personCredit.getId() == credit.getId());
     }
 
     private MovieDto convertCreditToMovieDto(final PersonCredit credit) {
