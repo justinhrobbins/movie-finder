@@ -86,7 +86,7 @@ export const ActorDetailCard = ({ providedActor, showActorBio, removeActor }) =>
                     setIsUserFollowingActor(false)
 
                     if (removeActor) {
-                        removeActor(null);
+                        removeActor(actorId);
                     }
                 }
             })

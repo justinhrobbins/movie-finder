@@ -10,6 +10,7 @@ import './scss/ActorAlertsPage.scss';
 export const ActorAlertsPage = () => {
   const { loggedInUser } = useContext(UserContext);
   const [userActorAlerts, setUserActorAlerts] = useState({});
+  const [unfollowedActor, setUnfollowedActor] = useState({});
 
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -62,7 +63,7 @@ export const ActorAlertsPage = () => {
       if (filterOption) {
         setSelectedFilterOption(filterOption);
       }
-    }, [loggedInUser, location]
+    }, [loggedInUser, location, unfollowedActor]
   );
 
   const handleSortChange = (selectedOption) => {
@@ -94,6 +95,10 @@ export const ActorAlertsPage = () => {
       color: 'white',
     }),
   }
+
+  const notifyOnActorUnfollow = (unfollowedActor) => {
+    setUnfollowedActor(unfollowedActor);
+}
 
   if (!loggedInUser) {
     return <h3>Login to configure your Actors</h3>
@@ -142,7 +147,7 @@ export const ActorAlertsPage = () => {
       }
       <div className="actor-alerts-page-actors-list">
         {userActorAlerts.actors
-          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} />)
+          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} notifyOnActorUnfollow={notifyOnActorUnfollow} />)
         }
       </div>
     </div>

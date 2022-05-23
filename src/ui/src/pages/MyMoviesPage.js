@@ -40,7 +40,7 @@ export const MyMoviesPage = () => {
         sortAndFilterOptions.filterOption = filterOption;
       }
       setSortAndFilterOptions({ ...sortAndFilterOptions });
-    }, [location]
+    }, [location, loggedInUser]
   );
 
   const createActorLabel = () => {
@@ -123,11 +123,6 @@ export const MyMoviesPage = () => {
         myMovies.movies
           .map((movie, index) => <MyMovieCard key={index} movie={movie} />)
       }
-      {/* {
-        myMovies.movies
-          .map((movie, index) =>
-            <div key={index}>{movie.credit.title}</div>)
-      } */}
     </div>
   );
 }

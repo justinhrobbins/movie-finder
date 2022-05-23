@@ -3,10 +3,16 @@ import { ActorDetailCard } from './ActorDetailCard';
 
 import './scss/ActorAlertDetailCard.scss';
 
-export const ActorAlertDetailCard = ({ providedActor }) => {
+export const ActorAlertDetailCard = ({ providedActor, notifyOnActorUnfollow }) => {
     const [actor, setActor] = useState(providedActor);
 
-    const removeActor = (removeActor) => setActor(removeActor);
+    const removeActor = (removeActor) => {
+        setActor(null);
+
+        if (notifyOnActorUnfollow) {
+            notifyOnActorUnfollow(removeActor);
+        }
+    }
 
     useEffect(
         () => {
