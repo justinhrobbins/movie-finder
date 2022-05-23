@@ -9,8 +9,10 @@ import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.enums.MovieFilter;
+import org.robbins.moviefinder.enums.MovieSort;
 import org.robbins.moviefinder.services.ActorService;
-import org.robbins.moviefinder.services.MovieFilterinService;
+import org.robbins.moviefinder.services.PersonCreditsFilteringService;
+import org.robbins.moviefinder.services.PersonCreditsSortingService;
 import org.robbins.moviefinder.services.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +27,16 @@ public class ActorServiceImpl implements ActorService {
     final Logger logger = LoggerFactory.getLogger(ActorServiceImpl.class);
 
     private final PersonService personService;
-    private final MovieFilterinService movieFilterService;
+    private final PersonCreditsFilteringService movieFilterService;
+    private final PersonCreditsSortingService personCreditsSortingService;
 
-    public ActorServiceImpl(final PersonService personService, final MovieFilterinService movieFilterService) {
+    public ActorServiceImpl(final PersonService personService, 
+            final PersonCreditsFilteringService movieFilterService,
+            final PersonCreditsSortingService personCreditsSortingService) {
+
         this.personService = personService;
         this.movieFilterService = movieFilterService;
+        this.personCreditsSortingService = personCreditsSortingService;
     }
 
     @Override
@@ -42,7 +49,9 @@ public class ActorServiceImpl implements ActorService {
 
         page.getResults()
                 .parallelStream()
-                .forEach(person -> actors.getActors().add(findActorWithMovies(Long.valueOf(person.getId()), Optional.empty(), Optional.empty())));
+                .forEach(person -> actors.getActors()
+                        .add(findActorWithMovies(Long.valueOf(person.getId()), Optional.empty(),
+                                Optional.empty(), Optional.empty())));
 
         final List<ActorDto> filteredActors = actors.getActors()
                 .stream()
@@ -83,34 +92,33 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public ActorDto findActorWithMovies(final Long actorId, final Optional<MovieFilter> filter, final Optional<User> user) {
+    public ActorDto findActorWithMovies(final Long actorId, final Optional<MovieFilter> filter,
+            final Optional<MovieSort> sort, final Optional<User> user) {
+
         final ActorDto actor = findActor(actorId);
         final PersonCredits allCredits = personService.findPersonMovieCredits(actorId);
-        final PersonCredits filteredCredits = filterCredits(allCredits, filter, user);
-        actor.setMovieCredits(filteredCredits);
+        final PersonCredits filteredCredits = filterPersonCredits(allCredits, filter, user);
+        final PersonCredits sortedCredits = sortPersonCredits(filteredCredits, sort);
+        actor.setMovieCredits(sortedCredits);
+
         return actor;
     }
 
-    // move this method into MovieFilterService?
-    private PersonCredits filterCredits(final PersonCredits credits, final Optional<MovieFilter> filter, final Optional<User> user) {
+    private PersonCredits filterPersonCredits(final PersonCredits credits,
+            final Optional<MovieFilter> filter, final Optional<User> user) {
 
         if (filter.isEmpty()) {
             return credits;
+        } else {
+            return movieFilterService.filter(credits, filter.get(), user);
         }
+    }
 
-        switch (filter.get()) {
-            case ALL:
-                return credits;
-            case RECENT:
-                return movieFilterService.filterByRecent(credits);
-            case UPCOMING:
-                return movieFilterService.filterByUpcoming(credits);
-            case SUBSCRIPTIONS:
-                if (user.isPresent()) {
-                    return movieFilterService.filterBySubscriptions(credits, user.get());
-                }
-                break;
+    private PersonCredits sortPersonCredits(final PersonCredits credits, final Optional<MovieSort> sort) {
+        if (sort.isEmpty()) {
+            return credits;
+        } else {
+            return personCreditsSortingService.sort(credits, sort.get());
         }
-        return credits;
     }
 }

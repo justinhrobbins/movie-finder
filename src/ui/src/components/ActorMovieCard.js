@@ -3,7 +3,7 @@ import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
 
 import './scss/ActorMovieCard.scss';
 
-export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubscriptions }) => {
+export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview }) => {
     const [movie] = useState(providedMovie);
     const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
     const [movieUrl, setMovieUrl] = useState(null);
@@ -56,7 +56,7 @@ export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBy
                 </div>
             </div>
             <div className="actor-movie-card-providers-section">
-                <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} filterBySubscriptions={filterBySubscriptions} />
+                <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} />
             </div>
         </div>
     );

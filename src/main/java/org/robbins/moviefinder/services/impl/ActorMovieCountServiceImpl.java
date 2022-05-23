@@ -6,7 +6,7 @@ import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.FlatrateProviderService;
-import org.robbins.moviefinder.services.MovieFilterinService;
+import org.robbins.moviefinder.services.PersonCreditsFilteringService;
 import org.robbins.moviefinder.services.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +20,10 @@ public class ActorMovieCountServiceImpl implements ActorMovieCountService {
 
     private final PersonService personService;
     private final FlatrateProviderService flatrateProviderService;
-    private final MovieFilterinService movieFilterService;
+    private final PersonCreditsFilteringService movieFilterService;
 
     public ActorMovieCountServiceImpl(final PersonService personService,
-            final MovieFilterinService movieFilterService, final FlatrateProviderService flatrateProviderService) {
+            final PersonCreditsFilteringService movieFilterService, final FlatrateProviderService flatrateProviderService) {
         this.personService = personService;
         this.flatrateProviderService = flatrateProviderService;
         this.movieFilterService = movieFilterService;
@@ -41,16 +41,10 @@ public class ActorMovieCountServiceImpl implements ActorMovieCountService {
 
         long moviesOnSubscriptions = 0;
         if (user.isPresent()) {
-            moviesOnSubscriptions = countMovieSubscriptions(personCredits, user.get());
+            moviesOnSubscriptions = movieFilterService.filterBySubscriptions(personCredits, user).getCast()
+                    .size();
         }
 
         return new MovieCountsDto(totalMovies, upcomingMovies, recentMovies, moviesOnSubscriptions);
-    }
-
-    private long countMovieSubscriptions(final PersonCredits personCredits, final User user) {
-        return personCredits.getCast()
-                .stream()
-                .filter(credit -> flatrateProviderService.movieIsOnSubscription(credit.getId(), user))
-                .count();
     }
 }

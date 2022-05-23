@@ -8,38 +8,14 @@ import './scss/ActorMovieListCard.scss';
 
 export const ActorMovieListCard = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);
-    const [loading, setLoading] = useState(true);
-    const [sortedAndFiltered, setSortedAndFiltered] = useState(false);
     const [personCredits, setPersonCredits] = useState({});
-    const [unfilteredPersonCredits, setUnfilteredPersonCredits] = useState({});
-    useEffect(
-        () => {
-            const fetchPersonCredits = async () => {
-                try {
-                    setLoading(true);
-                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.id}/movies`);
-                    const movieData = await response.json();
-                    setUnfilteredPersonCredits(movieData);
-                } catch (error) {
-                    throw error;
-                } finally {
-                    setLoading(false);
-                }
-            };
-            fetchPersonCredits();
-        }, [actor]
-    );
 
-    const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
-    const [sortAndFilterOptions, setSortAndFilterOptions] = useState({
-        "filterOption": {
-            "value": 'all', "label": "All Movies"
-        },
-        "sortOption": {
-            "value": "popularity", "label": "Popularity"
-        }
-    });
+    const [searchParams, setSearchParams] = useSearchParams();
+    const sortParam = searchParams.get('sort') ? searchParams.get('sort') : '';
+    const filterParam = searchParams.get('filter') ? searchParams.get('filter') : '';
+    const [selectedSortOption, setSelectedSortOption] = useState({ value: 'popularity', label: 'Popularity' });
+    const [selectedFilterOption, setSelectedFilterOption] = useState({ value: 'all', label: 'All Movies' });
     const sortOptions = [
         { value: 'popularity', label: 'Popularity' },
         { value: 'newest', label: 'Release Date (Newest)' },
@@ -51,83 +27,52 @@ export const ActorMovieListCard = ({ actor }) => {
         { value: 'recent', label: 'Recent release' },
         { value: 'subscriptions', label: 'Movies on my subscriptions' }
     ]
+
     useEffect(
         () => {
-            setSortedAndFiltered(false);
-            
-            const sortParam = searchParams.get('sort');
-            const filterParam = searchParams.get('filter');
+            const fetchPersonCredits = async () => {
+                try {
+                    var headers = new Headers();
+                    headers.append("Content-Type", "application/json");
+
+                    if (loggedInUser) {
+                        headers.append("Authorization", `Bearer ${loggedInUser.tokenId}`);
+                    }
+                    const requestOptions = {
+                        method: 'GET',
+                        headers: headers
+                    };
+
+                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actors/${actor.id}/movies?filter=${filterParam}&sort=${sortParam}`,
+                        requestOptions);
+                    const movieData = await response.json();
+                    setPersonCredits(movieData);
+                } catch (error) {
+                    throw error;
+                } finally {
+                }
+            };
+            fetchPersonCredits();
+
             const sortOption = sortOptions.find(option => option.value === sortParam);
             const filterOption = filterOptions.find(option => option.value === filterParam);
 
             if (sortOption) {
-                sortAndFilterOptions.sortOption = sortOption;
+                setSelectedSortOption(sortOption);
             }
             if (filterOption) {
-                sortAndFilterOptions.filterOption = filterOption;
+                setSelectedFilterOption(filterOption);
             }
-
-            setSortAndFilterOptions({...sortAndFilterOptions});
-        }, [location, loggedInUser]
-    );
-
-    useEffect(
-        () => {
-            const filterMovies = (allMovies) => {
-                const today = new Date();
-                const minNewReleaseDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-                let filteredCredits;
-                if (sortAndFilterOptions.filterOption.value == "all") {
-                    filteredCredits = allMovies.cast;
-                } else if (sortAndFilterOptions.filterOption.value == "upcoming") {
-                    filteredCredits = allMovies.cast.filter(function (el) {
-                        return new Date(el.release_date) > today;
-                    });
-                } else if (sortAndFilterOptions.filterOption.value == "recent") {
-                    filteredCredits = allMovies.cast.filter(function (el) {
-                        const releaseDate = new Date(el.release_date);
-                        return releaseDate < today && releaseDate > minNewReleaseDate;
-                    });
-                } else if (sortAndFilterOptions.filterOption.value == "subscriptions") {
-                    filteredCredits = allMovies.cast;
-                }
-                return filteredCredits;
-            };
-
-            const sortMovies = (movies) => {
-                let sortedMovies;
-                if (sortAndFilterOptions.sortOption.value == "newest") {
-                    sortedMovies = movies.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
-                } else if (sortAndFilterOptions.sortOption.value == "oldest") {
-                    sortedMovies = movies.sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
-                } else {
-                    sortedMovies = movies.sort((a, b) => b.popularity - a.popularity);
-                }
-                return sortedMovies;
-            }
-
-            if (unfilteredPersonCredits.cast) {
-                const filteredMovies = filterMovies(unfilteredPersonCredits);
-                const sortedMovies = sortMovies(filteredMovies);
-
-                personCredits.cast = sortedMovies;
-
-                setPersonCredits({ ...personCredits });
-                setSortedAndFiltered(true);
-            }
-
-        }, [sortAndFilterOptions, loading]
+        }, [actor, location]
     );
 
     const handleSortChange = (selectedOption) => {
-        setSortedAndFiltered(false);
         let updatedSearchParams = new URLSearchParams(searchParams.toString());
         updatedSearchParams.set('sort', selectedOption.value);
         setSearchParams(updatedSearchParams.toString());
     };
 
     const handleFilterChange = (selectedOption) => {
-        setSortedAndFiltered(false);
         let updatedSearchParams = new URLSearchParams(searchParams.toString());
         updatedSearchParams.set('filter', selectedOption.value);
         setSearchParams(updatedSearchParams.toString());
@@ -151,7 +96,7 @@ export const ActorMovieListCard = ({ actor }) => {
         }),
     }
 
-    if ((!personCredits || !personCredits.cast) || (sortedAndFiltered == false)) {
+    if (!personCredits || !personCredits.cast) {
         return <span>Searching for movies for {actor.name}</span>
     }
 
@@ -164,7 +109,7 @@ export const ActorMovieListCard = ({ actor }) => {
                         onChange={handleFilterChange}
                         options={filterOptions}
                         styles={colourStyles}
-                        value={sortAndFilterOptions.filterOption}
+                        value={selectedFilterOption}
                     />
                 </div>
                 <div className="actor-movie-list-sort">
@@ -172,7 +117,7 @@ export const ActorMovieListCard = ({ actor }) => {
                     <Select
                         onChange={handleSortChange}
                         options={sortOptions}
-                        value={sortAndFilterOptions.sortOption}
+                        value={selectedSortOption}
                         styles={colourStyles}
                     />
                 </div>
@@ -182,8 +127,7 @@ export const ActorMovieListCard = ({ actor }) => {
                     .map(movie => <ActorMovieCard
                         key={movie.id}
                         providedMovie={movie}
-                        shouldShowFullOverview={true}
-                        filterBySubscriptions={sortAndFilterOptions.filterOption.value == "subscriptions" ? true : false} />)
+                        shouldShowFullOverview={true} />)
             }
         </div>
     );

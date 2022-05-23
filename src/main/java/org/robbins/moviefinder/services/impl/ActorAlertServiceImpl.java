@@ -152,7 +152,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         final List<ActorDto> actors = actorAlerts
                 .stream()
                 .map(actorAlert -> actorService.findActorWithMovies(actorAlert.getActorId(), filter,
-                        Optional.of(user)))
+                        Optional.empty(), Optional.of(user)))
                 .collect(Collectors.toList());
 
         myActors.getActors().addAll(actors);

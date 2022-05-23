@@ -109,7 +109,7 @@ export const ActorDetailCard = ({ providedActor, showActorBio, removeActor }) =>
                     <Link className="actor-detail-card-content-actor-name-link" to={actorDetailRoute}>{actor.person.name}</Link>
                 </div>
                 <div className="actor-detail-card-content-alert-data">
-                    <ActorDetailAlertDataCard key={actor.actorId} actor={actor} />
+                    <ActorDetailAlertDataCard key={actor.actorId} providedActor={actor} />
                 </div>
                 {showActorBio == true &&
                     <ActorBioCard key={actor.actorId} actor={actor.person} />

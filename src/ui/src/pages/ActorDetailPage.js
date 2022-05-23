@@ -1,11 +1,13 @@
-import { React, useEffect, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { UserContext } from "../UserContext";
 import { ActorDetailCard } from '../components/ActorDetailCard';
 import { ActorMovieListCard } from '../components/ActorMovieListCard';
 
 import './scss/ActorDetailPage.scss';
 
 export const ActorDetailPage = () => {
+    const { loggedInUser } = useContext(UserContext);
     const [actor, setActor] = useState(null);
 
     const { actorId } = useParams();
@@ -19,7 +21,7 @@ export const ActorDetailPage = () => {
             };
             fetchPerson();
 
-        }, [actorId]
+        }, [actorId, loggedInUser]
     );
 
     if (!actor) {

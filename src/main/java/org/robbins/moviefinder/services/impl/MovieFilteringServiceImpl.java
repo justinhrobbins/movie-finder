@@ -1,34 +1,60 @@
 package org.robbins.moviefinder.services.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.robbins.moviefinder.entities.User;
+import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.services.FlatrateProviderService;
-import org.robbins.moviefinder.services.MovieFilterinService;
+import org.robbins.moviefinder.services.PersonCreditsFilteringService;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.model.people.PersonCredit;
 import info.movito.themoviedbapi.model.people.PersonCredits;
 
 @Service
-public class MovieFilterinServiceImpl implements MovieFilterinService {
+public class MovieFilteringServiceImpl implements PersonCreditsFilteringService {
 
     private final FlatrateProviderService flatrateProviderService;
 
-    public MovieFilterinServiceImpl(final FlatrateProviderService flatrateProviderService) {
+    public MovieFilteringServiceImpl(final FlatrateProviderService flatrateProviderService) {
         this.flatrateProviderService = flatrateProviderService;
     }
 
     @Override
-    public PersonCredits filterBySubscriptions(final PersonCredits personCredits, final User user) {
+    public PersonCredits filter(PersonCredits credits, MovieFilter filter, Optional<User> user) {
+
+        switch (filter) {
+            case ALL:
+                return credits;
+            case RECENT:
+                return filterByRecent(credits);
+            case UPCOMING:
+                return filterByUpcoming(credits);
+            case SUBSCRIPTIONS:
+                return filterBySubscriptions(credits, user);
+            default:
+                return credits;
+        }
+    }
+
+    @Override
+    public PersonCredits filterBySubscriptions(final PersonCredits personCredits, final Optional<User> user) {
+        final PersonCredits filteredPersonCredits = new PersonCredits();
+
+        if (user.isEmpty()) {
+            filteredPersonCredits.setCast(new ArrayList<>());
+            return filteredPersonCredits;
+        }
+
         final List<PersonCredit> filteredCastCredits = personCredits.getCast()
                 .stream()
-                .filter(credit -> flatrateProviderService.movieIsOnSubscription(credit.getId(), user))
+                .filter(credit -> flatrateProviderService.movieIsOnSubscription(credit.getId(), user.get()))
                 .collect(Collectors.toList());
 
-        final PersonCredits filteredPersonCredits = new PersonCredits();
         filteredPersonCredits.setCast(filteredCastCredits);
         return filteredPersonCredits;
     }

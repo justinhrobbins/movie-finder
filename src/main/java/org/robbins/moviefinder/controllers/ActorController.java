@@ -8,6 +8,8 @@ import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.entities.User;
+import org.robbins.moviefinder.enums.MovieFilter;
+import org.robbins.moviefinder.enums.MovieSort;
 import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.PersonService;
@@ -51,12 +53,22 @@ public class ActorController extends AbstractController {
     }
 
     @GetMapping("/{actorId}/movies")
-    public PersonCredits getMoviesForPerson(@PathVariable("actorId") final Long personId) {
-        return personService.findPersonMovieCredits(personId);
+    public PersonCredits getMoviesForPerson(@RequestParam(name = "filter", required = false) final MovieFilter filter,
+            @RequestParam(name = "sort", required = false) final MovieSort sort,
+            @PathVariable("actorId") final Long actorId,
+            final Principal principal) {
+
+        final Optional<User> user = findUser(principal);
+        Optional<MovieFilter> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
+        Optional<MovieSort> optionalSort = sort != null ? Optional.of(sort) : Optional.empty();
+
+        final ActorDto actor = actorService.findActorWithMovies(actorId, optionalFilter, optionalSort, user);
+        return actor.getMovieCredits();
     }
 
     @GetMapping("/{actorId}/movies/counts")
-    public MovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId, final Principal principal) {
+    public MovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId,
+            final Principal principal) {
         final Optional<User> user = findUser(principal);
         return movieCountService.findActorMovieCounts(actorId, user);
     }

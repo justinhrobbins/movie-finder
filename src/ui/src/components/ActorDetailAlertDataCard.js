@@ -4,10 +4,18 @@ import { Link } from 'react-router-dom';
 
 import './scss/ActorDetailAlertDataCard.scss';
 
-export const ActorDetailAlertDataCard = ({ actor }) => {
+export const ActorDetailAlertDataCard = ({ providedActor }) => {
     const { loggedInUser } = useContext(UserContext);
+    const [actor, setActor] = useState(providedActor);
     const [actorMoveCounts, setActorMovieCounts] = useState({});
     const [subscriptionsLink, setSubscriptionsLink] = useState(null);
+
+    useEffect(
+        () => {
+            setActor(providedActor);
+
+        }, [providedActor]
+    );
 
     useEffect(
         () => {
@@ -36,15 +44,7 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
                 setActorMovieCounts(actor.movieCounts);
             }
 
-        }, []
-    );
-
-    useEffect(
-        () => {
-            if (actor.movieCounts) {
-                setActorMovieCounts(actor.movieCounts);
-            }
-        }, [actor]
+        }, [actor, loggedInUser]
     );
 
     useEffect(
@@ -62,6 +62,8 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
             }
         }, [loggedInUser, actorMoveCounts]
     );
+
+    if (!actor) return null;
 
     if (!actorMoveCounts) {
         return <h3>Loading details for actor {actor.person.name}...</h3>
