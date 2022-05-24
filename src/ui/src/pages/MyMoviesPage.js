@@ -18,7 +18,7 @@ export const MyMoviesPage = () => {
     () => {
       const fetchMovies = async () => {
         try {
-          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actoralerts/movies?filter=${filterParam}`, {
+          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `mymovies?filter=${filterParam}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${loggedInUser.tokenId}`

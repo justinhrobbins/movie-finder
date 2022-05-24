@@ -37,7 +37,7 @@ export const ActorAlertsPage = () => {
     () => {
       const fetchActorAlerts = async () => {
         try {
-          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actoralerts?filter=${filterParam}&sort=${sortParam}`, {
+          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `myactors?filter=${filterParam}&sort=${sortParam}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${loggedInUser.tokenId}`

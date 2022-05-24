@@ -62,9 +62,9 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview }) => {
                     }
                 </div>
             </div>
-            <div className="movie-actors-container">
+            {/* <div className="movie-actors-container">
                 <MovieCastCard key={movie.id} providedMovie={movie} />
-            </div>
+            </div> */}
             <div className="movie-providers-container">
                 <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} />
             </div>

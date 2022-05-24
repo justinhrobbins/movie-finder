@@ -2,6 +2,7 @@ package org.robbins.moviefinder.services.counting.impl;
 
 import java.util.Optional;
 
+import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.services.counting.ActorMovieCountService;
@@ -43,5 +44,31 @@ public class ActorMovieCountServiceImpl implements ActorMovieCountService {
         }
 
         return new MovieCountsDto(totalMovies, upcomingMovies, recentMovies, moviesOnSubscriptions);
+    }
+
+    @Override
+    public MovieCountsDto calculateMovieCounts(final ActorsDto actorsDto) {
+        long totalMovies = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getTotalMovies())
+                .sum();
+
+        long upcomingMovies = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getUpcomingMovies())
+                .sum();
+
+        long recentMovies = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getRecentMovies())
+                .sum();
+
+        long moviesOnSubscriptions = actorsDto.getActors()
+                .stream()
+                .mapToLong(actor -> actor.getMovieCounts().getMoviesOnSubscriptions())
+                .sum();
+
+        return new MovieCountsDto(totalMovies, upcomingMovies, recentMovies,
+                moviesOnSubscriptions);
     }
 }
