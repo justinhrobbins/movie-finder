@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.filtering.impl;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.services.FlatrateProviderService;
-import org.robbins.moviefinder.services.PersonCreditsFilteringService;
+import org.robbins.moviefinder.services.filtering.MovieFilteringService;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.model.people.PersonCredit;
 import info.movito.themoviedbapi.model.people.PersonCredits;
 
 @Service
-public class MovieFilteringServiceImpl implements PersonCreditsFilteringService {
+public class MovieFilteringServiceImpl implements MovieFilteringService {
 
     private final FlatrateProviderService flatrateProviderService;
 

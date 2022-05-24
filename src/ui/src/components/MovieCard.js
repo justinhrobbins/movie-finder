@@ -1,4 +1,5 @@
 import { React, useEffect, useState } from 'react';
+import { MovieCastCard } from './MovieCastCard';
 import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
 
 import './scss/MovieCard.scss';
@@ -60,6 +61,9 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview }) => {
                         </div>
                     }
                 </div>
+            </div>
+            <div className="movie-actors-container">
+                <MovieCastCard key={movie.id} providedMovie={movie} />
             </div>
             <div className="movie-providers-container">
                 <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} />

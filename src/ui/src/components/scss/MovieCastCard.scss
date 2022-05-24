@@ -1,0 +1,16 @@
+.MovieCastCard {
+    // border: 1px white solid;
+
+    .c-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        // justify-content: space-between;
+        border: 1px white solid;
+    }
+
+    .MovieCastCard-item {
+        max-width: 45%;
+        border: 1px red solid;
+    }
+}

@@ -1,4 +1,4 @@
-package org.robbins.moviefinder.services;
+package org.robbins.moviefinder.services.counting;
 
 import java.util.Optional;
 

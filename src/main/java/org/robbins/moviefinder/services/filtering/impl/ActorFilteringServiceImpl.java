@@ -1,11 +1,11 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.filtering.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.enums.MovieFilter;
-import org.robbins.moviefinder.services.ActorFilteringService;
+import org.robbins.moviefinder.services.filtering.ActorFilteringService;
 import org.springframework.stereotype.Service;
 
 @Service

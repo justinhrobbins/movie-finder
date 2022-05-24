@@ -1,8 +1,8 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.counting.impl;
 
 import org.robbins.moviefinder.dtos.ActorCountsDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
-import org.robbins.moviefinder.services.ActorsCountService;
+import org.robbins.moviefinder.services.counting.ActorsCountService;
 import org.springframework.stereotype.Service;
 
 @Service

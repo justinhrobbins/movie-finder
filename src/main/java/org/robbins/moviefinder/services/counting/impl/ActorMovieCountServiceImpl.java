@@ -1,11 +1,11 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.counting.impl;
 
 import java.util.Optional;
 
 import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.entities.User;
-import org.robbins.moviefinder.services.ActorMovieCountService;
-import org.robbins.moviefinder.services.PersonCreditsFilteringService;
+import org.robbins.moviefinder.services.counting.ActorMovieCountService;
+import org.robbins.moviefinder.services.filtering.MovieFilteringService;
 import org.robbins.moviefinder.services.tmdb.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,10 @@ public class ActorMovieCountServiceImpl implements ActorMovieCountService {
     final Logger logger = LoggerFactory.getLogger(ActorMovieCountServiceImpl.class);
 
     private final PersonService personService;
-    private final PersonCreditsFilteringService movieFilterService;
+    private final MovieFilteringService movieFilterService;
 
     public ActorMovieCountServiceImpl(final PersonService personService,
-            final PersonCreditsFilteringService movieFilterService) {
+            final MovieFilteringService movieFilterService) {
         this.personService = personService;
         this.movieFilterService = movieFilterService;
     }

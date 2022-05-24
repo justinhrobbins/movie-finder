@@ -1,11 +1,11 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.sorting.impl;
 
 import java.util.Comparator;
 import java.util.List;
 
 import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.enums.ActorSort;
-import org.robbins.moviefinder.services.ActorSortingService;
+import org.robbins.moviefinder.services.sorting.ActorSortingService;
 import org.springframework.stereotype.Service;
 
 @Service

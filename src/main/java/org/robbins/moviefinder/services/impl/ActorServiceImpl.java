@@ -11,8 +11,8 @@ import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.enums.MovieSort;
 import org.robbins.moviefinder.services.ActorService;
-import org.robbins.moviefinder.services.PersonCreditsFilteringService;
-import org.robbins.moviefinder.services.PersonCreditsSortingService;
+import org.robbins.moviefinder.services.filtering.MovieFilteringService;
+import org.robbins.moviefinder.services.sorting.PersonCreditsSortingService;
 import org.robbins.moviefinder.services.tmdb.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +27,11 @@ public class ActorServiceImpl implements ActorService {
     final Logger logger = LoggerFactory.getLogger(ActorServiceImpl.class);
 
     private final PersonService personService;
-    private final PersonCreditsFilteringService movieFilterService;
+    private final MovieFilteringService movieFilterService;
     private final PersonCreditsSortingService personCreditsSortingService;
 
     public ActorServiceImpl(final PersonService personService, 
-            final PersonCreditsFilteringService movieFilterService,
+            final MovieFilteringService movieFilterService,
             final PersonCreditsSortingService personCreditsSortingService) {
 
         this.personService = personService;

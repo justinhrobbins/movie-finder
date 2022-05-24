@@ -1,9 +1,9 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.sorting.impl;
 
 import java.util.Comparator;
 
 import org.robbins.moviefinder.enums.MovieSort;
-import org.robbins.moviefinder.services.PersonCreditsSortingService;
+import org.robbins.moviefinder.services.sorting.PersonCreditsSortingService;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.model.people.PersonCredit;
