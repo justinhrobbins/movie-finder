@@ -98,7 +98,7 @@ export const ActorAlertsPage = () => {
 
   const notifyOnActorUnfollow = (unfollowedActor) => {
     setUnfollowedActor(unfollowedActor);
-}
+  }
 
   if (!loggedInUser) {
     return <h3>Login to configure your Actors</h3>
@@ -115,16 +115,11 @@ export const ActorAlertsPage = () => {
 
   return (
     <div className="ActorAlertsPage">
-      <div className="actor-alert-header">
-        <h2>My Actors:</h2>
-      </div>
-      <div className="actor-alert-movie-list-section">
-        <div className="actor-alert-movie-list-section-summary">
-          <div className="actor-alert-movie-list-section-summary-data">
-            <ActorAlertSummaryCard actorCounts={userActorAlerts.actorCounts} movieCounts={userActorAlerts.movieCounts} />
-          </div>
+      <div className="actor-alert-header-container">
+        <div className="actor-alert-header-dashboard">
+          <ActorAlertSummaryCard actorCounts={userActorAlerts.actorCounts} movieCounts={userActorAlerts.movieCounts} />
         </div>
-        <div className="actor-alert-movie-list-filter">Flter by:
+        <div className="actor-alert-dropdown-filter">Flter by:
           <Select
             onChange={handleFilterChange}
             options={filterOptions}
@@ -132,7 +127,7 @@ export const ActorAlertsPage = () => {
             value={selectedFilterOption}
           />
         </div>
-        <div className="actor-alert-movie-list-sort">
+        <div className="actor-alert-dropdown-sort">
           Sort by:
           <Select
             onChange={handleSortChange}
@@ -142,10 +137,10 @@ export const ActorAlertsPage = () => {
           />
         </div>
       </div>
-      {
-        !loggedInUser ? "Please login to create Actor Alerts" : ""
-      }
-      <div className="actor-alerts-page-actors-list">
+      <div className="actor-alert-label">
+        <h2>My Actors:</h2>
+      </div>
+      <div className="actor-alerts-actors-container">
         {userActorAlerts.actors
           .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} notifyOnActorUnfollow={notifyOnActorUnfollow} />)
         }

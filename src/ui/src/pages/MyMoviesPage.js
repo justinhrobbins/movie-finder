@@ -99,22 +99,11 @@ export const MyMoviesPage = () => {
 
   return (
     <div className="MyMoviesPage">
-      <div className="my-movies-page-about-container">
-        <div className="my-movies-page-about-intro">
-          Movies from the actors you follow
-          <br /><br />
-          Use Actor Alerts to:
+      <div className="my-movies-header-container">
+        <div className="my-movies-header-dashboard">
+          <ActorAlertSummaryCard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
         </div>
-        <ul className="my-movies-page-about-list">
-          <li>Quickly find <b>upcoming movies</b> from your favorite actors</li>
-        </ul>
-      </div>
-      <div className="my-movies-header-section">
-        <h2 className="my-movies-header-section-label">{createActorLabel()}</h2>
-        <div className="actor-alert-movie-list-section-summary-data">
-            <ActorAlertSummaryCard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
-          </div>
-        <div className="my-movies-header-section-filter">Flter by:
+        <div className="my-movies-dropdown-filter">Flter by:
           <Select
             onChange={handleFilterChange}
             options={filterOptions}
@@ -122,6 +111,9 @@ export const MyMoviesPage = () => {
             value={sortAndFilterOptions.filterOption}
           />
         </div>
+      </div>
+      <div className="my-movies-label">
+        <h2 >{createActorLabel()}</h2>
       </div>
       <div className="my-movie-movies-container">
         {
