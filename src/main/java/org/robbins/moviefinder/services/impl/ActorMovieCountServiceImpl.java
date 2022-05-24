@@ -7,7 +7,7 @@ import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.services.ActorMovieCountService;
 import org.robbins.moviefinder.services.FlatrateProviderService;
 import org.robbins.moviefinder.services.PersonCreditsFilteringService;
-import org.robbins.moviefinder.services.PersonService;
+import org.robbins.moviefinder.services.tmdb.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

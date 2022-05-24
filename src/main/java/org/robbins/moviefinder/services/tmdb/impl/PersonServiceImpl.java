@@ -1,11 +1,11 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.tmdb.impl;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.robbins.moviefinder.services.PersonService;
+import org.robbins.moviefinder.services.tmdb.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;

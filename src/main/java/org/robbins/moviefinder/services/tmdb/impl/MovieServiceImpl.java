@@ -1,6 +1,6 @@
-package org.robbins.moviefinder.services.impl;
+package org.robbins.moviefinder.services.tmdb.impl;
 
-import org.robbins.moviefinder.services.MovieService;
+import org.robbins.moviefinder.services.tmdb.MovieService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 

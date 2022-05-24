@@ -13,7 +13,7 @@ import org.robbins.moviefinder.enums.MovieSort;
 import org.robbins.moviefinder.services.ActorService;
 import org.robbins.moviefinder.services.PersonCreditsFilteringService;
 import org.robbins.moviefinder.services.PersonCreditsSortingService;
-import org.robbins.moviefinder.services.PersonService;
+import org.robbins.moviefinder.services.tmdb.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

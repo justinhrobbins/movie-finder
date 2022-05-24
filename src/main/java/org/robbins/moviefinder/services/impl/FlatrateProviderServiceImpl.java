@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.services.FlatrateProviderService;
-import org.robbins.moviefinder.services.MovieService;
 import org.robbins.moviefinder.services.UserService;
+import org.robbins.moviefinder.services.tmdb.MovieService;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.model.MovieDb;
