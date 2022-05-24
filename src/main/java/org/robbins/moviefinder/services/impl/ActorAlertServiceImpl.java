@@ -179,6 +179,7 @@ public class ActorAlertServiceImpl implements ActorAlertService {
         final ActorsDto actors = findMyActorsWithMoviesAndCount(filter, user);
 
         final MoviesDto myMovies = new MoviesDto();
+        myMovies.setActorCounts(new ActorCountsDto());
         myMovies.setMovieCounts(actors.getMovieCounts());
         myMovies.setMovies(addMoviesAndActors(actors));
 

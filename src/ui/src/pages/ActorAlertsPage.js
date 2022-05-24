@@ -121,7 +121,7 @@ export const ActorAlertsPage = () => {
       <div className="actor-alert-movie-list-section">
         <div className="actor-alert-movie-list-section-summary">
           <div className="actor-alert-movie-list-section-summary-data">
-            <ActorAlertSummaryCard actors={userActorAlerts} />
+            <ActorAlertSummaryCard actorCounts={userActorAlerts.actorCounts} movieCounts={userActorAlerts.movieCounts} />
           </div>
         </div>
         <div className="actor-alert-movie-list-filter">Flter by:

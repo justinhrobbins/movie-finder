@@ -31,7 +31,7 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubsc
     if (!movie) return null;
 
     return (
-        <div className="ActorMovieCard">
+        <div className="MovieCard">
             <div className="actor-movie-card-image">
                 <img width="185" src={movieUrl} />
             </div>

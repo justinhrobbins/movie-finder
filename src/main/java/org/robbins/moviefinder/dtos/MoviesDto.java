@@ -7,6 +7,7 @@ import java.util.List;
 public class MoviesDto {
 
     private List<MovieDto> movies = Collections.synchronizedList(new ArrayList<>());
+    private ActorCountsDto actorCounts;
     private MovieCountsDto movieCounts;
 
     public List<MovieDto> getMovies() {
@@ -15,6 +16,14 @@ public class MoviesDto {
 
     public void setMovies(List<MovieDto> movies) {
         this.movies = movies;
+    }
+
+    public ActorCountsDto getActorCounts() {
+        return actorCounts;
+    }
+
+    public void setActorCounts(ActorCountsDto actorCounts) {
+        this.actorCounts = actorCounts;
     }
 
     public MovieCountsDto getMovieCounts() {

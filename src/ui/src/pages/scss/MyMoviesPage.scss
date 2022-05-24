@@ -31,4 +31,22 @@
     .my-movies-header-filter{
         flex: 30%;
     }
+
+    .my-movie-movies-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        grid-column-gap: 50px;
+        margin-top: 50px;
+        // border: 1px white solid;
+    }
+
+    .my-movie-movies-item {
+        max-width: 48%;
+        // display: flex;
+        flex-grow: 1;
+        // flex: 1;
+        // border: 1px white solid;
+    }
 }

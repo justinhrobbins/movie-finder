@@ -1,7 +1,8 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { MyMovieCard } from '../components/MyMovieCard';
+import { ActorAlertSummaryCard } from '../components/ActorAlertSummaryCard';
+import { MovieCard } from '../components/MovieCard';
 import Select from 'react-select';
 
 import './scss/MyMoviesPage.scss';
@@ -110,6 +111,9 @@ export const MyMoviesPage = () => {
       </div>
       <div className="my-movies-header-section">
         <h2 className="my-movies-header-section-label">{createActorLabel()}</h2>
+        <div className="actor-alert-movie-list-section-summary-data">
+            <ActorAlertSummaryCard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
+          </div>
         <div className="my-movies-header-section-filter">Flter by:
           <Select
             onChange={handleFilterChange}
@@ -119,10 +123,20 @@ export const MyMoviesPage = () => {
           />
         </div>
       </div>
-      {
-        myMovies.movies
-          .map((movie, index) => <MyMovieCard key={index} movie={movie} />)
-      }
+      <div className="my-movie-movies-container">
+        {
+          myMovies.movies
+            .map((movie) =>
+              <div key={movie.credit.id} className="my-movie-movies-item">
+                <MovieCard
+                  key={movie.credit.id}
+                  providedMovie={movie.credit}
+                  shouldShowFullOverview={false}
+                  filterBySubscriptions={false} />
+              </div>
+            )
+        }
+      </div>
     </div>
   );
 }
