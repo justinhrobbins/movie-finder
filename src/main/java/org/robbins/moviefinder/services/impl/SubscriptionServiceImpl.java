@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.robbins.moviefinder.entities.User;
-import org.robbins.moviefinder.services.FlatrateProviderService;
+import org.robbins.moviefinder.services.SubscriptionService;
 import org.robbins.moviefinder.services.UserService;
 import org.robbins.moviefinder.services.tmdb.MovieService;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ import info.movito.themoviedbapi.model.WatchProviders.Provider;
 import info.movito.themoviedbapi.model.WatchProviders.Results.US;
 
 @Service
-public class FlatrateProviderServiceImpl implements FlatrateProviderService {
+public class SubscriptionServiceImpl implements SubscriptionService {
     
     private final MovieService movieService;
     private final UserService userService;
 
-    public FlatrateProviderServiceImpl(final MovieService movieService, final UserService userService) {
+    public SubscriptionServiceImpl(final MovieService movieService, final UserService userService) {
         this.movieService = movieService;
         this.userService = userService;
     }

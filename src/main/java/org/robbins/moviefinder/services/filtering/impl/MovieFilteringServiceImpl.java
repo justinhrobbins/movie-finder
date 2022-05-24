@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import org.robbins.moviefinder.entities.User;
 import org.robbins.moviefinder.enums.MovieFilter;
-import org.robbins.moviefinder.services.FlatrateProviderService;
+import org.robbins.moviefinder.services.SubscriptionService;
 import org.robbins.moviefinder.services.filtering.MovieFilteringService;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +18,9 @@ import info.movito.themoviedbapi.model.people.PersonCredits;
 @Service
 public class MovieFilteringServiceImpl implements MovieFilteringService {
 
-    private final FlatrateProviderService flatrateProviderService;
+    private final SubscriptionService flatrateProviderService;
 
-    public MovieFilteringServiceImpl(final FlatrateProviderService flatrateProviderService) {
+    public MovieFilteringServiceImpl(final SubscriptionService flatrateProviderService) {
         this.flatrateProviderService = flatrateProviderService;
     }
 

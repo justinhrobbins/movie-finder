@@ -18,7 +18,6 @@ import org.robbins.moviefinder.enums.MovieFilter;
 import org.robbins.moviefinder.repositories.ActorAlertRepository;
 import org.robbins.moviefinder.services.ActorAlertService;
 import org.robbins.moviefinder.services.ActorService;
-import org.robbins.moviefinder.services.UserService;
 import org.robbins.moviefinder.services.counting.ActorMovieCountService;
 import org.robbins.moviefinder.services.counting.ActorsCountService;
 import org.robbins.moviefinder.services.filtering.ActorFilteringService;
@@ -33,7 +32,6 @@ import info.movito.themoviedbapi.model.people.PersonCredit;
 public class ActorAlertServiceImpl implements ActorAlertService {
     final Logger logger = LoggerFactory.getLogger(ActorAlertService.class);
 
-    private final UserService userService;
     private final ActorService actorService;
     private final ActorAlertRepository actorAlertRepository;
     private final ActorsCountService actorCountService;
@@ -41,15 +39,13 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     private final ActorFilteringService actorFilteringService;
     private final ActorSortingService actorSortingService;
 
-    public ActorAlertServiceImpl(final UserService userService,
-            final ActorAlertRepository actorAlertRepository,
+    public ActorAlertServiceImpl(final ActorAlertRepository actorAlertRepository,
             final ActorService actorService,
             final ActorsCountService actorCountService,
             final ActorMovieCountService actorMovieCountService,
             final ActorFilteringService actorFilteringService,
             final ActorSortingService actorSortingService) {
 
-        this.userService = userService;
         this.actorAlertRepository = actorAlertRepository;
         this.actorService = actorService;
         this.actorCountService = actorCountService;
@@ -59,24 +55,19 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public Boolean isUserFollowingActor(String userEmail, Long actorId) {
-        final User user = userService.findByEmailUser(userEmail).get();
-
+    public Boolean isUserFollowingActor(final User user, final Long actorId) {
         Optional<ActorAlert> actorAlert = actorAlertRepository.findByUserAndActorId(user, actorId);
 
         return actorAlert.isPresent() ? Boolean.TRUE : Boolean.FALSE;
     }
 
     @Override
-    public void saveActorAlert(String userEmail, Long actorId) {
-        final User user = userService.findByEmailUser(userEmail).get();
+    public void saveActorAlert(final User user, final Long actorId) {
         actorAlertRepository.save(new ActorAlert(user, actorId));
     }
 
     @Override
-    public void deleteActorAlert(final String userEmail, final Long actorId) {
-        final User user = userService.findByEmailUser(userEmail).get();
-
+    public void deleteActorAlert(final User user, final Long actorId) {
         final Optional<ActorAlert> actorAlert = actorAlertRepository.findByUserAndActorId(user, actorId);
 
         if (!actorAlert.isPresent()) {
@@ -88,10 +79,13 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public ActorsDto findAMyActors(final String userEmail, final Optional<MovieFilter> filter,
-            final Optional<ActorSort> sort) {
+    public List<ActorAlert> findActorAlerts(User user) {
+        return actorAlertRepository.findByUser(user);
+    }
 
-        final User user = userService.findByEmailUser(userEmail).get();
+    @Override
+    public ActorsDto findAMyActors(final User user, final Optional<MovieFilter> filter,
+            final Optional<ActorSort> sort) {
         final ActorsDto myActors = findMyActorsWithCounts(user);
         myActors.setActorCounts(actorCountService.calculateTotals(myActors));
         myActors.setMovieCounts(calculateMovieCounts(myActors));
@@ -165,17 +159,14 @@ public class ActorAlertServiceImpl implements ActorAlertService {
     }
 
     @Override
-    public ActorCountsDto findMyActorCounts(String userEmail) {
-        final User user = userService.findByEmailUser(userEmail).get();
+    public ActorCountsDto findMyActorCounts(final User user) {
         final ActorsDto actorsWithMovieCounts = findMyActorsWithCounts(user);
         final ActorCountsDto actorCounts = actorCountService.calculateTotals(actorsWithMovieCounts);
         return actorCounts;
     }
 
     @Override
-    public MoviesDto findMyMovies(String userEmail, final Optional<MovieFilter> filter) {
-        final User user = userService.findByEmailUser(userEmail).get();
-
+    public MoviesDto findMyMovies(final User user, final Optional<MovieFilter> filter) {
         final ActorsDto actors = findMyActorsWithMoviesAndCount(filter, user);
 
         final MoviesDto myMovies = new MoviesDto();

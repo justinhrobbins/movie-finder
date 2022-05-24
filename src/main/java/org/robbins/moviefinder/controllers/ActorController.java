@@ -58,7 +58,7 @@ public class ActorController extends AbstractController {
             @PathVariable("actorId") final Long actorId,
             final Principal principal) {
 
-        final Optional<User> user = findUser(principal);
+        final Optional<User> user = extractUserFromPrincipal(principal);
         Optional<MovieFilter> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
         Optional<MovieSort> optionalSort = sort != null ? Optional.of(sort) : Optional.empty();
 
@@ -69,21 +69,17 @@ public class ActorController extends AbstractController {
     @GetMapping("/{actorId}/movies/counts")
     public MovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId,
             final Principal principal) {
-        final Optional<User> user = findUser(principal);
+        final Optional<User> user = extractUserFromPrincipal(principal);
         return movieCountService.findActorMovieCounts(actorId, user);
-    }
-
-    private Optional<User> findUser(final Principal principal) {
-        if (principal == null) {
-            return Optional.empty();
-        }
-
-        final String userEmail = extractUserEmailFromPrincipal(principal);
-        return userService.findByEmailUser(userEmail);
     }
 
     @GetMapping("/popular")
     public ActorsDto getPopluar() {
         return actorService.findPopularActors();
+    }
+
+    @Override
+    public UserService getUserService() {
+        return userService;
     }
 }

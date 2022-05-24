@@ -28,8 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUserSubscriptions(final String userEmail, final List<String> streamingServices) {
-        final User user = userRepository.findByEmail(userEmail).get();
+    public UserDto updateUserSubscriptions(final User user, final List<String> streamingServices) {
         user.setStreamingServices(String.join(",", streamingServices));
         final User updatedUser = userRepository.save(user);
 
@@ -49,10 +48,10 @@ public class UserServiceImpl implements UserService {
     public List<String> convertStreamingServices(final User user) {
         if (user.getStreamingServices() != null) {
             return Stream.of(user.getStreamingServices().split(","))
-            .map(String::trim)
-            .collect(Collectors.toList());
+                    .map(String::trim)
+                    .collect(Collectors.toList());
         } else {
-            return  new ArrayList<>();
+            return new ArrayList<>();
         }
     }
 
