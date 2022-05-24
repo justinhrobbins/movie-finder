@@ -11,7 +11,7 @@ export const MovieSubscriptionsCard = ({ flatrateProvider }) => {
 
     return (
         <div className="MovieSubscriptionsCard">
-            <div className="movie-flatrate-provider-card-image"><img alt={flatrateProvider.provider_name} title={flatrateProvider.provider_name} src={providerUrl} /></div>
+            <div className="movie-subscriptions-image"><img alt={flatrateProvider.provider_name} title={flatrateProvider.provider_name} src={providerUrl} /></div>
         </div>
     );
 }

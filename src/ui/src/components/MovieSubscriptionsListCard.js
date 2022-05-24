@@ -54,8 +54,8 @@ export const MovieSubscriptionsListCard = ({ providedMovie }) => {
 
     return (
         <div className="MovieSubscriptionsListCard">
-            <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div>
-            <div className="actor-movie-card-providers-section-content">
+            <div className="movie-subscription-provide-label">{flatrateProviderLabel}</div>
+            <div className="movie-subscription-provider-content">
                 {
                     flatrateProviders.map(flatrateProvider => <MovieSubscriptionsCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
                 }

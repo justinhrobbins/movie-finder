@@ -1,9 +1,12 @@
 .MovieSubscriptionsListCard {
     padding: 5px;
 
-    .movie-flatrate-provider-card-image {
-        & > img {
-            border-radius: 8px;
-        }
+    .movie-subscription-provide-label {
+        padding-left: 5px;
+        align-self: end;
+    }
+
+    .movie-subscription-provider-content {
+        display: flex;
     }
 }

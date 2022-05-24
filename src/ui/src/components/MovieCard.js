@@ -3,7 +3,7 @@ import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
 
 import './scss/MovieCard.scss';
 
-export const MovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubscriptions }) => {
+export const MovieCard = ({ providedMovie, shouldShowFullOverview }) => {
     const [movie, setMovie] = useState(providedMovie);
     const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
     const [movieUrl, setMovieUrl] = useState(null);
@@ -32,39 +32,37 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubsc
 
     return (
         <div className="MovieCard">
-            <div className="actor-movie-card-image">
+            <div className="movie-image">
                 <img width="185" src={movieUrl} />
             </div>
-            <div className="actor-movie-card-info">
-                <div className="actor-movie-card-info-header">
-                    <span className="actor-movie-card-info-title">{movie.title}</span>
+            <div className="movie-info">
+                <div className="movie-info-header">
+                    <span className="movie-info-title">{movie.title}</span>
                 </div>
-                <div className="actor-movie-card-info-content">RELEASE DATE: {movie.release_date} ({movie.original_language})</div>
-                <div className="actor-movie-card-info-content">LANGUAGE: {movie.original_language}</div>
-                <div className="actor-movie-card-info-content">ROLE: {movie.character}</div>
-                <div className="actor-movie-card-info-content">
-                    <span className="actor-movie-card-info-content-overview-label">OVERVIEW:</span><br />
+                <div className="movie-info-content">RELEASE DATE: {movie.release_date} ({movie.original_language})</div>
+                <div className="movie-info-content">LANGUAGE: {movie.original_language}</div>
+                <div className="movie-info-content">ROLE: {movie.character}</div>
+                <div className="movie-info-content">
+                    <span className="movie-info-content-overview-label">OVERVIEW:</span><br />
                     {movie.overview && movie.overview.length > 100 && showFullOverview == true &&
                         <div>
-                            <span className="actor-movie-card-info-content-overview"> {movie.overview} <span className="actor-movie-card-info-content-overview-link" onClick={toggleOverview}>Show less</span></span>
+                            <span className="movie-info-content-overview"> {movie.overview} <span className="movie-info-content-overview-link" onClick={toggleOverview}>Show less</span></span>
                         </div>
                     }
                     {movie.overview && movie.overview.length > 100 && showFullOverview == false &&
                         <div>
-                            <span className="actor-movie-card-info-content-overview">{movie.overview.substring(0, 100)}... <span className="actor-movie-card-info-content-overview-link" onClick={toggleOverview}>Show more</span></span>
+                            <span className="movie-info-content-overview">{movie.overview.substring(0, 100)}... <span className="movie-info-content-overview-link" onClick={toggleOverview}>Show more</span></span>
                         </div>
                     }
                     {movie.overview && movie.overview.length < 101 &&
                         <div>
-                            <span className="actor-movie-card-info-content-overview">{movie.overview}</span>
+                            <span className="movie-info-content-overview">{movie.overview}</span>
                         </div>
                     }
                 </div>
             </div>
-            <div className="actor-movie-card-providers-section">
-                <div className="actor-movie-card-providers-section-content">
-                    <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} filterBySubscriptions={filterBySubscriptions} />
-                </div>
+            <div className="movie-providers-container">
+                <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} />
             </div>
         </div>
     );
