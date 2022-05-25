@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import info.movito.themoviedbapi.TmdbPeople.PersonResultsPage;
+import info.movito.themoviedbapi.model.people.PersonCredit;
 import info.movito.themoviedbapi.model.people.PersonCredits;
 import info.movito.themoviedbapi.model.people.PersonPeople;
 
@@ -98,7 +99,8 @@ public class ActorServiceImpl implements ActorService {
         final ActorDto actor = findActor(actorId);
         final PersonCredits allCredits = personService.findPersonMovieCredits(actorId);
         final PersonCredits filteredCredits = filterPersonCredits(allCredits, filter, user);
-        final PersonCredits sortedCredits = sortPersonCredits(filteredCredits, sort);
+        final PersonCredits sanitizedPersonCreds = sanitizePersonCredits(filteredCredits);
+        final PersonCredits sortedCredits = sortPersonCredits(sanitizedPersonCreds, sort);
         actor.setMovieCredits(sortedCredits);
 
         return actor;
@@ -120,5 +122,19 @@ public class ActorServiceImpl implements ActorService {
         } else {
             return personCreditsSortingService.sort(credits, sort.get());
         }
+    }
+
+    private PersonCredits sanitizePersonCredits(final PersonCredits credits) {
+        credits.getCast()
+        .forEach(credit -> sanitizePersonCredit(credit));
+
+        return credits;
+    }
+
+    private PersonCredit sanitizePersonCredit(final PersonCredit credit) {
+        if (credit.getReleaseDate() == null) {
+            credit.setReleaseDate("");
+        }
+        return credit;
     }
 }
