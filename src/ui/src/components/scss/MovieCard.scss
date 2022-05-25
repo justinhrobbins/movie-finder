@@ -10,7 +10,7 @@
     // border: 1px white solid;
 
     .movie-image {
-        grid-row: span 2;
+        grid-row: span 3;
         margin-right: 20px;
 
         & > img {
@@ -21,7 +21,8 @@
     .movie-info {
         display: grid;
         grid-template-rows: min-content auto;
-        grid-row-gap: 10px;
+        grid-row-gap: 5px;
+        // border: 1px white solid;
     }
 
     .movie-info-title {

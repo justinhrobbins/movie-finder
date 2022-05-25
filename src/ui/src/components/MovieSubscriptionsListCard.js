@@ -12,6 +12,12 @@ export const MovieSubscriptionsListCard = ({ providedMovie }) => {
 
     useEffect(
         () => {
+            setMovie(providedMovie);
+        }, [providedMovie]
+    );
+
+    useEffect(
+        () => {
             let isMounted = true;
             const fetchWatchProviders = async () => {
                 const response = await fetch(process.env.REACT_APP_BACKEND_URL + `movies/${movie.id}/watchproviders`);

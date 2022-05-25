@@ -4,7 +4,7 @@ import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
 
 import './scss/MovieCard.scss';
 
-export const MovieCard = ({ providedMovie, shouldShowFullOverview }) => {
+export const MovieCard = ({ providedMovie, shouldShowFullOverview, shouldShowRole }) => {
     const [movie, setMovie] = useState(providedMovie);
     const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
     const [movieUrl, setMovieUrl] = useState(null);
@@ -42,7 +42,9 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview }) => {
                 </div>
                 <div className="movie-info-content">RELEASE DATE: {movie.release_date} ({movie.original_language})</div>
                 <div className="movie-info-content">LANGUAGE: {movie.original_language}</div>
-                <div className="movie-info-content">ROLE: {movie.character}</div>
+                {shouldShowRole == true &&
+                    <div className="movie-info-content">ROLE: {movie.character}</div>
+                }
                 <div className="movie-info-content">
                     <span className="movie-info-content-overview-label">OVERVIEW:</span><br />
                     {movie.overview && movie.overview.length > 100 && showFullOverview == true &&
@@ -62,9 +64,9 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview }) => {
                     }
                 </div>
             </div>
-            {/* <div className="movie-actors-container">
+            <div className="movie-actors-container">
                 <MovieCastCard key={movie.id} providedMovie={movie} />
-            </div> */}
+            </div>
             <div className="movie-providers-container">
                 <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} />
             </div>
