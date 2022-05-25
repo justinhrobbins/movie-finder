@@ -1,14 +1,11 @@
 package org.robbins.moviefinder.dtos;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import info.movito.themoviedbapi.model.people.PersonCredit;
 
 public class MovieDto {
     PersonCredit credit;
-    List<ActorDto> actors = new ArrayList<>();
 
     public MovieDto() {
     }
@@ -19,14 +16,6 @@ public class MovieDto {
 
     public void setCredit(PersonCredit credit) {
         this.credit = credit;
-    }
-
-    public List<ActorDto> getActors() {
-        return actors;
-    }
-
-    public void setActors(List<ActorDto> actors) {
-        this.actors = actors;
     }
 
     @Override

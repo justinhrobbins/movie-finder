@@ -58,9 +58,9 @@ export const MovieCastCard = ({ providedMovie }) => {
 
     return (
         <div className="MovieCastCard">
-            {actorsInMovie.slice(0,8).map((actor, index) =>
-                <Link className="movie-cast-link" to={actorLinkUrl(actor.id)}>
-                    <img src={actorProfileUrl(actor.profile_path)} alt={actor.name} title={actor.name} />
+            {actorsInMovie.slice(0,5).map((actor) =>
+                <Link key={actor.actorId} className="movie-cast-link" to={actorLinkUrl(actor.actorId)}>
+                    <img key={actor.actorId} src={actorProfileUrl(actor.person.profile_path)} alt={actor.person.name} title={actor.person.name} />
                 </Link>
             )
             }

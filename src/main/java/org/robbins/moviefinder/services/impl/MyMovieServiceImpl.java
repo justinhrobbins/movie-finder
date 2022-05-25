@@ -56,9 +56,8 @@ public class MyMovieServiceImpl implements MyMovieService {
 
     private List<MovieDto> addMoviesAndActors(final ActorsDto actors) {
         final List<MovieDto> uniqueMovies = addUniqueMoviesForActors(actors);
-        final List<MovieDto> sanitizedReleaseDates = sanitizeReleaseDates(uniqueMovies);
-        final List<MovieDto> moviesWithActors = addActorsForEachMovie(sanitizedReleaseDates, actors);
-        return moviesWithActors;
+        final List<MovieDto> moviesWithSanitizedReleaseDates = sanitizeReleaseDates(uniqueMovies);
+        return moviesWithSanitizedReleaseDates;
     }
 
     private ActorsDto findMyActorsWithMoviesAndCount(List<ActorAlert> followedActors,
@@ -106,43 +105,6 @@ public class MyMovieServiceImpl implements MyMovieService {
                 : "";
         movie.getCredit().setReleaseDate(sanitizedReleaseDate);
         return movie;
-    }
-
-    private List<MovieDto> addActorsForEachMovie(List<MovieDto> movies, final ActorsDto actors) {
-        List<MovieDto> moviesWithActors = movies
-                .stream()
-                .map(movie -> addActorsForMovie(movie, actors))
-                .collect(Collectors.toList());
-
-        List<MovieDto> moviesWithCleanedActors = moviesWithActors
-                .stream()
-                .map(movie -> cleanActorCreditsFromMovie(movie))
-                .collect(Collectors.toList());
-
-        return moviesWithCleanedActors;
-    }
-
-    private MovieDto cleanActorCreditsFromMovie(final MovieDto movie) {
-        movie.getActors()
-                .forEach(actor -> actor.setMovieCredits(null));
-
-        return movie;
-    }
-
-    private MovieDto addActorsForMovie(final MovieDto movie, final ActorsDto actors) {
-        final List<ActorDto> actorsInMovie = actors.getActors()
-                .stream()
-                .filter(actor -> isActorInMovie(actor, movie.getCredit()))
-                .collect(Collectors.toList());
-
-        movie.setActors(actorsInMovie);
-        return movie;
-    }
-
-    private boolean isActorInMovie(final ActorDto actor, final PersonCredit credit) {
-        return actor.getMovieCredits().getCast()
-                .stream()
-                .anyMatch(personCredit -> personCredit.getId() == credit.getId());
     }
 
     private MovieDto convertCreditToMovieDto(final PersonCredit credit) {
