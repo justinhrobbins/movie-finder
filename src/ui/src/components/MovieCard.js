@@ -65,6 +65,7 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview, shouldShowRol
                 </div>
             </div>
             <div className="movie-actors-container">
+                <div className="movie-info-content">CAST:</div>
                 <MovieCastCard key={movie.id} providedMovie={movie} />
             </div>
             <div className="movie-providers-container">

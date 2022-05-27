@@ -123,8 +123,7 @@ export const MyMoviesPage = () => {
                 <MovieCard
                   key={movie.credit.id}
                   providedMovie={movie.credit}
-                  shouldShowFullOverview={false}
-                  filterBySubscriptions={false} />
+                  shouldShowFullOverview={false} />
               </div>
             )
         }
