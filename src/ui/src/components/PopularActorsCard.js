@@ -42,7 +42,7 @@ export const PopularActorsCard = () => {
         {popularActors.actors
           .map(actor => 
             <div className="popular-actors-card-list-item" key={actor.actorId}>
-              <ActorDetailCard key={actor.actorId} actor={actor} removeActor={removeActor} showActorBio={false} />
+              <ActorDetailCard key={actor.actorId} providedActor={actor} removeActor={removeActor} showActorBio={false} />
             </div>
             )
         }

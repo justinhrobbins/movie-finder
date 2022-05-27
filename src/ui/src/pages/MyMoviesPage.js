@@ -1,30 +1,31 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { MyMovieActorCard } from '../components/MyMovieActorCard';
+import { ActorAlertSummaryCard } from '../components/ActorAlertSummaryCard';
+import { MovieCard } from '../components/MovieCard';
 import Select from 'react-select';
 
 import './scss/MyMoviesPage.scss';
 
 export const MyMoviesPage = () => {
   const { loggedInUser } = useContext(UserContext);
-  const [movies, setMovies] = useState();
+  const [myMovies, setMyMovies] = useState();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const filterParam = searchParams.get('filter');
+  const filterParam = searchParams.get('filter') ? searchParams.get('filter') : '';
 
   useEffect(
     () => {
       const fetchMovies = async () => {
         try {
-          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `actoralerts/movies?filter=${filterParam}`, {
+          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `mymovies?filter=${filterParam}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${loggedInUser.tokenId}`
             }
           });
-          const movies = await response.json();
-          setMovies((movies));
+          const myMovies = await response.json();
+          setMyMovies(myMovies);
         } catch (error) {
           throw error;
         } finally {
@@ -39,13 +40,13 @@ export const MyMoviesPage = () => {
       if (filterOption) {
         sortAndFilterOptions.filterOption = filterOption;
       }
-      setSortAndFilterOptions({...sortAndFilterOptions});
-    }, [location]
+      setSortAndFilterOptions({ ...sortAndFilterOptions });
+    }, [location, loggedInUser]
   );
 
   const createActorLabel = () => {
     if (filterParam === "recent") {
-      return <span>Recent releases from you actors</span>
+      return <span>Recent releases from your actors</span>
     } else if (filterParam === "upcoming") {
       return <span>Upcoming releases from your actors</span>
     } else {
@@ -56,9 +57,6 @@ export const MyMoviesPage = () => {
   const [sortAndFilterOptions, setSortAndFilterOptions] = useState({
     "filterOption": {
       "value": 'all', "label": "All Movies"
-    },
-    "sortOption": {
-      "value": "popularity", "label": "Popularity"
     }
   });
   const filterOptions = [
@@ -95,25 +93,17 @@ export const MyMoviesPage = () => {
     return <h3>Login to view Movies from your Actors</h3>
   }
 
-  if (!movies || !movies.actors) {
-    return <span>Searching for movies for your actors</span>
+  if (!myMovies || !myMovies.movies) {
+    return <span>Searching for movies from your actors</span>
   }
 
   return (
     <div className="MyMoviesPage">
-      <div className="my-movies-page-about-container">
-        <div className="my-movies-page-about-intro">
-          Movies from the actors you follow
-          <br /><br />
-          Use Actor Alerts to:
+      <div className="my-movies-header-container">
+        <div className="my-movies-header-dashboard">
+          <ActorAlertSummaryCard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
         </div>
-        <ul className="my-movies-page-about-list">
-          <li>Quickly find <b>upcoming movies</b> from your favorite actors</li>
-        </ul>
-      </div>
-      <div className="my-movies-header-section">
-        <h2 className="my-movies-header-section-label">{createActorLabel()}</h2>
-        <div className="my-movies-header-section-filter">Flter by:
+        <div className="my-movies-dropdown-filter">Flter by:
           <Select
             onChange={handleFilterChange}
             options={filterOptions}
@@ -122,10 +112,23 @@ export const MyMoviesPage = () => {
           />
         </div>
       </div>
-      {
-        movies.actors.actors
-          .map(actor => <MyMovieActorCard key={actor.actorId} actor={actor} />)
-      }
+      <div className="my-movies-label">
+        <h2 >{createActorLabel()}</h2>
+      </div>
+      <div className="my-movie-movies-container">
+        {
+          myMovies.movies
+            .map((movie) =>
+              <div key={movie.credit.id} className="my-movie-movies-item">
+                <MovieCard
+                  key={movie.credit.id}
+                  providedMovie={movie.credit}
+                  shouldShowFullOverview={false}
+                  filterBySubscriptions={false} />
+              </div>
+            )
+        }
+      </div>
     </div>
   );
 }

@@ -9,46 +9,22 @@ import './scss/ActorAlertsPage.scss';
 
 export const ActorAlertsPage = () => {
   const { loggedInUser } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
   const [userActorAlerts, setUserActorAlerts] = useState({});
-  const [unfilteredUserActorAlerts, setUnfilteredUserActorAlerts] = useState({});
+  const [unfollowedActor, setUnfollowedActor] = useState({});
 
-  useEffect(
-    () => {
-      const fetchActorAlerts = async () => {
-        try {
-          setLoading(true);
-          const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'actoralerts', {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${loggedInUser.tokenId}`
-            }
-          });
-          const userActorAlerts = await response.json();
-          setUnfilteredUserActorAlerts((userActorAlerts));
-        } catch (error) {
-          throw error;
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      if (loggedInUser) {
-        fetchActorAlerts();
-      }
-    }, [loggedInUser]
-  );
-
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
+  const filterParam = searchParams.get('filter') ? searchParams.get('filter') : '';
+  const sortParam = searchParams.get('sort') ? searchParams.get('sort') : '';
   const [selectedSortOption, setSelectedSortOption] = useState({ value: 'popularity', label: 'Popularity' });
   const [selectedFilterOption, setSelectedFilterOption] = useState({ value: 'all', label: 'All My Actors' });
   const sortOptions = [
     { value: 'name', label: 'Name' },
     { value: 'popularity', label: 'Popularity' },
-    { value: 'upcoming', label: 'Upcoming Releases' },
-    { value: 'recent', label: 'Recent Releases' },
-    { value: 'total', label: 'Total Releases' }
+    { value: 'upcoming', label: 'Upcoming Movies' },
+    { value: 'recent', label: 'Recent Movies' },
+    { value: 'subscription', label: 'Movies on my subscriptions' },
+    { value: 'total', label: 'Total Movies' }
   ]
   const filterOptions = [
     { value: 'all', label: 'All My Actors' },
@@ -56,77 +32,50 @@ export const ActorAlertsPage = () => {
     { value: 'recent', label: 'Actors with recent releases' },
     { value: 'subscriptions', label: 'Actors with movies on my subscriptions' }
   ]
+
   useEffect(
     () => {
-      const sortParam = searchParams.get('sort');
-      const filterParam = searchParams.get('filter');
+      const fetchActorAlerts = async () => {
+        try {
+          const response = await fetch(process.env.REACT_APP_BACKEND_URL + `myactors?filter=${filterParam}&sort=${sortParam}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${loggedInUser.tokenId}`
+            }
+          });
+          const actors = await response.json();
+          setUserActorAlerts(actors);
+        } catch (error) {
+          throw error;
+        } finally {
+        }
+      };
+
+      if (loggedInUser) {
+        fetchActorAlerts();
+      }
+
       const sortOption = sortOptions.find(option => option.value === sortParam);
       const filterOption = filterOptions.find(option => option.value === filterParam);
-
       if (sortOption) {
         setSelectedSortOption(sortOption);
       }
       if (filterOption) {
         setSelectedFilterOption(filterOption);
       }
-    }, [location]
-  );
-
-  useEffect(
-    () => {
-      const filterActors = (allActorAlerts) => {
-        let filteredActors;
-        if (selectedFilterOption.value == "recent") {
-          filteredActors = allActorAlerts.actors.filter(function (el) {
-            return el.movieCounts.recentMovies > 0;
-          });
-        } else if (selectedFilterOption.value == "upcoming") {
-          filteredActors = allActorAlerts.actors.filter(function (el) {
-            return el.movieCounts.upcomingMovies > 0;
-          });
-        } else if (selectedFilterOption.value == "subscriptions") {
-          filteredActors = allActorAlerts.actors.filter(function (el) {
-            return el.movieCounts.moviesOnSubscriptions > 0;
-          });
-        } else {
-          filteredActors = allActorAlerts.actors;
-        }
-        return filteredActors;
-      };
-
-      const sortActors = (actorAlerts) => {
-        let sortedActorAlerts;
-        if (selectedSortOption.value == "popularity") {
-          sortedActorAlerts = actorAlerts.sort((a, b) => b.person.popularity - a.person.popularity);
-        } else if (selectedSortOption.value == "name") {
-          sortedActorAlerts = actorAlerts.sort((a, b) => a.person.name.localeCompare(b.person.name));
-        } else if (selectedSortOption.value == "upcoming") {
-          sortedActorAlerts = actorAlerts.sort((a, b) => b.movieCounts.upcomingMovies - a.movieCounts.upcomingMovies);
-        } else if (selectedSortOption.value == "recent") {
-          sortedActorAlerts = actorAlerts.sort((a, b) => b.movieCounts.recentMovies - a.movieCounts.recentMovies);
-        } else {
-          sortedActorAlerts = actorAlerts.sort((a, b) => b.movieCounts.totalMovies - a.movieCounts.totalMovies);
-        }
-        return sortedActorAlerts;
-      }
-
-      if (unfilteredUserActorAlerts.actors) {
-        const filteredActors = filterActors(unfilteredUserActorAlerts);
-        const sortedActors = sortActors(filteredActors);
-
-        userActorAlerts.actors = sortedActors;
-        setUserActorAlerts({ ...userActorAlerts });
-      }
-
-    }, [selectedSortOption, selectedFilterOption, loading, location]
+    }, [loggedInUser, location, unfollowedActor]
   );
 
   const handleSortChange = (selectedOption) => {
-    setSelectedSortOption(selectedOption);
+    let updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set('sort', selectedOption.value);
+    setSearchParams(updatedSearchParams.toString());
   };
 
   const handleFilterChange = (selectedOption) => {
-    setSelectedFilterOption(selectedOption);
+    let updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set('filter', selectedOption.value);
+    setSearchParams(updatedSearchParams.toString());
   };
 
   const colourStyles = {
@@ -147,6 +96,10 @@ export const ActorAlertsPage = () => {
     }),
   }
 
+  const notifyOnActorUnfollow = (unfollowedActor) => {
+    setUnfollowedActor(unfollowedActor);
+  }
+
   if (!loggedInUser) {
     return <h3>Login to configure your Actors</h3>
   }
@@ -156,23 +109,17 @@ export const ActorAlertsPage = () => {
     return <h3>Loading your Actors...</h3>
   }
 
-  if (unfilteredUserActorAlerts.actors.length === 0) {
-
+  if (userActorAlerts.actorCounts.actorCount === 0) {
     return <h3>You are not following any Actors</h3>
   }
 
   return (
     <div className="ActorAlertsPage">
-      <div className="actor-alert-header">
-        <h2>My Actors:</h2>
-      </div>
-      <div className="actor-alert-movie-list-section">
-        <div className="actor-alert-movie-list-section-summary">
-          <div className="actor-alert-movie-list-section-summary-data">
-            <ActorAlertSummaryCard actors={unfilteredUserActorAlerts} />
-          </div>
+      <div className="actor-alert-header-container">
+        <div className="actor-alert-header-dashboard">
+          <ActorAlertSummaryCard actorCounts={userActorAlerts.actorCounts} movieCounts={userActorAlerts.movieCounts} />
         </div>
-        <div className="actor-alert-movie-list-filter">Flter by:
+        <div className="actor-alert-dropdown-filter">Flter by:
           <Select
             onChange={handleFilterChange}
             options={filterOptions}
@@ -180,7 +127,7 @@ export const ActorAlertsPage = () => {
             value={selectedFilterOption}
           />
         </div>
-        <div className="actor-alert-movie-list-sort">
+        <div className="actor-alert-dropdown-sort">
           Sort by:
           <Select
             onChange={handleSortChange}
@@ -190,12 +137,12 @@ export const ActorAlertsPage = () => {
           />
         </div>
       </div>
-      {
-        !loggedInUser ? "Please login to create Actor Alerts" : ""
-      }
-      <div className="actor-alerts-page-actors-list">
+      <div className="actor-alert-label">
+        <h2>My Actors:</h2>
+      </div>
+      <div className="actor-alerts-actors-container">
         {userActorAlerts.actors
-          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} />)
+          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} notifyOnActorUnfollow={notifyOnActorUnfollow} />)
         }
       </div>
     </div>

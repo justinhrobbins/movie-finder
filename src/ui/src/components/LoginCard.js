@@ -70,13 +70,13 @@ export const LoginCard = () => {
     };
 
     const checkForValidLogin = () => {
-        console.log("Checking for valid login");
-        if ((loggedInUser) && (loggedInUser.expiresAt < Date.now())) {
-            console.log("loggedInUser: " + loggedInUser);
-            console.log("Login is expired, cleaning up");
-            logoutAndCleanupUser();
-        }
-        setTimeout(checkForValidLogin, 5000);
+        // console.log("Checking for valid login");
+        // if ((loggedInUser) && (loggedInUser.expiresAt < Date.now())) {
+        //     console.log("loggedInUser: " + loggedInUser);
+        //     console.log("Login is expired, cleaning up");
+        //     logoutAndCleanupUser();
+        // }
+        // setTimeout(checkForValidLogin, 5000);
     }
 
     return (

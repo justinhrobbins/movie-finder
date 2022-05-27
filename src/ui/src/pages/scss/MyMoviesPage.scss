@@ -1,34 +1,57 @@
 .MyMoviesPage {
 
-    .my-movies-page-about-container {
-        padding-top: 10px;
-        padding-left: 15px;
-        padding-bottom: 10px;
-        margin-right: 20px;
-        margin-bottom: 25px;
-        background-color: rgb(32, 32, 32);
-    }
+    // .my-movies-page-about-container {
+    //     padding-top: 10px;
+    //     padding-left: 15px;
+    //     padding-bottom: 10px;
+    //     margin-right: 20px;
+    //     margin-bottom: 25px;
+    //     background-color: rgb(32, 32, 32);
+    // }
 
-    .my-movies-page-about-intro {
-        margin-bottom: 5px;
-    }
+    // .my-movies-page-about-intro {
+    //     margin-bottom: 5px;
+    // }
 
-    .my-movies-page-about-list {
-        margin-left: 15px;
-    }
+    // .my-movies-page-about-list {
+    //     margin-left: 15px;
+    // }
 
-    .my-movies-header-section{ 
+    .my-movies-header-container { 
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
         margin-right: 20px;
     }
 
-    .my-movies-header-label{
+    .my-movies-header-dashboard {
+        margin-top: auto;
         flex: 70%;
+        padding-right: 30px;
     }
 
-    .my-movies-header-filter{
+    .my-movies-dropdown-filter {
         flex: 30%;
+    }
+
+    .my-movies-label {
+        margin-bottom: 15px;
+    }
+
+    .my-movie-movies-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        grid-column-gap: 50px;
+        // border: 1px white solid;
+    }
+
+    .my-movie-movies-item {
+        max-width: 48%;
+        // display: flex;
+        flex-grow: 1;
+        // flex: 1;
+        // border: 1px white solid;
     }
 }

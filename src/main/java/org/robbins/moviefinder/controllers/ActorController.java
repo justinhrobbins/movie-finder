@@ -8,10 +8,12 @@ import org.robbins.moviefinder.dtos.ActorDto;
 import org.robbins.moviefinder.dtos.ActorsDto;
 import org.robbins.moviefinder.dtos.MovieCountsDto;
 import org.robbins.moviefinder.entities.User;
-import org.robbins.moviefinder.services.ActorMovieCountService;
+import org.robbins.moviefinder.enums.MovieFilter;
+import org.robbins.moviefinder.enums.MovieSort;
 import org.robbins.moviefinder.services.ActorService;
-import org.robbins.moviefinder.services.PersonService;
 import org.robbins.moviefinder.services.UserService;
+import org.robbins.moviefinder.services.counting.ActorMovieCountService;
+import org.robbins.moviefinder.services.tmdb.PersonService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,27 +53,33 @@ public class ActorController extends AbstractController {
     }
 
     @GetMapping("/{actorId}/movies")
-    public PersonCredits getMoviesForPerson(@PathVariable("actorId") final Long personId) {
-        return personService.findPersonMovieCredits(personId);
+    public PersonCredits getMoviesForPerson(@RequestParam(name = "filter", required = false) final MovieFilter filter,
+            @RequestParam(name = "sort", required = false) final MovieSort sort,
+            @PathVariable("actorId") final Long actorId,
+            final Principal principal) {
+
+        final Optional<User> user = extractUserFromPrincipal(principal);
+        Optional<MovieFilter> optionalFilter = filter != null ? Optional.of(filter) : Optional.empty();
+        Optional<MovieSort> optionalSort = sort != null ? Optional.of(sort) : Optional.empty();
+
+        final ActorDto actor = actorService.findActorWithMovies(actorId, optionalFilter, optionalSort, user);
+        return actor.getMovieCredits();
     }
 
     @GetMapping("/{actorId}/movies/counts")
-    public MovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId, final Principal principal) {
-        final Optional<User> user = findUser(principal);
+    public MovieCountsDto getMovieCountsForActor(@PathVariable("actorId") final Long actorId,
+            final Principal principal) {
+        final Optional<User> user = extractUserFromPrincipal(principal);
         return movieCountService.findActorMovieCounts(actorId, user);
-    }
-
-    private Optional<User> findUser(final Principal principal) {
-        if (principal == null) {
-            return Optional.empty();
-        }
-
-        final String userEmail = extractUserEmailFromPrincipal(principal);
-        return userService.findByEmailUser(userEmail);
     }
 
     @GetMapping("/popular")
     public ActorsDto getPopluar() {
         return actorService.findPopularActors();
+    }
+
+    @Override
+    public UserService getUserService() {
+        return userService;
     }
 }

@@ -1,45 +1,12 @@
-import { React, useContext, useEffect, useState } from 'react';
-import { UserContext } from "../UserContext";
-import { MovieFlatrateProviderCard } from './MovieFlatrateProviderCard';
+import { React, useEffect, useState } from 'react';
+import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
 
 import './scss/ActorMovieCard.scss';
 
-export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBySubscriptions }) => {
-    const { loggedInUser } = useContext(UserContext);
-    const [movie, setMovie] = useState(providedMovie);
+export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview }) => {
+    const [movie] = useState(providedMovie);
     const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
-    const [flatrateProviders, setFlatrateProviders] = useState(null);
     const [movieUrl, setMovieUrl] = useState(null);
-    const [flatrateProviderLabel, setFlatrateProviderLabel] = useState(null);
-
-    useEffect(
-        () => {
-            let isMounted = true;
-            const fetchWatchProviders = async () => {
-                const response = await fetch(process.env.REACT_APP_BACKEND_URL + `movies/${providedMovie.id}/watchproviders`);
-                const movieWithWatchProviders = await response.json();
-
-                let flatrateProviders;
-                if (!movieWithWatchProviders
-                    || !movieWithWatchProviders["watch/providers"]
-                    || !movieWithWatchProviders["watch/providers"].results
-                    || !movieWithWatchProviders["watch/providers"].results.US
-                    || !movieWithWatchProviders["watch/providers"].results.US.flatrate) {
-                    flatrateProviders = [];
-                } else {
-                    flatrateProviders = movieWithWatchProviders["watch/providers"].results.US.flatrate;
-                }
-
-                if (isMounted) setFlatrateProviders(flatrateProviders);
-            };
-
-            fetchWatchProviders();
-
-            return () => {
-                isMounted = false
-            };
-        }, [providedMovie]
-    );
 
     useEffect(
         () => {
@@ -51,29 +18,11 @@ export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBy
         }, [movie]
     );
 
-    useEffect(
-        () => {
-            if (!flatrateProviders || flatrateProviders.length == 0) {
-                setFlatrateProviderLabel(<span>Not currently on any streaming services</span>);
-            } else {
-                setFlatrateProviderLabel(<span>Available on these streaming services:</span>);
-            }
-            if (filterBySubscriptions == true && flatrateProviders) {
-                if (!loggedInUser
-                    || !loggedInUser.streamingServices
-                    || !flatrateProviders.some(e => loggedInUser.streamingServices.includes(e.provider_name))) {
-                    setMovie(null);
-                }
-            }
-        }, [flatrateProviders]
-    );
-
     const toggleOverview = () => {
         setShowFullOverview(!showFullOverview)
     }
 
     if (!movie) return null;
-    if (!flatrateProviders) return null;
 
     return (
         <div className="ActorMovieCard">
@@ -107,12 +56,7 @@ export const ActorMovieCard = ({ providedMovie, shouldShowFullOverview, filterBy
                 </div>
             </div>
             <div className="actor-movie-card-providers-section">
-                <div className="actor-movie-card-providers-section-label">{flatrateProviderLabel}</div>
-                <div className="actor-movie-card-providers-section-content">
-                    {
-                        flatrateProviders.map(flatrateProvider => <MovieFlatrateProviderCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
-                    }
-                </div>
+                <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} />
             </div>
         </div>
     );

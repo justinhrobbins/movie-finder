@@ -4,10 +4,18 @@ import { Link } from 'react-router-dom';
 
 import './scss/ActorDetailAlertDataCard.scss';
 
-export const ActorDetailAlertDataCard = ({ actor }) => {
+export const ActorDetailAlertDataCard = ({ providedActor }) => {
     const { loggedInUser } = useContext(UserContext);
-    const [actorMoveCounts, setActorMovieCounts] = useState(actor.movieCounts);
+    const [actor, setActor] = useState(providedActor);
+    const [actorMoveCounts, setActorMovieCounts] = useState({});
     const [subscriptionsLink, setSubscriptionsLink] = useState(null);
+
+    useEffect(
+        () => {
+            setActor(providedActor);
+
+        }, [providedActor]
+    );
 
     useEffect(
         () => {
@@ -30,11 +38,13 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
                 setActorMovieCounts(actorMoveCounts);
             };
 
-            if (!actorMoveCounts) {
+            if (!actor.movieCounts) {
                 fetchActorMovieCounts();
+            } else {
+                setActorMovieCounts(actor.movieCounts);
             }
 
-        }, []
+        }, [actor, loggedInUser]
     );
 
     useEffect(
@@ -45,14 +55,18 @@ export const ActorDetailAlertDataCard = ({ actor }) => {
                 setSubscriptionsLink("Configure your Subscriptions to filter by Subscriptions");
             } else {
                 if (actorMoveCounts) {
+                    if (actor.person.name === "Scarlett Johansson") {
+                    }
                     setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=subscriptions`}>On your Subscriptions: {actorMoveCounts.moviesOnSubscriptions}</Link>)
                 }
             }
         }, [loggedInUser, actorMoveCounts]
     );
 
+    if (!actor) return null;
+
     if (!actorMoveCounts) {
-        return <h3>Loading details for actor {actor.name}...</h3>
+        return <h3>Loading details for actor {actor.person.name}...</h3>
     }
 
     return (

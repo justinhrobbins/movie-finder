@@ -1,0 +1,22 @@
+import { React } from 'react';
+import { MovieCard } from './MovieCard';
+
+import './scss/MyMovieCard.scss';
+
+export const MyMovieCard = ({ movie }) => {
+
+    return (
+        <div className="MyMovieCard">
+            <div className="my-movie-actor-card-movies-container">
+                {
+                    <div className="my-movie-actor-card-movies-item">
+                        <MovieCard
+                            key={movie.credit.id}
+                            providedMovie={movie.credit}
+                            shouldShowFullOverview={false} />
+                    </div>
+                }
+            </div>
+        </div>
+    );
+}

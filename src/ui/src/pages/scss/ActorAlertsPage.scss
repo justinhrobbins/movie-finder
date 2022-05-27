@@ -1,35 +1,32 @@
 .ActorAlertsPage {
 
-    .actor-alert-header {
-        margin-bottom: 5px;
-    }
-
-    .actor-alert-movie-list-section {
+    .actor-alert-header-container {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         margin-right: 20px;
     }
 
-    .actor-alert-movie-list-section-summary {
+    .actor-alert-header-dashboard {
+        margin-top: auto;
         flex: 70%;
         padding-right: 30px;
     }
 
-    .actor-alert-movie-list-section-summary-data {
-        margin-top: auto;
-    }
-
-    .actor-alert-movie-list-filter {
+    .actor-alert-dropdown-filter {
         flex: 15%;
         margin-right: 10px;
     }
 
-    .actor-alert-movie-list-sort {
+    .actor-alert-dropdown-sort {
         flex: 15%;
     }
 
-    .actor-alerts-page-actors-list {
+    .actor-alert-label {
+        margin-bottom: 15px;
+    }
+
+    .actor-alerts-actors-container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;

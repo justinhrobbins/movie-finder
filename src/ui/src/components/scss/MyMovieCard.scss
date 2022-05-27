@@ -1,0 +1,51 @@
+.MyMovieCard {
+    // border: 1px white solid;
+    
+    // .my-movie-actor-card-actor-name {
+    //     font-size: 1.5rem;
+    //     font-weight: bold;
+    //     margin-bottom: 20px;
+    // }
+
+    // .my-movie-actor-card-section { 
+    //     display: flex;
+    //     justify-content: space-between;
+    //     margin-bottom: 20px;
+    //     margin-right: 5px;
+    //     border: 1px white solid;
+    // }
+
+    // .my-movie-actor-card-section-actor-details {
+    //     flex: 30%;
+    //     margin-right: 20px;
+    // }
+
+    // .my-movie-actor-card-section-movies {
+    //     // flex: 70%;
+    //     border: 1px white solid;
+    // }
+
+    .my-movie-actor-card-movies-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        // justify-content: space-between;
+        // grid-column-gap: 50px;
+        border: 1px white solid;
+    }
+
+    .my-movie-actor-card-movies-item {
+        max-width: 45%;
+        // display: flex;
+        border: 1px red solid;
+    }
+
+    // .my-movie-actor-card-name-link {
+    //     text-decoration: none;
+    //     margin-bottom: 100px;
+
+    //     &:hover {
+    //         text-decoration: underline;
+    //     } 
+    // }
+}
