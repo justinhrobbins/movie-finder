@@ -1,32 +1,32 @@
-.ActorAlertsPage {
+.MyActorsPage {
 
-    .actor-alert-header-container {
+    .my-actors-header-container {
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
         margin-right: 20px;
     }
 
-    .actor-alert-header-dashboard {
+    .my-actors-header-dashboard {
         margin-top: auto;
         flex: 70%;
         padding-right: 30px;
     }
 
-    .actor-alert-dropdown-filter {
+    .my-actors-dropdown-filter {
         flex: 15%;
         margin-right: 10px;
     }
 
-    .actor-alert-dropdown-sort {
+    .my-actors-dropdown-sort {
         flex: 15%;
     }
 
-    .actor-alert-label {
+    .my-actors-label {
         margin-bottom: 15px;
     }
 
-    .actor-alerts-actors-container {
+    .my-actors-actors-container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
