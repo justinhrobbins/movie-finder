@@ -1,5 +1,6 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaCheckCircle, FaCircle } from 'react-icons/fa';
 import { UserContext } from "../UserContext";
 
 import './scss/MovieCastCard.scss';
@@ -50,7 +51,7 @@ export const MovieCastCard = ({ providedMovie }) => {
 
     const actorLinkUrl = (actorId) => {
         return "/actors/" + actorId;
-     }
+    }
 
     if (!actorsInMovie) {
         return null;
@@ -58,10 +59,21 @@ export const MovieCastCard = ({ providedMovie }) => {
 
     return (
         <div className="MovieCastCard">
-            {actorsInMovie.slice(0,5).map((actor) =>
-                <Link key={actor.actorId} className="movie-cast-link" to={actorLinkUrl(actor.actorId)}>
-                    <img key={actor.actorId} src={actorProfileUrl(actor.person.profile_path)} alt={actor.person.name} title={actor.person.name} />
-                </Link>
+            {actorsInMovie.slice(0, 5).map((actor) =>
+                <div className="movie-cast-item" key={actor.actorId} >
+                    <Link key={actor.actorId} className="movie-cast-link" to={actorLinkUrl(actor.actorId)}>
+                        <img key={actor.actorId} src={actorProfileUrl(actor.person.profile_path)} alt={actor.person.name} title={actor.person.name} />
+                        {actor.followedByUser == true &&
+                            <FaCircle size=".55em" color="white" style={{ position: 'absolute', top: '-3', right: '0' }} />
+                        }
+                        {actor.followedByUser == true &&
+                            <FaCheckCircle size=".75em"
+                                color="cornflowerblue"
+                                style={{ position: 'absolute', top: '-4', right: '-1' }}
+                                title="You are following this actor" />
+                        }
+                    </Link>
+                </div>
             )
             }
         </div>

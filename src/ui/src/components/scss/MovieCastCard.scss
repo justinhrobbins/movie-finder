@@ -1,11 +1,18 @@
 .MovieCastCard {
-    // border: 1px white solid;
+    display:flex;
+
+    .movie-cast-item {
+        // border: 1px white solid;
+        position: relative;
+    }
 
     .movie-cast-link {
         &>img {
             border-radius: 8px;
             width: 45px;
-            padding: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            display: block;
         }
     }
 }
