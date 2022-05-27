@@ -18,4 +18,18 @@
         flex: 15%;
         margin-right: 10px;
     }
+
+    .actor-movie-list-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        grid-column-gap: 50px;
+        // border: 1px white solid;
+    }
+
+    .actor-movie-list-item {
+        max-width: 48%;
+        flex-grow: 1;
+    }
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, NavLink } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
 import { ActorDetailPage } from './pages/ActorDetailPage';
-import { ActorAlertsPage } from './pages/ActorAlertsPage';
+import { MyActorsPage } from './pages/MyActorsPage';
 import { MyMoviesPage } from './pages/MyMoviesPage';
 import { ActorSearchCard } from './components/ActorSearchCard';
 import { LoginCard } from './components/LoginCard';
@@ -27,7 +27,7 @@ function App() {
             <div className="app-header-menu">
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to="/">Home</NavLink>
               <span>|</span>
-              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/actoralerts?filter=all&sort=popularity'>My Actors</NavLink>
+              <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/myactors?filter=all&sort=popularity'>My Actors</NavLink>
               <span>|</span>
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/mymovies?filter=recent'>My Movies</NavLink>
             </div>
@@ -39,7 +39,7 @@ function App() {
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/actors/:actorId' element={<ActorDetailPage />} />
-            <Route path='/actoralerts/' element={<ActorAlertsPage />} />
+            <Route path='/myactors/' element={<MyActorsPage />} />
             <Route path='/mymovies/' element={<MyMoviesPage />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,7 +1,7 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorAlertSummaryCard } from '../components/ActorAlertSummaryCard';
+import { ActorSummaryCard } from '../components/ActorSummaryCard';
 import { MovieCard } from '../components/MovieCard';
 import Select from 'react-select';
 
@@ -101,7 +101,7 @@ export const MyMoviesPage = () => {
     <div className="MyMoviesPage">
       <div className="my-movies-header-container">
         <div className="my-movies-header-dashboard">
-          <ActorAlertSummaryCard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
+          <ActorSummaryCard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
         </div>
         <div className="my-movies-dropdown-filter">Flter by:
           <Select
@@ -123,8 +123,7 @@ export const MyMoviesPage = () => {
                 <MovieCard
                   key={movie.credit.id}
                   providedMovie={movie.credit}
-                  shouldShowFullOverview={false}
-                  filterBySubscriptions={false} />
+                  shouldShowFullOverview={false} />
               </div>
             )
         }

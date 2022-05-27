@@ -1,17 +1,13 @@
-.ActorAlertSummaryCard {
+.ActorSummaryCard {
     display: flex;
     margin-top: 10px;
     margin-left: 10px;
 
-    .actor-alert-data-card-movie-summary {
+    .actor-summary-card-movie-summary {
         margin-left: auto;
     }
 
-    .actor-alert-data-card-actor-summary {
-
-    }
-
-    .actor-detail-alert-data-card-link {
+    .actor-detail-link {
         text-decoration: none;
 
         &:hover {

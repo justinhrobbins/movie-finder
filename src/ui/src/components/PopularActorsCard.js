@@ -29,7 +29,6 @@ export const PopularActorsCard = () => {
   }
 
   if (!popularActors) {
-
     return <h3>Loading popular actors...</h3>
   }
 

@@ -1,7 +1,7 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorMovieCard } from './ActorMovieCard';
+import { MovieCard } from './MovieCard';
 import Select from 'react-select';
 
 import './scss/ActorMovieListCard.scss';
@@ -122,13 +122,19 @@ export const ActorMovieListCard = ({ actor }) => {
                     />
                 </div>
             </div>
-            {
-                personCredits.cast
-                    .map(movie => <ActorMovieCard
-                        key={movie.id}
-                        providedMovie={movie}
-                        shouldShowFullOverview={true} />)
-            }
+            <div className="actor-movie-list-container">
+                {
+                    personCredits.cast
+                        .map(movie =>
+                            <div key={movie.id} className="actor-movie-list-item">
+                                <MovieCard
+                                    key={movie.id}
+                                    providedMovie={movie}
+                                    shouldShowFullOverview={false} />
+                            </div>
+                        )
+                }
+            </div>
         </div>
     );
 }

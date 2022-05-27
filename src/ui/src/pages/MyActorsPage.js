@@ -1,15 +1,15 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorAlertSummaryCard } from '../components/ActorAlertSummaryCard';
-import { ActorAlertDetailCard } from '../components/ActorAlertDetailCard';
+import { ActorSummaryCard } from '../components/ActorSummaryCard';
+import { ActorDetailCard } from '../components/ActorDetailCard';
 import Select from 'react-select';
 
-import './scss/ActorAlertsPage.scss';
+import './scss/MyActorsPage.scss';
 
-export const ActorAlertsPage = () => {
+export const MyActorsPage = () => {
   const { loggedInUser } = useContext(UserContext);
-  const [userActorAlerts, setUserActorAlerts] = useState({});
+  const [myActors, setMyActors] = useState({});
   const [unfollowedActor, setUnfollowedActor] = useState({});
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,7 +35,7 @@ export const ActorAlertsPage = () => {
 
   useEffect(
     () => {
-      const fetchActorAlerts = async () => {
+      const fetchMyActors = async () => {
         try {
           const response = await fetch(process.env.REACT_APP_BACKEND_URL + `myactors?filter=${filterParam}&sort=${sortParam}`, {
             method: 'GET',
@@ -44,7 +44,7 @@ export const ActorAlertsPage = () => {
             }
           });
           const actors = await response.json();
-          setUserActorAlerts(actors);
+          setMyActors(actors);
         } catch (error) {
           throw error;
         } finally {
@@ -52,7 +52,7 @@ export const ActorAlertsPage = () => {
       };
 
       if (loggedInUser) {
-        fetchActorAlerts();
+        fetchMyActors();
       }
 
       const sortOption = sortOptions.find(option => option.value === sortParam);
@@ -104,22 +104,22 @@ export const ActorAlertsPage = () => {
     return <h3>Login to configure your Actors</h3>
   }
 
-  if (!userActorAlerts || !userActorAlerts.actors) {
+  if (!myActors || !myActors.actors) {
 
     return <h3>Loading your Actors...</h3>
   }
 
-  if (userActorAlerts.actorCounts.actorCount === 0) {
+  if (myActors.actorCounts.actorCount === 0) {
     return <h3>You are not following any Actors</h3>
   }
 
   return (
-    <div className="ActorAlertsPage">
-      <div className="actor-alert-header-container">
-        <div className="actor-alert-header-dashboard">
-          <ActorAlertSummaryCard actorCounts={userActorAlerts.actorCounts} movieCounts={userActorAlerts.movieCounts} />
+    <div className="MyActorsPage">
+      <div className="my-actors-header-container">
+        <div className="my-actors-header-dashboard">
+          <ActorSummaryCard actorCounts={myActors.actorCounts} movieCounts={myActors.movieCounts} />
         </div>
-        <div className="actor-alert-dropdown-filter">Flter by:
+        <div className="my-actors-dropdown-filter">Flter by:
           <Select
             onChange={handleFilterChange}
             options={filterOptions}
@@ -127,7 +127,7 @@ export const ActorAlertsPage = () => {
             value={selectedFilterOption}
           />
         </div>
-        <div className="actor-alert-dropdown-sort">
+        <div className="my-actors-dropdown-sort">
           Sort by:
           <Select
             onChange={handleSortChange}
@@ -137,12 +137,16 @@ export const ActorAlertsPage = () => {
           />
         </div>
       </div>
-      <div className="actor-alert-label">
+      <div className="my-actors-label">
         <h2>My Actors:</h2>
       </div>
-      <div className="actor-alerts-actors-container">
-        {userActorAlerts.actors
-          .map(actor => <ActorAlertDetailCard key={actor.actorId} providedActor={actor} notifyOnActorUnfollow={notifyOnActorUnfollow} />)
+      <div className="my-actors-actors-container">
+        {myActors.actors
+          .map(actor =>
+            <div className="ActorDetailCard">
+              <ActorDetailCard key={actor.actorId} providedActor={actor} removeActor={notifyOnActorUnfollow} showActorBio={false} />
+            </div>
+          )
         }
       </div>
     </div>
