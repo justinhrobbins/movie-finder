@@ -1,17 +1,17 @@
-.PopularActorsCard {
+.PopularActors {
 
-    .popular-actors-card-header {
+    .popular-actors-header {
         margin-bottom: 15px;
     }
 
-    .popular-actors-card-list {
+    .popular-actors-list {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         grid-column-gap: 50px;
     }
 
-    .popular-actors-card-list-item {
+    .popular-actors-list-item {
         flex: 1;
         padding-right: 20px;
         max-width: 400px;

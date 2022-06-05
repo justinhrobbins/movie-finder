@@ -1,9 +1,9 @@
 import { React, useEffect, useState } from 'react';
-import { ActorSearchResultsCard } from './ActorSearchResultsCard';
+import { ActorSearchResults } from './ActorSearchResults';
 
-import './scss/ActorSearchCard.scss';
+import './scss/ActorSearchBox.scss';
 
-export const ActorSearchCard = () => {
+export const ActorSearchBox = () => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [actorName, setActorName] = useState("");
   const [actors, setActors] = useState([]);
@@ -37,7 +37,7 @@ export const ActorSearchCard = () => {
   };
 
   return (
-    <div className="ActorSearchCard">
+    <div className="ActorSearchBox">
       <div className="actor-search-box">
         <label className="actor-search-label">Actor Search:</label>
         <input className="actor-search-box-input"
@@ -63,7 +63,7 @@ export const ActorSearchCard = () => {
 
             {actors
               .slice(0, 5)
-              .map(actor => <ActorSearchResultsCard key={actor.id} actor={actor} clearSearchResults={clearSearchResults} />)}
+              .map(actor => <ActorSearchResults key={actor.id} actor={actor} clearSearchResults={clearSearchResults} />)}
           </div>
         </div>
       )}

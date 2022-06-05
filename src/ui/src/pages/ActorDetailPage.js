@@ -1,8 +1,8 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorDetailCard } from '../components/ActorDetailCard';
-import { ActorMovieListCard } from '../components/ActorMovieListCard';
+import { ActorDetails } from '../components/ActorDetails';
+import { ActorMovieList } from '../components/ActorMovieList';
 
 import './scss/ActorDetailPage.scss';
 
@@ -30,8 +30,8 @@ export const ActorDetailPage = () => {
 
     return (
         <div className="ActorDetailPage">
-            <ActorDetailCard key={actor.actorId} providedActor={actor} showActorBio={true} />
-            <ActorMovieListCard id={actorId} actor={actor.person} />
+            <ActorDetails key={actor.actorId} providedActor={actor} showActorBio={true} />
+            <ActorMovieList id={actorId} actor={actor.person} />
         </div>
     );
 }

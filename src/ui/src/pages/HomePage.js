@@ -1,5 +1,5 @@
 import { React } from 'react';
-import { PopularActorsCard } from '../components/PopularActorsCard';
+import { PopularActors } from '../components/PopularActors';
 
 import './scss/HomePage.scss';
 
@@ -20,7 +20,7 @@ export const HomePage = () => {
                     <li>See which movies from your actors are currently on your <b>streaming services</b></li>
                 </ul>
             </div>
-            <PopularActorsCard />
+            <PopularActors />
         </div>
     );
 }

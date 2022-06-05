@@ -1,9 +1,9 @@
 import { React, useEffect, useState } from 'react';
-import { ActorDetailCard } from './ActorDetailCard';
+import { ActorDetails } from './ActorDetails';
 
-import './scss/PopularActorsCard.scss';
+import './scss/PopularActors.scss';
 
-export const PopularActorsCard = () => {
+export const PopularActors = () => {
   const [popularActors, setPopularActors] = useState(null);
 
   useEffect(
@@ -33,15 +33,15 @@ export const PopularActorsCard = () => {
   }
 
   return (
-    <div className="PopularActorsCard">
-      <div className="popular-actors-card-header">
+    <div className="PopularActors">
+      <div className="popular-actors-header">
         <h2>Popular Actors:</h2>
       </div>
-      <div className="popular-actors-card-list">
+      <div className="popular-actors-list">
         {popularActors.actors
           .map(actor => 
-            <div className="popular-actors-card-list-item" key={actor.actorId}>
-              <ActorDetailCard key={actor.actorId} providedActor={actor} removeActor={removeActor} showActorBio={false} />
+            <div className="popular-actors-list-item" key={actor.actorId}>
+              <ActorDetails key={actor.actorId} providedActor={actor} removeActor={removeActor} showActorBio={false} />
             </div>
             )
         }

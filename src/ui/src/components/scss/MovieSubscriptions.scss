@@ -1,0 +1,24 @@
+.MovieSubscriptions {
+    padding: 5px;
+
+    .movie-subscription-provider-label {
+        font-size: .85rem;
+        color: #8a8d98;
+    }
+
+    .movie-subscription-provider-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .movie-subscriptions {
+        padding-top: 5px;
+        padding-right: 7px;
+    }
+
+    .movie-subscription-image {
+        & > img {
+            border-radius: 8px;
+        }
+    }
+}

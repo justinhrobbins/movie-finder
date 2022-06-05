@@ -1,12 +1,12 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorDetailAlertDataCard } from './ActorDetailAlertDataCard';
-import { ActorBioCard } from './ActorBioCard';
+import { ActorMovieMetrics } from './ActorMovieMetrics';
+import { ActorBio } from './ActorBio';
 
-import './scss/ActorDetailCard.scss';
+import './scss/ActorDetails.scss';
 
-export const ActorDetailCard = ({ providedActor, showActorBio, removeActor }) => {
+export const ActorDetails = ({ providedActor, showActorBio, removeActor }) => {
     const { loggedInUser } = useContext(UserContext);
     const [actor, setActor] = useState(providedActor);
     const [isUserFollowingActor, setIsUserFollowingActor] = useState(false);
@@ -94,25 +94,25 @@ export const ActorDetailCard = ({ providedActor, showActorBio, removeActor }) =>
     };
 
     return (
-        <div className="ActorDetailCard">
-            <div className="actor-detail-card-image-container">
-                <img className="actor-detail-card-image-image" src={actorPhotoUrl} alt={actor.person.name} title={actor.person.name} />
-                <div className="actor-detail-card-image-details">
-                    <button className="actor-detail-card-image-button" value={actor.actorId} onClick={(e) => { toggleActorAlert(e.target.value) }}>
+        <div className="ActorDetails">
+            <div className="actor-detail-image-container">
+                <img className="actor-detail-image-image" src={actorPhotoUrl} alt={actor.person.name} title={actor.person.name} />
+                <div className="actor-detail-image-details">
+                    <button className="actor-detail-image-button" value={actor.actorId} onClick={(e) => { toggleActorAlert(e.target.value) }}>
                         {isUserFollowingActor === true ? removeActorAlertText : createActorAlertText}
                     </button>
                 </div>
             </div>
 
-            <div className="actor-detail-card-content">
-                <div className="actor-detail-card-content-actor-name">
-                    <Link className="actor-detail-card-content-actor-name-link" to={actorDetailRoute}>{actor.person.name}</Link>
+            <div className="actor-detail-content">
+                <div className="actor-detail-content-actor-name">
+                    <Link className="actor-detail-content-actor-name-link" to={actorDetailRoute}>{actor.person.name}</Link>
                 </div>
-                <div className="actor-detail-card-content-alert-data">
-                    <ActorDetailAlertDataCard key={actor.actorId} providedActor={actor} />
+                <div className="actor-detail-content-alert-data">
+                    <ActorMovieMetrics key={actor.actorId} providedActor={actor} />
                 </div>
                 {showActorBio == true &&
-                    <ActorBioCard key={actor.actorId} actor={actor.person} />
+                    <ActorBio key={actor.actorId} actor={actor.person} />
                 }
             </div>
         </div>

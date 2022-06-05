@@ -1,4 +1,4 @@
-.AccountConfigurationCard {
+.AccountConfiguration {
     // border: 1px white solid;
     text-align: right;
     margin-top: 5px;
@@ -50,7 +50,7 @@
         padding: 5px 5px;
     }
 
-    .account-configuration-card-checkbox {
+    .account-configuration-checkbox {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
@@ -59,14 +59,14 @@
         // border: 1px solid grey;
     }
 
-    .account-configuration-card-flatrate-provider-section {
+    .account-configuration-flatrate-provider-section {
         display: flex;
         justify-content: flex-end;
         column-gap: .10rem;
         // border: 1px white solid;
     }
 
-    .account-configuration-card-flatrate-provider-image {
+    .account-configuration-flatrate-provider-image {
         &>img {
             border-radius: 5px;
             max-width: 80%;

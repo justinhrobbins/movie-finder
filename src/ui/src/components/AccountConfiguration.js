@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
 
-import "./scss/AccountConfigurationCard.scss";
+import "./scss/AccountConfiguration.scss";
 import checkboxesData from './FlatrateProviders.json';
 
-export const AccountConfigurationCard = () => {
+export const AccountConfiguration = () => {
     const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
     const [modal, setModal] = useState(false);
     const [selectedCheckboxes, setSelectedCheckboxes] = useState(null);
@@ -62,14 +62,14 @@ export const AccountConfigurationCard = () => {
     }
 
     return (
-        <div className="AccountConfigurationCard">
-            <div className="account-configuration-card-flatrate-provider-section">
+        <div className="AccountConfiguration">
+            <div className="account-configuration-flatrate-provider-section">
                 {
                     (loggedInUser && loggedInUser.streamingServices && loggedInUser.streamingServices.length > 0)
                         ? checkboxesData.map(
                             data =>
                                 loggedInUser.streamingServices.includes(data.value) ?
-                                    <div key={data.key} className="account-configuration-card-flatrate-provider-image"> <img alt={data.label} title={data.label} src={data.img} /></div>
+                                    <div key={data.key} className="account-configuration-flatrate-provider-image"> <img alt={data.label} title={data.label} src={data.img} /></div>
                                     : ""
                         )
                         : ""
@@ -87,7 +87,7 @@ export const AccountConfigurationCard = () => {
                             {
                                 checkboxesData.map(
                                     checkbox =>
-                                        <div key={checkbox.value} className="account-configuration-card-checkbox">
+                                        <div key={checkbox.value} className="account-configuration-checkbox">
                                             <input type="checkbox" name={checkbox.value} value={checkbox.value} checked={selectedCheckboxes && selectedCheckboxes.has(checkbox.value) ? true : false} onChange={handleCheckboxChange} />
                                             <img alt={checkbox.label} title={checkbox.label} src={checkbox.img} />
                                             <label>{checkbox.label}</label>
