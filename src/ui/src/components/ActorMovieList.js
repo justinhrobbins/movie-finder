@@ -1,12 +1,12 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { MovieCard } from './MovieCard';
+import { MovieDetails } from './MovieDetails';
 import Select from 'react-select';
 
-import './scss/ActorMovieListCard.scss';
+import './scss/ActorMovieList.scss';
 
-export const ActorMovieListCard = ({ actor }) => {
+export const ActorMovieList = ({ actor }) => {
     const { loggedInUser } = useContext(UserContext);
     const [personCredits, setPersonCredits] = useState({});
 
@@ -101,7 +101,7 @@ export const ActorMovieListCard = ({ actor }) => {
     }
 
     return (
-        <div className="ActorMovieListCard">
+        <div className="ActorMovieList">
             <div className="actor-movie-list-section">
                 <h2 className="actor-movie-list-label">Movies for {actor.name}</h2>
                 <div className="actor-movie-list-filter">Flter by:
@@ -127,7 +127,7 @@ export const ActorMovieListCard = ({ actor }) => {
                     personCredits.cast
                         .map(movie =>
                             <div key={movie.id} className="actor-movie-list-item">
-                                <MovieCard
+                                <MovieDetails
                                     key={movie.id}
                                     providedMovie={movie}
                                     shouldShowFullOverview={false} />

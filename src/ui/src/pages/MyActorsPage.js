@@ -1,8 +1,8 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorSummaryCard } from '../components/ActorSummaryCard';
-import { ActorDetailCard } from '../components/ActorDetailCard';
+import { MyActorsDashboard } from '../components/MyActorsDashboard';
+import { ActorDetails } from '../components/ActorDetails';
 import Select from 'react-select';
 
 import './scss/MyActorsPage.scss';
@@ -117,7 +117,7 @@ export const MyActorsPage = () => {
     <div className="MyActorsPage">
       <div className="my-actors-header-container">
         <div className="my-actors-header-dashboard">
-          <ActorSummaryCard actorCounts={myActors.actorCounts} movieCounts={myActors.movieCounts} />
+          <MyActorsDashboard actorCounts={myActors.actorCounts} movieCounts={myActors.movieCounts} />
         </div>
         <div className="my-actors-dropdown-filter">Flter by:
           <Select
@@ -143,8 +143,8 @@ export const MyActorsPage = () => {
       <div className="my-actors-actors-container">
         {myActors.actors
           .map(actor =>
-            <div className="ActorDetailCard">
-              <ActorDetailCard key={actor.actorId} providedActor={actor} removeActor={notifyOnActorUnfollow} showActorBio={false} />
+            <div className="my-actors-actors-actor-details">
+              <ActorDetails key={actor.actorId} providedActor={actor} removeActor={notifyOnActorUnfollow} showActorBio={false} />
             </div>
           )
         }

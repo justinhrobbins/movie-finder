@@ -1,51 +1,54 @@
-.ActorDetailCard {
+.ActorDetails {
     display: grid;
     grid-template-columns: min-content auto;
     grid-template-rows: 1fr;
     margin-bottom: 45px;
     background-color: rgb(32, 32, 32);
+    // border: 1px white solid;
 
-    .actor-detail-card-image-container {
+    .actor-detail-image-container {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         background-color: rgb(91, 93, 103);
     }
 
-    .actor-detail-card-image-image {
+    .actor-detail-image-image {
         // width: 100%;
         // height: auto;
     }
 
-    .actor-detail-card-image-details {
+    .actor-detail-image-details {
         font-size: .85rem;
         text-align: center;
         padding: 10px 20px;
     }
 
-    .actor-detail-card-image-button {
+    .actor-detail-image-button {
         cursor: pointer;
         padding-left: 10px;
         padding-right: 10px;
     }
 
-    .actor-detail-card-content {
+    .actor-detail-content {
         display: flex;
         flex-direction: column;
         margin-left: 15px;
-        margin-right: 15px;
+        margin-right: 20px;
         font-size: .85rem;
+        // border: 1px white solid;
     }
 
-    .actor-detail-card-content-alert-data {
+    .actor-detail-content-alert-data {
         margin-top: 5px;
-    }
-
-    .actor-detail-card-content-actor-name {
-        font-size: 1.25rem;
-        font-weight: bold;
         margin-bottom: 5px;
     }
 
-    .actor-detail-card-content-actor-name-link {
+    .actor-detail-content-actor-name {
+        font-size: 1.25rem;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .actor-detail-content-actor-name-link {
         text-decoration: none;
 
         &:hover {

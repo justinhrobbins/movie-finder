@@ -1,4 +1,4 @@
-.MovieCard {
+.MovieDetails {
     display: grid;
     flex: 1;
     grid-template-columns: min-content auto;
@@ -23,7 +23,12 @@
         display: grid;
         grid-template-rows: min-content auto;
         grid-row-gap: 5px;
+        padding-top: 5px;
         // border: 1px white solid;
+    }
+
+    .movie-info-header {
+
     }
 
     .movie-info-title {

@@ -1,9 +1,9 @@
 import { React } from 'react';
 import { Link } from 'react-router-dom';
 
-import './scss/ActorSearchResultsCard.scss';
+import './scss/ActorSearchResults.scss';
 
-export const ActorSearchResultsCard = ({ actor, clearSearchResults }) => {
+export const ActorSearchResults = ({ actor, clearSearchResults }) => {
     if (!actor) return null;
 
     const baseUrl = "https://image.tmdb.org/t/p/w45/";
@@ -12,11 +12,11 @@ export const ActorSearchResultsCard = ({ actor, clearSearchResults }) => {
     const actorDetailRoute = `/actors/${actor.id}`;
 
     return (
-        <div className="ActorSearchResultsCard" onClick={clearSearchResults}>
+        <div className="ActorSearchResults" onClick={clearSearchResults}>
             <Link to={actorDetailRoute}>
-                <img className="actor-search-results-card-image" src={actorUrl} width="45" alt="" />
+                <img className="actor-search-results-image" src={actorUrl} width="45" alt="" />
             </Link>
-            <span className="actor-search-results-card-name"><Link to={actorDetailRoute}>{actor.name}</Link></span>
+            <span className="actor-search-results-name"><Link to={actorDetailRoute}>{actor.name}</Link></span>
         </div>
     );
 }

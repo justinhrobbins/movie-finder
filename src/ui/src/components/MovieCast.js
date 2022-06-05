@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { FaCheckCircle, FaCircle } from 'react-icons/fa';
 import { UserContext } from "../UserContext";
 
-import './scss/MovieCastCard.scss';
+import './scss/MovieCast.scss';
 
-export const MovieCastCard = ({ providedMovie }) => {
+export const MovieCast = ({ providedMovie }) => {
     const { loggedInUser } = useContext(UserContext);
     const [movie, setMovie] = useState(providedMovie);
     const [actorsInMovie, setActorsInMovie] = useState(null);
@@ -58,7 +58,7 @@ export const MovieCastCard = ({ providedMovie }) => {
     }
 
     return (
-        <div className="MovieCastCard">
+        <div className="MovieCast">
             {actorsInMovie.slice(0, 5).map((actor) =>
                 <div className="movie-cast-item" key={actor.actorId} >
                     <Link key={actor.actorId} className="movie-cast-link" to={actorLinkUrl(actor.actorId)}>

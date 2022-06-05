@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { UserContext } from "../UserContext";
-import { AccountConfigurationCard } from './AccountConfigurationCard';
+import { AccountConfiguration } from './AccountConfiguration';
 
-import './scss/LoginCard.scss';
+import './scss/Login.scss';
 
-export const LoginCard = () => {
+export const Login = () => {
     const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
 
     useEffect(
@@ -80,17 +80,17 @@ export const LoginCard = () => {
     }
 
     return (
-        <div className="LoginCard">
+        <div className="Login">
             {loggedInUser ? (
-                <div className="login-card-logged-in">
+                <div className="login-logged-in">
                     <div>
-                        <span className="login-card-logged-in-label">Logged in as {loggedInUser.name}</span>
+                        <span className="login-logged-in-label">Logged in as {loggedInUser.name}</span>
                         <button onClick={handleLogout}>Logout</button>
                     </div>
-                    <div><AccountConfigurationCard /></div>
+                    <div><AccountConfiguration /></div>
                 </div>
             ) : (
-                <div className="login-card-logged-in">
+                <div className="login-logged-in">
                     <GoogleLogin
                         clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                         buttonText="Login with Google"

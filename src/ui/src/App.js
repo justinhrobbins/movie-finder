@@ -4,8 +4,8 @@ import { HomePage } from './pages/HomePage';
 import { ActorDetailPage } from './pages/ActorDetailPage';
 import { MyActorsPage } from './pages/MyActorsPage';
 import { MyMoviesPage } from './pages/MyMoviesPage';
-import { ActorSearchCard } from './components/ActorSearchCard';
-import { LoginCard } from './components/LoginCard';
+import { ActorSearchBox } from './components/ActorSearchBox';
+import { Login } from './components/Login';
 import { UserContext } from "./UserContext";
 
 import './App.scss';
@@ -22,7 +22,7 @@ function App() {
               <h2>Actor Alerts</h2>
             </div>
             <div className="app-header-login">
-              <LoginCard />
+              <Login />
             </div>
             <div className="app-header-menu">
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to="/">Home</NavLink>
@@ -32,7 +32,7 @@ function App() {
               <NavLink className={({ isActive }) => (isActive ? 'app-header-menu-link-active' : 'app-header-menu-link-inactive')} to='/mymovies?filter=recent'>My Movies</NavLink>
             </div>
             <div className="app-header-search-bar">
-              <ActorSearchCard />
+              <ActorSearchBox />
             </div>
           </div>
 

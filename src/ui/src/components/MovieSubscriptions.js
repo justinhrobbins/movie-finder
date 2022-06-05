@@ -1,10 +1,9 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { UserContext } from "../UserContext";
-import { MovieSubscriptionsCard } from './MovieSubscriptionsCard';
 
-import './scss/MovieSubscriptionsListCard.scss';
+import './scss/MovieSubscriptions.scss';
 
-export const MovieSubscriptionsListCard = ({ providedMovie }) => {
+export const MovieSubscriptions = ({ providedMovie }) => {
     const { loggedInUser } = useContext(UserContext);
     const [flatrateProviders, setFlatrateProviders] = useState(null);
     const [movie, setMovie] = useState(providedMovie);
@@ -55,15 +54,26 @@ export const MovieSubscriptionsListCard = ({ providedMovie }) => {
         }, [flatrateProviders]
     );
 
-    
+    const flatrateProviderUrl = (flatrateProvider) => {
+        const baseUrl = "https://image.tmdb.org/t/p/w45/";
+        const defaultMovieUrl = "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
+        return !flatrateProvider.logo_path || flatrateProvider.logo_path === ""
+            ? defaultMovieUrl
+            : baseUrl + flatrateProvider.logo_path;
+    };
+
     if (!flatrateProviders) return null;
 
     return (
-        <div className="MovieSubscriptionsListCard">
-            <div className="movie-subscription-provide-label">{flatrateProviderLabel}</div>
-            <div className="movie-subscription-provider-content">
+        <div className="MovieSubscriptions">
+            <div className="movie-subscription-provider-label">{flatrateProviderLabel}</div>
+            <div className="movie-subscription-provider-container">
                 {
-                    flatrateProviders.map(flatrateProvider => <MovieSubscriptionsCard key={flatrateProvider.provider_id} flatrateProvider={flatrateProvider} />)
+                    flatrateProviders.map(flatrateProvider =>
+                        <div key={flatrateProvider.provider_id} className="movie-subscriptions">
+                            <div className="movie-subscription-image"><img alt={flatrateProvider.provider_name} title={flatrateProvider.provider_name} src={flatrateProviderUrl(flatrateProvider)} /></div>
+                        </div>
+                    )
                 }
             </div>
         </div>

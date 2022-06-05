@@ -2,9 +2,9 @@ import { React, useContext, useEffect, useState } from 'react';
 import { UserContext } from "../UserContext";
 import { Link } from 'react-router-dom';
 
-import './scss/ActorDetailAlertDataCard.scss';
+import './scss/ActorMovieMetrics.scss';
 
-export const ActorDetailAlertDataCard = ({ providedActor }) => {
+export const ActorMovieMetrics = ({ providedActor }) => {
     const { loggedInUser } = useContext(UserContext);
     const [actor, setActor] = useState(providedActor);
     const [actorMoveCounts, setActorMovieCounts] = useState({});
@@ -57,7 +57,7 @@ export const ActorDetailAlertDataCard = ({ providedActor }) => {
                 if (actorMoveCounts) {
                     if (actor.person.name === "Scarlett Johansson") {
                     }
-                    setSubscriptionsLink(<Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=subscriptions`}>On your Subscriptions: {actorMoveCounts.moviesOnSubscriptions}</Link>)
+                    setSubscriptionsLink(<Link className="actor-movie-metrics-link" to={`/actors/${actor.actorId}?sort=newest&filter=subscriptions`}>On your Subscriptions: {actorMoveCounts.moviesOnSubscriptions}</Link>)
                 }
             }
         }, [loggedInUser, actorMoveCounts]
@@ -70,11 +70,11 @@ export const ActorDetailAlertDataCard = ({ providedActor }) => {
     }
 
     return (
-        <div className="ActorDetailAlertDataCard">
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=upcoming`}>Upcoming Movies: {actorMoveCounts.upcomingMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=recent`}>Recent Movies: {actorMoveCounts.recentMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-label"><Link className="actor-detail-alert-data-card-link" to={`/actors/${actor.actorId}?sort=newest&filter=all`}>Total Movies: {actorMoveCounts.totalMovies}</Link></div>
-            <div className="actor-detail-alert-data-card-subscription-label">{subscriptionsLink}</div>
+        <div className="ActorMovieMetrics">
+            <div className="actor-movie-metrics-label"><Link className="actor-movie-metrics-link" to={`/actors/${actor.actorId}?sort=newest&filter=upcoming`}>Upcoming Movies: {actorMoveCounts.upcomingMovies}</Link></div>
+            <div className="actor-movie-metrics-label"><Link className="actor-movie-metrics-link" to={`/actors/${actor.actorId}?sort=newest&filter=recent`}>Recent Movies: {actorMoveCounts.recentMovies}</Link></div>
+            <div className="actor-movie-metrics-label"><Link className="actor-movie-metrics-link" to={`/actors/${actor.actorId}?sort=newest&filter=all`}>Total Movies: {actorMoveCounts.totalMovies}</Link></div>
+            <div className="actor-movie-metrics-label">{subscriptionsLink}</div>
         </div>
     );
 }

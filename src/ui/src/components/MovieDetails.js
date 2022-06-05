@@ -1,10 +1,10 @@
 import { React, useEffect, useState } from 'react';
-import { MovieCastCard } from './MovieCastCard';
-import { MovieSubscriptionsListCard } from './MovieSubscriptionsListCard';
+import { MovieCast } from './MovieCast';
+import { MovieSubscriptions } from './MovieSubscriptions';
 
-import './scss/MovieCard.scss';
+import './scss/MovieDetails.scss';
 
-export const MovieCard = ({ providedMovie, shouldShowFullOverview, shouldShowRole }) => {
+export const MovieDetails = ({ providedMovie, shouldShowFullOverview, shouldShowRole }) => {
     const [movie, setMovie] = useState(providedMovie);
     const [showFullOverview, setShowFullOverview] = useState(shouldShowFullOverview);
     const [movieUrl, setMovieUrl] = useState(null);
@@ -32,7 +32,7 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview, shouldShowRol
     if (!movie) return null;
 
     return (
-        <div className="MovieCard">
+        <div className="MovieDetails">
             <div className="movie-image">
                 <img width="185" src={movieUrl} />
             </div>
@@ -66,10 +66,10 @@ export const MovieCard = ({ providedMovie, shouldShowFullOverview, shouldShowRol
             </div>
             <div className="movie-actors-container">
                 <div className="movie-info-content">CAST:</div>
-                <MovieCastCard key={movie.id} providedMovie={movie} />
+                <MovieCast key={movie.id} providedMovie={movie} />
             </div>
             <div className="movie-providers-container">
-                <MovieSubscriptionsListCard key={movie.id} providedMovie={movie} />
+                <MovieSubscriptions key={movie.id} providedMovie={movie} />
             </div>
         </div>
     );

@@ -1,8 +1,8 @@
 import { React, useContext, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { UserContext } from "../UserContext";
-import { ActorSummaryCard } from '../components/ActorSummaryCard';
-import { MovieCard } from '../components/MovieCard';
+import { MyActorsDashboard } from '../components/MyActorsDashboard';
+import { MovieDetails } from '../components/MovieDetails';
 import Select from 'react-select';
 
 import './scss/MyMoviesPage.scss';
@@ -101,7 +101,7 @@ export const MyMoviesPage = () => {
     <div className="MyMoviesPage">
       <div className="my-movies-header-container">
         <div className="my-movies-header-dashboard">
-          <ActorSummaryCard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
+          <MyActorsDashboard actorCounts={myMovies.actorCounts} movieCounts={myMovies.movieCounts} />
         </div>
         <div className="my-movies-dropdown-filter">Flter by:
           <Select
@@ -120,7 +120,7 @@ export const MyMoviesPage = () => {
           myMovies.movies
             .map((movie) =>
               <div key={movie.credit.id} className="my-movie-movies-item">
-                <MovieCard
+                <MovieDetails
                   key={movie.credit.id}
                   providedMovie={movie.credit}
                   shouldShowFullOverview={false} />
