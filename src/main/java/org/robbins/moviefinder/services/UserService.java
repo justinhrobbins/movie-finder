@@ -11,4 +11,5 @@ public interface UserService {
     public UserDto updateUserSubscriptions(final User user, final List<String> streamingServices);
     public UserDto handleLoggedInUser(final UserDto userDto);
     public List<String> convertStreamingServices(final User user);
+    public List<User> findAll();
 }

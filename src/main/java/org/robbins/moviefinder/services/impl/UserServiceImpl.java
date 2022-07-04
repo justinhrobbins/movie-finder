@@ -65,4 +65,11 @@ public class UserServiceImpl implements UserService {
         }
         return convert(existingUser.get());
     }
+
+    @Override
+    public List<User> findAll() {
+        final List<User> users = new ArrayList<User>();
+        userRepository.findAll().forEach(user -> users.add(user));
+        return users;
+    };
 }
