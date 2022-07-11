@@ -20,12 +20,21 @@ export const MovieCast = ({ providedMovie }) => {
         () => {
             const fetchActorsInMovie = async () => {
                 try {
-                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `movies/${movie.id}/cast`, {
+                    var headers = new Headers();
+                    headers.append("Content-Type", "application/json");
+
+                    if (loggedInUser) {
+                        headers.append("Authorization", `Bearer ${loggedInUser.tokenId}`);
+                    }
+
+                    const requestOptions = {
                         method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${loggedInUser.tokenId}`
-                        }
-                    });
+                        headers: headers
+                    };
+
+                    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `movies/${movie.id}/cast`,
+                        requestOptions);
+
                     const actors = await response.json();
                     setActorsInMovie(actors);
                 } catch (error) {

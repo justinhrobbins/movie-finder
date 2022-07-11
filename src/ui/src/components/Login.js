@@ -1,18 +1,34 @@
 import React, { useContext, useEffect } from 'react';
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from '@react-oauth/google';
+import { googleLogout } from '@react-oauth/google';
+import { useInterval } from 'usehooks-ts'
 import { UserContext } from "../UserContext";
 import { AccountConfiguration } from './AccountConfiguration';
 
 import './scss/Login.scss';
 
 export const Login = () => {
+
     const { loggedInUser, setLoggedInUserContext } = useContext(UserContext);
 
-    useEffect(
+    const now = () => {
+        return Date.now();
+    }
+
+    useInterval(
         () => {
-            setTimeout(checkForValidLogin, 5000);
-        }, []
-      );
+            console.log("running setInterval()");
+            if (loggedInUser && loggedInUser.expiresIn) {
+
+                const expiresIn = Date.parse(loggedInUser.expiresIn);
+                if (expiresIn < now()) {
+                    console.log(expiresIn + " is older than " + now());
+                    logoutAndCleanupUser();
+                }
+            }
+        },
+        5000
+      )
 
     const handleFailure = (failure) => {
         console.log(failure);
@@ -22,62 +38,28 @@ export const Login = () => {
         const response = await fetch(process.env.REACT_APP_BACKEND_URL + 'user', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${googleData.tokenId}`,
+                'Authorization': `Bearer ${googleData.credential}`,
             }
         });
 
+        console.log(googleData);
         const userData = await response.json();
-        userData.tokenId = googleData.tokenId;
-        userData.expiresAt = googleData.tokenObj.expires_at;
+        userData.tokenId = googleData.credential;
+        userData.expiresIn = new Date(Date.now() + 30 * 60000)
+
         localStorage.setItem("loginData", JSON.stringify(userData));
         setLoggedInUserContext(userData);
-
-        refreshTokenSetup(googleData);
     };
 
     const logoutAndCleanupUser = () => {
         localStorage.removeItem('loginData');
-        setLoggedInUserContext(null);        
+        setLoggedInUserContext(null);
     }
 
     const handleLogout = () => {
         logoutAndCleanupUser();
+        googleLogout();
     };
-
-    const refreshTokenSetup = (res) => {
-        let refreshTiming = ( (res.tokenObj.expires_in || 3600) - 1800) * 1000;
-        console.log("Next refreshTiming at: " + refreshTiming);
-
-        const refreshToken = async () => {
-            console.log("Entering refreshToken()");
-            const loginData = JSON.parse(localStorage.getItem('loginData'));
-            if (!loginData) return;
-
-            const newAuthRes = await res.reloadAuthResponse();
-            console.log("Updating expiresAt to " + newAuthRes.expires_at);
-            refreshTiming = ( (newAuthRes.expires_in || 3600) - 1800) * 1000;
-            console.log("Next refreshTiming in " + refreshTiming);
-            
-            loginData.tokenId = newAuthRes.id_token;
-            loginData.expiresAt = newAuthRes.expires_at;
-            localStorage.setItem('loginData', JSON.stringify(loginData));
-            setLoggedInUserContext(loginData);
-
-            setTimeout(refreshToken, refreshTiming);
-        };
-
-        setTimeout(refreshToken, refreshTiming);
-    };
-
-    const checkForValidLogin = () => {
-        // console.log("Checking for valid login");
-        // if ((loggedInUser) && (loggedInUser.expiresAt < Date.now())) {
-        //     console.log("loggedInUser: " + loggedInUser);
-        //     console.log("Login is expired, cleaning up");
-        //     logoutAndCleanupUser();
-        // }
-        // setTimeout(checkForValidLogin, 5000);
-    }
 
     return (
         <div className="Login">
@@ -92,11 +74,11 @@ export const Login = () => {
             ) : (
                 <div className="login-logged-in">
                     <GoogleLogin
-                        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                        buttonText="Login with Google"
                         onSuccess={handleLogin}
-                        onFailure={handleFailure}
-                        cookiePolicy={'single_host_origin'}
+                        onError={handleFailure}
+                        theme="filled_black"
+                        useOneTap
+                        auto_select
                     />
                 </div>
             )}
