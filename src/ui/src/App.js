@@ -38,14 +38,27 @@ function App() {
               </div>
             </div>
 
-            <Routes>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/actors/:actorId' element={<ActorDetailPage />} />
-              <Route path='/myactors/' element={<MyActorsPage />} />
-              <Route path='/mymovies/' element={<MyMoviesPage />} />
+            <div className="app-content">
+              <Routes>
+                <Route path='/' element={<HomePage />} />
+                <Route path='/actors/:actorId' element={<ActorDetailPage />} />
+                <Route path='/myactors/' element={<MyActorsPage />} />
+                <Route path='/mymovies/' element={<MyMoviesPage />} />
 
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
+
+            <div className="app-footer-section">
+              <div className="app-footer-tmdb">
+                <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer"><img src="/images/TMDB.svg" width="100" /></a>
+                &nbsp;This product uses the TMDB API but is not endorsed or certified by TMDB.
+              </div>
+              <div className="app-footer-justwatch">
+                <a href="https://www.justwatch.com/" target="_blank" rel="noopener noreferrer"><img src="/images/JustWatch.png" width="100" /></a>
+                &nbsp;Movie watch provider data is provided by JustWatch
+              </div>
+            </div>
           </Router>
         </UserContext.Provider>
       </div >

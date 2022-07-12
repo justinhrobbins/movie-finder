@@ -1,6 +1,9 @@
 .App {
   padding: 0px 20px 20px 20px;
   text-align: left;
+  position: relative;
+  min-height: 100vh;
+  // border: 1px white solid;
 
   .app-header-section {
     display: grid;
@@ -55,5 +58,30 @@
 
   .app-header-search-bar {
     grid-column: span 2;
+  }
+
+  .app-content {
+    padding-bottom: 2.5rem;
+  }
+
+  .app-footer-section {
+    // border: 1px white solid;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    font-size: .85rem;
+  }
+
+  .app-footer-tmdb {
+    padding-bottom: 5px;
+    align-self: center;
+  }
+
+  .app-footer-justwatch {
+    align-self: center;
   }
 }
